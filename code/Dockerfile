@@ -22,7 +22,7 @@ RUN pio pkg install -g --tool "platformio/toolchain-xtensa32@^2.50200.97"
 RUN pio pkg install -g --tool "platformio/framework-arduinoespressif32@3.10004.210126"
 RUN pio pkg install -g --platform "platformio/espressif32@2.0.0"
 
-EXPOSE 5000
+EXPOSE 5001
 
 WORKDIR /src
 CMD [ "node", "app.js" ]

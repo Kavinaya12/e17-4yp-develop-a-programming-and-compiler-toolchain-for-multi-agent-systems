@@ -1,7 +1,7 @@
 FROM rcc-image
 COPY ./ /src
 
-EXPOSE 5000
+EXPOSE 5001
 
 WORKDIR /src
 CMD [ "node", "app.js" ]
