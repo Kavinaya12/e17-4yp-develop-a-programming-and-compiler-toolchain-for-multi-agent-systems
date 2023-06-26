@@ -27,10 +27,10 @@
 //#define WIFI_SSID "Dialog 4G PRE"
 //#define WIFI_PASS "thisakuttige"
 
-#define WIFI_SSID "DiaSul 4G"
-#define WIFI_PASS "1997Podi=dialog"
+#define WIFI_SSID "Eng-Student"
+#define WIFI_PASS "3nG5tuDt"
 
-#define OTA_SERVER_IP "192.168.8.103"
+#define OTA_SERVER_IP "192.168.4.32"
 #define OTA_SERVER_PORT "5001"
 
 // const char* ssid = WIFI_SSID;

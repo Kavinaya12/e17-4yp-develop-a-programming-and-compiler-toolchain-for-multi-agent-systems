@@ -102,6 +102,10 @@ function DynamicCodeGenerationForm() {
         {
             value: 'esp_robot_firmware',
             label: 'ESP-Firmware-01'
+        },
+        {
+            value: 'esp_robot_firmware2',
+            label: 'ESP-Firmware-02'
         }
     ]
 

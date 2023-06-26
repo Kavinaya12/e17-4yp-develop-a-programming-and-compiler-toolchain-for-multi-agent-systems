@@ -33,4 +33,7 @@
 // const char* ssid = WIFI_SSID;
 // const char* password = WIFI_PASS;
 
+#define OTA_SERVER_IP "192.168.4.32"
+#define OTA_SERVER_PORT "5001"
+
 #endif

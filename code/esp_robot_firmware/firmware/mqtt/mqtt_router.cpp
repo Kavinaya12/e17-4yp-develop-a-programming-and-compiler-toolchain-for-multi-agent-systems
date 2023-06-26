@@ -9,6 +9,8 @@
 
 void mqtt_onMessageArrived(char* topic, byte* message, unsigned int length) {
 
+   Serial.printf("\n>> topic:\t %s \n>> msg:\t\t %s\n", topic, message);
+
    // For message, convert byte array into a char array
    char msg[length+1];
    msg[length] = '\0';
