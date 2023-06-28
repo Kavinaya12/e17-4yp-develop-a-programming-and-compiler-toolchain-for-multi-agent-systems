@@ -32,6 +32,96 @@ Blockly.Blocks["serial_print"] = {
   },
 };
 
+Blockly.Blocks["random_movement"] = {
+  init: function () {
+  this.appendDummyInput()
+  .appendField("Random Movement")
+  .appendField("Left")
+  .appendField(new Blockly.FieldNumber(0), "left")
+  .appendField("Right")
+  .appendField(new Blockly.FieldNumber(0), "right")
+  .appendField("Delay (ms)")
+  .appendField(new Blockly.FieldNumber(0), "delay_ms");
+  this.setPreviousStatement(true, null);
+  this.setNextStatement(true, null);
+  this.setColour(230);
+  this.setTooltip("Performs random movement with the given parameters");
+  this.setHelpUrl("");
+  },
+};
+
+Blockly.Cpp["random_movement"] = function (block) {
+  var left = block.getFieldValue("left");
+  var right = block.getFieldValue("right");
+  var delay_ms = block.getFieldValue("delay_ms");
+  
+  var code = `random_movement(${left}, ${right}, ${delay_ms}); `;
+  return code;
+  };
+
+Blockly.Blocks["random_turn"] = {
+  init: function () {
+    this.appendDummyInput()
+      .appendField("Random Turn")
+      .appendField("Angle")
+      .appendField(new Blockly.FieldNumber(0), "angle")
+      .appendField("Delay (ms)")
+      .appendField(new Blockly.FieldNumber(0), "delay_ms");
+    this.setPreviousStatement(true, null);
+    this.setNextStatement(true, null);
+    this.setColour(230);
+    this.setTooltip("Performs a random turn with the given angle and delay");
+    this.setHelpUrl("");
+  },
+};
+  
+  Blockly.Cpp["random_turn"] = function (block) {
+    var angle = block.getFieldValue("angle");
+    var delay_ms = block.getFieldValue("delay_ms");
+  
+    var code = `
+      int random = (rand() % 100);
+      int sign = (random % 2 == 0) ? 1 : -1;
+      Serial.printf("random: %d, sign: %d \\n", random, sign);
+  
+      Serial.println("Random Turn \\n");
+      random_movement(${angle} * sign, -${angle} * sign, ${delay_ms});
+      motors.stop();
+    `;
+    return code;
+  };
+  
+Blockly.Blocks["move_back"] = {
+  init: function () {
+    this.appendDummyInput()
+      .appendField("Move Backward")
+      .appendField("Left")
+      .appendField(new Blockly.FieldNumber(0), "left")
+      .appendField("Right")
+      .appendField(new Blockly.FieldNumber(0), "right")
+      .appendField("Delay (ms)")
+      .appendField(new Blockly.FieldNumber(0), "delay_ms");
+    this.setPreviousStatement(true, null);
+    this.setNextStatement(true, null);
+    this.setColour(230);
+    this.setTooltip("Moves backward with the given motor values and delay");
+    this.setHelpUrl("");
+  },
+};
+
+Blockly.Cpp["move_back"] = function (block) {
+  var left = block.getFieldValue("left");
+  var right = block.getFieldValue("right");
+  var delay_ms = block.getFieldValue("delay_ms");
+
+  var code = `
+    random_movement(${left} * -1, ${right} * -1, ${delay_ms});
+    motors.stop();
+  `;
+  return code;
+};
+  
+
 Blockly.Blocks["drive_motors"] = {
   init: function () {
     this.appendDummyInput().appendField("Drive Motor");

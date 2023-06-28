@@ -308,6 +308,12 @@ export default function Playground() {
         <Category name="ESP">
           <Block type="chip_id"></Block>
         </Category>
+
+        <Category name="Atomic">
+          <Block type="random_movement" />
+          <Block type="random_turn" />
+          <Block type="move_back" />
+        </Category>
       </BlocklyComponent>
     </div>
   );
