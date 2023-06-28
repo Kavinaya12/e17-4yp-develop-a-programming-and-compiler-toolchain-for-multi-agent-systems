@@ -32,12 +32,12 @@ void loopModes() {
         // What should happen on mode 2
         // mode_sensorTest();
 
-        // algorithm_loop();
+        algorithm_loop();
         
-        motors.write(100,100);
-        whiteOverRainbow(75, 5);
-        motors.write(-100,-100);
-        whiteOverRainbow(75, 5);
+        // motors.write(100,100);
+        // whiteOverRainbow(75, 5);
+        // motors.write(-100,-100);
+        // whiteOverRainbow(75, 5);
 
         // rainbowFade2White(3, 3, 1);
         break;

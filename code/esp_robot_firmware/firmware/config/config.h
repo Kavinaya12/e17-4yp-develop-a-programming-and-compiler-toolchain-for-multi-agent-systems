@@ -1,6 +1,6 @@
 
 // This is the configuration file for the robot
-// Fill all the required the parameters and 
+// Fill all the required the parameters and
 // rename this file as 'config.h' before use
 
 #ifndef _ROBOT_CONFIG_H
@@ -24,8 +24,8 @@
 #endif
 
 // ------------------------------------------------------------ WiFi Credentials
-//#define WIFI_SSID "Dialog 4G PRE"
-//#define WIFI_PASS "thisakuttige"
+// #define WIFI_SSID "Dialog 4G PRE"
+// #define WIFI_PASS "thisakuttige"
 
 #define WIFI_SSID "Eng-Student"
 #define WIFI_PASS "3nG5tuDt"

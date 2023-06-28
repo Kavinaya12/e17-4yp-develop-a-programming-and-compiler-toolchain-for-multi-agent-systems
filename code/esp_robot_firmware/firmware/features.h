@@ -1,10 +1,11 @@
 
-    #pragma once
-    /*
-      This is an auto-generated file.
-    */
+#pragma once
+/*
+  This is an auto-generated file.
+*/
 
-#define ALGO_COLOR_CHANGE
+#define MOVE_DISPLAY_OBJ_COLOR
+// ALGO_COLOR_CHANGE
 
 #define ENABLE_SERIAL_COMMUNICATION1
 
