@@ -313,6 +313,8 @@ export default function Playground() {
           <Block type="random_movement" />
           <Block type="random_turn" />
           <Block type="move_back" />
+          <Block type="read_distance" />
+          <Block type="read_color" />
         </Category>
       </BlocklyComponent>
     </div>

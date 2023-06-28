@@ -50,14 +50,6 @@ Blockly.Blocks["random_movement"] = {
   },
 };
 
-Blockly.Cpp["random_movement"] = function (block) {
-  var left = block.getFieldValue("left");
-  var right = block.getFieldValue("right");
-  var delay_ms = block.getFieldValue("delay_ms");
-  
-  var code = `random_movement(${left}, ${right}, ${delay_ms}); `;
-  return code;
-  };
 
 Blockly.Blocks["random_turn"] = {
   init: function () {
@@ -75,21 +67,7 @@ Blockly.Blocks["random_turn"] = {
   },
 };
   
-  Blockly.Cpp["random_turn"] = function (block) {
-    var angle = block.getFieldValue("angle");
-    var delay_ms = block.getFieldValue("delay_ms");
   
-    var code = `
-      int random = (rand() % 100);
-      int sign = (random % 2 == 0) ? 1 : -1;
-      Serial.printf("random: %d, sign: %d \\n", random, sign);
-  
-      Serial.println("Random Turn \\n");
-      random_movement(${angle} * sign, -${angle} * sign, ${delay_ms});
-      motors.stop();
-    `;
-    return code;
-  };
   
 Blockly.Blocks["move_back"] = {
   init: function () {
@@ -109,18 +87,26 @@ Blockly.Blocks["move_back"] = {
   },
 };
 
-Blockly.Cpp["move_back"] = function (block) {
-  var left = block.getFieldValue("left");
-  var right = block.getFieldValue("right");
-  var delay_ms = block.getFieldValue("delay_ms");
-
-  var code = `
-    random_movement(${left} * -1, ${right} * -1, ${delay_ms});
-    motors.stop();
-  `;
-  return code;
+Blockly.Blocks["read_distance"] = {
+  init: function () {
+    this.appendDummyInput().appendField("Read Distance");
+    this.setOutput(true, "Number");
+    this.setColour(230);
+    this.setTooltip("Reads the distance and returns the value");
+    this.setHelpUrl("");
+  },
 };
-  
+
+Blockly.Blocks["read_color"] = {
+  init: function () {
+    this.appendDummyInput().appendField("Read Color");
+    this.setPreviousStatement(true, null);
+    this.setNextStatement(true, null);
+    this.setColour(230);
+    this.setTooltip("Reads the color and stores it in the provided variable");
+    this.setHelpUrl("");
+  },
+};
 
 Blockly.Blocks["drive_motors"] = {
   init: function () {
@@ -171,6 +157,50 @@ Blockly.Blocks["algorithm"] = {
 cppGenerator["serial_print"] = function (block) {
   var text_msg = block.getFieldValue("msg");
   var code = `Serial.println("${text_msg}");\n`;
+  return code;
+};
+
+cppGenerator["random_movement"] = function (block) {
+  var left = block.getFieldValue("left");
+  var right = block.getFieldValue("right");
+  var delay_ms = block.getFieldValue("delay_ms");
+  
+  var code = `random_movement(${left}, ${right}, ${delay_ms}); `;
+  return code;
+  };
+
+cppGenerator["random_turn"] = function (block) {
+  var angle = block.getFieldValue("angle");
+  var delay_ms = block.getFieldValue("delay_ms");
+
+  var code = `
+    int random = (rand() % 100);
+    int sign = (random % 2 == 0) ? 1 : -1;
+    Serial.printf("random: %d, sign: %d \\n", random, sign);
+
+    Serial.println("Random Turn \\n");
+    random_movement(${angle} * sign, -${angle} * sign, ${delay_ms});
+    motors.stop();
+  `;
+  return code;
+};
+
+cppGenerator["read_distance"] = function (block) {
+  var code = `
+    motors.stop();
+    int d = distance_read();
+    Serial.printf("algo_dist: %d\\n", d);
+    ${cppGenerator.INDENT}return d;
+  `;
+  return [code, cppGenerator.ORDER_ATOMIC];
+};
+
+cppGenerator["read_color"] = function (block) {
+  var code = `
+    motors.stop();
+    color_t obsColor;
+    color_read(&obsColor);
+  `;
   return code;
 };
 
