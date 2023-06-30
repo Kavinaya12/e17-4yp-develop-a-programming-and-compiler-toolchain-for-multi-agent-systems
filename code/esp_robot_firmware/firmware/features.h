@@ -4,7 +4,7 @@
   This is an auto-generated file.
 */
 
-#define MOVE_DISPLAY_OBJ_COLOR
+#define DYNAMIC_TASK_ALLOCATION
 // ALGO_COLOR_CHANGE
 
 #define ENABLE_SERIAL_COMMUNICATION1
