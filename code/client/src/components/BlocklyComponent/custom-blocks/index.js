@@ -17,6 +17,11 @@ Blockly.Blocks["delay"] = {
   },
 };
 
+cppGenerator["delay"] = function (block) {
+  var number_delay_s = block.getFieldValue("delay_s");
+  var code = `delay(${number_delay_s});\n`;
+  return code;
+};
 
 Blockly.Blocks["serial_print"] = {
   init: function () {
@@ -30,6 +35,11 @@ Blockly.Blocks["serial_print"] = {
     this.setTooltip("Serial print");
     this.setHelpUrl("");
   },
+};
+cppGenerator["serial_print"] = function (block) {
+  var text_msg = block.getFieldValue("msg");
+  var code = `Serial.println("${text_msg}");\n`;
+  return code;
 };
 
 Blockly.Blocks["random_movement"] = {
@@ -49,7 +59,14 @@ Blockly.Blocks["random_movement"] = {
   this.setHelpUrl("");
   },
 };
-
+cppGenerator["random_movement"] = function (block) {
+  var left = block.getFieldValue("left");
+  var right = block.getFieldValue("right");
+  var delay_ms = block.getFieldValue("delay_ms");
+  
+  var code = `random_movement(${left}, ${right}, ${delay_ms}); `;
+  return code;
+  };
 
 Blockly.Blocks["random_turn"] = {
   init: function () {
@@ -66,9 +83,15 @@ Blockly.Blocks["random_turn"] = {
     this.setHelpUrl("");
   },
 };
+cppGenerator["random_turn"] = function (block) {
   
-  
-  
+  var angle = block.getFieldValue("angle");
+  var delay_ms = block.getFieldValue("delay_ms");
+
+  var code = `random_turn(${angle}, ${delay_ms})`;
+  return code;
+};
+   
 Blockly.Blocks["move_back"] = {
   init: function () {
     this.appendDummyInput()
@@ -86,6 +109,15 @@ Blockly.Blocks["move_back"] = {
     this.setHelpUrl("");
   },
 };
+cppGenerator["move_back"] = function (block) {
+  
+  var left = block.getFieldValue("left");
+  var right = block.getFieldValue("right");
+  var delay_ms = block.getFieldValue("delay_ms");
+
+  var code = `move_back(${left}, ${right}, ${delay_ms});`;
+  return code;
+};
 
 Blockly.Blocks["read_distance"] = {
   init: function () {
@@ -95,6 +127,13 @@ Blockly.Blocks["read_distance"] = {
     this.setTooltip("Reads the distance and returns the value");
     this.setHelpUrl("");
   },
+};
+cppGenerator["read_distance"] = function (block) {
+  cppGenerator.definitions_[
+    `include#distance_read`
+  ] = `#include "atomic_behaviours/atomic_behaviours.h"`;
+  var code = `read_distance()`;
+  return [code, cppGenerator.ORDER_ATOMIC];
 };
 
 Blockly.Blocks["read_color"] = {
@@ -107,6 +146,33 @@ Blockly.Blocks["read_color"] = {
     this.setHelpUrl("");
   },
 };
+cppGenerator["read_color"] = function (block) {
+ 
+  var code = `read_color(&obsColor);`;
+  return code;
+};
+
+Blockly.Blocks["obs_color"] = {
+  init: function () {
+    this.appendDummyInput()
+      .appendField("obsColor")
+      .appendField(new Blockly.FieldDropdown([
+        ["R", "R"],
+        ["G", "G"],
+        ["B", "B"]
+      ]), "color_property");
+    this.setOutput(true, null);
+    this.setColour(230);
+    this.setTooltip("");
+    this.setHelpUrl("");
+  },
+};
+cppGenerator["obs_color"] = function (block) {
+  var colorProperty = block.getFieldValue("color_property");
+  var code = `obsColor.${colorProperty}`;
+  return [code, cppGenerator.ORDER_ATOMIC];
+};
+
 
 Blockly.Blocks["drive_motors"] = {
   init: function () {
@@ -124,6 +190,25 @@ Blockly.Blocks["drive_motors"] = {
     this.setTooltip("Activate motor");
     this.setHelpUrl("");
   },
+};
+
+Blockly.Blocks["motors_stop"] = {
+  init: function () {
+    this.appendDummyInput()
+      .appendField("Stop Motors");
+    this.setPreviousStatement(true, null);
+    this.setNextStatement(true, null);
+    this.setColour(230);
+    this.setTooltip("");
+    this.setHelpUrl("");
+  },
+};
+cppGenerator["motors_stop"] = function (block) {
+  cppGenerator.definitions_[
+    `include#motors_stop`
+  ] = `#include "modules/motors/motors.h"`;
+  var code = `motors.stop();`;
+  return code;
 };
 
 Blockly.Blocks["algorithm"] = {
@@ -153,63 +238,6 @@ Blockly.Blocks["algorithm"] = {
     this.setHelpUrl("");
   },
 };
-
-cppGenerator["serial_print"] = function (block) {
-  var text_msg = block.getFieldValue("msg");
-  var code = `Serial.println("${text_msg}");\n`;
-  return code;
-};
-
-cppGenerator["random_movement"] = function (block) {
-  var left = block.getFieldValue("left");
-  var right = block.getFieldValue("right");
-  var delay_ms = block.getFieldValue("delay_ms");
-  
-  var code = `random_movement(${left}, ${right}, ${delay_ms}); `;
-  return code;
-  };
-
-cppGenerator["random_turn"] = function (block) {
-  var angle = block.getFieldValue("angle");
-  var delay_ms = block.getFieldValue("delay_ms");
-
-  var code = `
-    int random = (rand() % 100);
-    int sign = (random % 2 == 0) ? 1 : -1;
-    Serial.printf("random: %d, sign: %d \\n", random, sign);
-
-    Serial.println("Random Turn \\n");
-    random_movement(${angle} * sign, -${angle} * sign, ${delay_ms});
-    motors.stop();
-  `;
-  return code;
-};
-
-cppGenerator["read_distance"] = function (block) {
-  var code = `
-    motors.stop();
-    int d = distance_read();
-    Serial.printf("algo_dist: %d\\n", d);
-    ${cppGenerator.INDENT}return d;
-  `;
-  return [code, cppGenerator.ORDER_ATOMIC];
-};
-
-cppGenerator["read_color"] = function (block) {
-  var code = `
-    motors.stop();
-    color_t obsColor;
-    color_read(&obsColor);
-  `;
-  return code;
-};
-
-cppGenerator["delay"] = function (block) {
-  var number_delay_s = block.getFieldValue("delay_s");
-  var code = `delay(${number_delay_s});\n`;
-  return code;
-};
-
 cppGenerator["algorithm"] = function (block) {
   console.log(cppGenerator.nameDB_, NameType.VARIABLE);
   cppGenerator.definitions_[`include#algorithm`] = `#include "algorithm.h"`;
@@ -234,6 +262,12 @@ cppGenerator["algorithm"] = function (block) {
   // TODO: Assemble JavaScript into code variable.
   var code = `
     int ${variable_robot_state_label} = ${number_robot_state_value};
+    struct Color {
+      int R;
+      int G;
+      int B;
+    };
+    struct Color obsColor;
 
     void algorithm_loop() {
       \t${body}
@@ -242,6 +276,29 @@ cppGenerator["algorithm"] = function (block) {
   `;
   return code;
 };
+
+/*
+cppGenerator["read_distance"] = function (block) {
+  cppGenerator.definitions_[
+    `include#distance_read`
+  ] = `#include "atomic_behaviours/atomic_behaviours.h"`;
+  var code = `
+    motors.stop();
+    int d = distance_read();
+    Serial.printf("algo_dist: %d\\n", d);
+    ${cppGenerator.INDENT}return d;
+  `;
+  return [code, cppGenerator.ORDER_ATOMIC];
+};
+
+cppGenerator["read_color"] = function (block) {
+  var code = `
+    motors.stop();
+    color_t obsColor;
+    color_read(&obsColor);
+  `;
+  return code;
+};*/
 
 Blockly.Blocks["variable"] = {
   init: function () {

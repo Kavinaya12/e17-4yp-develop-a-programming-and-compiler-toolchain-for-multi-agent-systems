@@ -17,6 +17,7 @@ export default function Playground() {
     <variable id="s]bRmbZ++\`1c?{z!/d_:">ROBOT_STATE</variable>
     <variable id="x$leYs{fIiSO1QApRb*c">interrupt</variable>
     <variable id="C}k8;%~r]6mMiJiCA2b%">msg</variable>
+    <variable>d</variable>
   </variables>
   <block type="procedures_defnoreturn" id="zfserX5aCGAE:_V]Uq8|" x="316" y="31">
     <field name="NAME">algorithm_setup</field>
@@ -260,11 +261,13 @@ export default function Playground() {
 
         <Category name="Motors">
           <Block type="drive_motors" />
+          <Block type="motors_stop" />
         </Category>
 
         <Category name="Outputs">
           <Block type="serial_print" />
           <Block type="neo_color_wave" />
+          <Block type="obs_color" />
         </Category>
 
         <Category name="Variables">
@@ -272,6 +275,7 @@ export default function Playground() {
           <Block type="variables_init"></Block>
           <Block type="variables_get"></Block>
           <Block type="variables_set"></Block>
+          
         </Category>
 
         <Category name="String">
