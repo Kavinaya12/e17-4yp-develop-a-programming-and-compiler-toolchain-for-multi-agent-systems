@@ -42,7 +42,7 @@ cppGenerator["serial_print"] = function (block) {
   return code;
 };
 
-Blockly.Blocks["random_movement"] = {
+Blockly.Blocks["move_random"] = {
   init: function () {
   this.appendDummyInput()
   .appendField("Random Movement")
@@ -50,8 +50,6 @@ Blockly.Blocks["random_movement"] = {
   .appendField(new Blockly.FieldNumber(0), "left")
   .appendField("Right")
   .appendField(new Blockly.FieldNumber(0), "right")
-  .appendField("Delay (ms)")
-  .appendField(new Blockly.FieldNumber(0), "delay_ms");
   this.setPreviousStatement(true, null);
   this.setNextStatement(true, null);
   this.setColour(230);
@@ -59,12 +57,12 @@ Blockly.Blocks["random_movement"] = {
   this.setHelpUrl("");
   },
 };
-cppGenerator["random_movement"] = function (block) {
+cppGenerator["move_random"] = function (block) {
+  cppGenerator.definitions_[`include#atomic_behaviors`] = `#include "atomic_behaviours/atomic_behaviours.h"`;
   var left = block.getFieldValue("left");
   var right = block.getFieldValue("right");
-  var delay_ms = block.getFieldValue("delay_ms");
   
-  var code = `random_movement(${left}, ${right}, ${delay_ms}); `;
+  var code = `move_random(${left}, ${right}); `;
   return code;
   };
 
@@ -88,7 +86,7 @@ cppGenerator["random_turn"] = function (block) {
   var angle = block.getFieldValue("angle");
   var delay_ms = block.getFieldValue("delay_ms");
 
-  var code = `random_turn(${angle}, ${delay_ms})`;
+  var code = `random_turn(${angle}, ${delay_ms});`;
   return code;
 };
    
@@ -136,6 +134,59 @@ cppGenerator["read_distance"] = function (block) {
   return [code, cppGenerator.ORDER_ATOMIC];
 };
 
+Blockly.Blocks["collision_avoidance"] = {
+  init: function () {
+    this.appendDummyInput().appendField("Collision Avoidance");
+    this.setPreviousStatement(true, null);
+    this.setNextStatement(true, null);
+    this.setColour(230);
+    this.setTooltip("");
+    this.setHelpUrl("");
+  },
+};
+
+cppGenerator["collision_avoidance"] = function (block) {
+  //var body = cppGenerator.statementToCode(block, "collision_avoidance_body");
+  cppGenerator.definitions_[`include#pair_bahaviors`] = `#include "pair_behaviours/pair_behaviours.h"`;
+  var code = `collision_avoidance();`;
+  return code;
+};
+
+Blockly.Blocks["observe_environment"] = {
+  init: function () {
+    this.appendDummyInput().appendField("Observe Environment");
+    this.setOutput(true, "Boolean");
+    this.setColour(230);
+    this.setTooltip("");
+    this.setHelpUrl("");
+  },
+};
+
+cppGenerator["observe_environment"] = function (block) {
+  //var body = cppGenerator.statementToCode(block, "collision_avoidance_body");
+  cppGenerator.definitions_[`include#cluster_bahaviors`] = `#include "cluster_behaviours/cluster_behaviours.h"`;
+  var code = `observe_environment()`;
+  return [code, cppGenerator.ORDER_ATOMIC];
+};
+
+Blockly.Blocks["assign_task"] = {
+  init: function () {
+    this.appendDummyInput().appendField("Assign Task");
+    this.setPreviousStatement(true, null);
+    this.setNextStatement(true, null);
+    this.setColour(230);
+    this.setTooltip("");
+    this.setHelpUrl("");
+  },
+};
+
+cppGenerator["assign_task"] = function (block) {
+  
+  var code = `assign_task();`;
+  return code;
+};
+
+
 Blockly.Blocks["read_color"] = {
   init: function () {
     this.appendDummyInput().appendField("Read Color");
@@ -151,6 +202,22 @@ cppGenerator["read_color"] = function (block) {
   var code = `read_color(&obsColor);`;
   return code;
 };
+/*
+Blockly.Blocks["obs_color_variable"] = {
+  init: function () {
+    this.appendDummyInput()
+      .appendField(new Blockly.FieldVariable("obsColor"), "VAR");
+    this.setOutput(true, null);
+    this.setColour(230);
+    this.setTooltip("");
+    this.setHelpUrl("");
+  },
+};
+// Generate the code for the obs_color_variable block
+cppGenerator["obs_color_variable"] = function (block) {
+  var variableName = block.getFieldValue("VAR");
+  return [variableName, cppGenerator.ORDER_ATOMIC];
+};*/
 
 Blockly.Blocks["obs_color"] = {
   init: function () {
@@ -168,6 +235,7 @@ Blockly.Blocks["obs_color"] = {
   },
 };
 cppGenerator["obs_color"] = function (block) {
+  //var variableName = block.getFieldValue("VAR");
   var colorProperty = block.getFieldValue("color_property");
   var code = `obsColor.${colorProperty}`;
   return [code, cppGenerator.ORDER_ATOMIC];
@@ -223,6 +291,17 @@ Blockly.Blocks["algorithm"] = {
         "robot_state_label"
       )
       .appendField(new Blockly.FieldNumber(0, 0, 10), "robot_state_value");
+    this.appendDummyInput()
+      .appendField(
+        new Blockly.FieldVariable("isTaskFound"),
+        "isTaskFound"
+      );
+      //.appendField(new Blockly.FieldVariable("obsColor"), "VAR");
+    /*this.appendDummyInput()
+      .appendField(
+        new Blockly.FieldVariable("obsColor"),
+        "VAR"
+      );*/
     this.appendStatementInput("algo_body")
       .setCheck(null)
       .appendField("algorithm_loop");
@@ -241,6 +320,7 @@ Blockly.Blocks["algorithm"] = {
 cppGenerator["algorithm"] = function (block) {
   console.log(cppGenerator.nameDB_, NameType.VARIABLE);
   cppGenerator.definitions_[`include#algorithm`] = `#include "algorithm.h"`;
+  cppGenerator.definitions_[`include#mqtt`] = `#include "mqtt/mqtt.h"`;
   var variable_name = cppGenerator.nameDB_.getName(
     block.getFieldValue("algorithm_name"),
     NameType.VARIABLE
@@ -252,6 +332,18 @@ cppGenerator["algorithm"] = function (block) {
   );
   console.log(variable_robot_state_label);
   var number_robot_state_value = block.getFieldValue("robot_state_value");
+/*
+  var variable_obsColor = cppGenerator.nameDB_.getName(
+    block.getFieldValue("obsColor"),
+    NameType.VARIABLE
+  );
+*/
+
+  
+  var variable_isTaskFound = cppGenerator.nameDB_.getName(
+    block.getFieldValue("isTaskFound"),
+    NameType.VARIABLE
+  );
 
   var body = cppGenerator.statementToCode(block, "algo_body");
   // var statements_loop = cppGenerator.statementToCode(block, "loop");
@@ -262,12 +354,8 @@ cppGenerator["algorithm"] = function (block) {
   // TODO: Assemble JavaScript into code variable.
   var code = `
     int ${variable_robot_state_label} = ${number_robot_state_value};
-    struct Color {
-      int R;
-      int G;
-      int B;
-    };
-    struct Color obsColor;
+    
+    bool ${variable_isTaskFound};
 
     void algorithm_loop() {
       \t${body}

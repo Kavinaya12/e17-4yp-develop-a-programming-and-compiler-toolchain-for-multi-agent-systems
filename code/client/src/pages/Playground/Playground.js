@@ -18,6 +18,7 @@ export default function Playground() {
     <variable id="x$leYs{fIiSO1QApRb*c">interrupt</variable>
     <variable id="C}k8;%~r]6mMiJiCA2b%">msg</variable>
     <variable>d</variable>
+    <variable>isTaskFound</variable>
   </variables>
   <block type="procedures_defnoreturn" id="zfserX5aCGAE:_V]Uq8|" x="316" y="31">
     <field name="NAME">algorithm_setup</field>
@@ -131,6 +132,8 @@ export default function Playground() {
     <field name="algorithm_name">color_change</field>
     <field name="robot_state_label" id="s]bRmbZ++\`1c?{z!/d_:">ROBOT_STATE</field>
     <field name="robot_state_value">1</field>
+    <field name="isTaskFound">isTaskFound</field>
+    
     <statement name="algo_body">
       <block type="controls_if" id="=4kTK+MPC(%=/uZS6_A}">
         <mutation elseif="1" else="1"></mutation>
@@ -314,11 +317,20 @@ export default function Playground() {
         </Category>
 
         <Category name="Atomic">
-          <Block type="random_movement" />
+          <Block type="move_random" />
+          <Block type="assign_task" />
           <Block type="random_turn" />
           <Block type="move_back" />
           <Block type="read_distance" />
           <Block type="read_color" />
+        </Category>
+
+        <Category name="Pair">
+          <Block type="collision_avoidance" />
+        </Category>
+
+        <Category name="Cluster">
+          <Block type="observe_environment" />
         </Category>
       </BlocklyComponent>
     </div>
