@@ -42,6 +42,9 @@ cppGenerator["serial_print"] = function (block) {
   return code;
 };
 
+/*    ATOMIC BLOCKS   */
+
+//using
 Blockly.Blocks["move_random"] = {
   init: function () {
   this.appendDummyInput()
@@ -62,10 +65,28 @@ cppGenerator["move_random"] = function (block) {
   var left = block.getFieldValue("left");
   var right = block.getFieldValue("right");
   
-  var code = `move_random(${left}, ${right}); `;
+  var code = `move_random(${left}, ${right});\n`;
   return code;
   };
 
+//using
+Blockly.Blocks["assign_task"] = {
+  init: function () {
+    this.appendDummyInput().appendField("Assign Task");
+    this.setPreviousStatement(true, null);
+    this.setNextStatement(true, null);
+    this.setColour(230);
+    this.setTooltip("");
+    this.setHelpUrl("");
+  },
+};
+cppGenerator["assign_task"] = function (block) {
+  
+  var code = `assign_task();`;
+  return code;
+};
+
+//not using
 Blockly.Blocks["random_turn"] = {
   init: function () {
     this.appendDummyInput()
@@ -89,7 +110,8 @@ cppGenerator["random_turn"] = function (block) {
   var code = `random_turn(${angle}, ${delay_ms});`;
   return code;
 };
-   
+
+//not using
 Blockly.Blocks["move_back"] = {
   init: function () {
     this.appendDummyInput()
@@ -117,6 +139,7 @@ cppGenerator["move_back"] = function (block) {
   return code;
 };
 
+//not using
 Blockly.Blocks["read_distance"] = {
   init: function () {
     this.appendDummyInput().appendField("Read Distance");
@@ -134,59 +157,7 @@ cppGenerator["read_distance"] = function (block) {
   return [code, cppGenerator.ORDER_ATOMIC];
 };
 
-Blockly.Blocks["collision_avoidance"] = {
-  init: function () {
-    this.appendDummyInput().appendField("Collision Avoidance");
-    this.setPreviousStatement(true, null);
-    this.setNextStatement(true, null);
-    this.setColour(230);
-    this.setTooltip("");
-    this.setHelpUrl("");
-  },
-};
-
-cppGenerator["collision_avoidance"] = function (block) {
-  //var body = cppGenerator.statementToCode(block, "collision_avoidance_body");
-  cppGenerator.definitions_[`include#pair_bahaviors`] = `#include "pair_behaviours/pair_behaviours.h"`;
-  var code = `collision_avoidance();`;
-  return code;
-};
-
-Blockly.Blocks["observe_environment"] = {
-  init: function () {
-    this.appendDummyInput().appendField("Observe Environment");
-    this.setOutput(true, "Boolean");
-    this.setColour(230);
-    this.setTooltip("");
-    this.setHelpUrl("");
-  },
-};
-
-cppGenerator["observe_environment"] = function (block) {
-  //var body = cppGenerator.statementToCode(block, "collision_avoidance_body");
-  cppGenerator.definitions_[`include#cluster_bahaviors`] = `#include "cluster_behaviours/cluster_behaviours.h"`;
-  var code = `observe_environment()`;
-  return [code, cppGenerator.ORDER_ATOMIC];
-};
-
-Blockly.Blocks["assign_task"] = {
-  init: function () {
-    this.appendDummyInput().appendField("Assign Task");
-    this.setPreviousStatement(true, null);
-    this.setNextStatement(true, null);
-    this.setColour(230);
-    this.setTooltip("");
-    this.setHelpUrl("");
-  },
-};
-
-cppGenerator["assign_task"] = function (block) {
-  
-  var code = `assign_task();`;
-  return code;
-};
-
-
+//not using
 Blockly.Blocks["read_color"] = {
   init: function () {
     this.appendDummyInput().appendField("Read Color");
@@ -202,6 +173,59 @@ cppGenerator["read_color"] = function (block) {
   var code = `read_color(&obsColor);`;
   return code;
 };
+
+
+/*    PAIR BLOCKS   */
+
+//using
+Blockly.Blocks["collision_avoidance"] = {
+  init: function () {
+    this.appendDummyInput()
+    .appendField("Collision Avoidance")
+    .appendField("Collision Threshold")
+    .appendField(new Blockly.FieldNumber(20), "collisionThreshold_value");
+    this.setPreviousStatement(true, null);
+    this.setNextStatement(true, null);
+    this.setColour(230);
+    this.setTooltip("");
+    this.setHelpUrl("");
+  },
+};
+cppGenerator["collision_avoidance"] = function (block) {
+  //var body = cppGenerator.statementToCode(block, "collision_avoidance_body");
+  cppGenerator.definitions_[`include#pair_bahaviors`] = `#include "pair_behaviours/pair_behaviours.h"`;
+  var number_collisionThreshold_value = block.getFieldValue("collisionThreshold_value");
+  var code = `collision_avoidance(${number_collisionThreshold_value});\n`;
+  return code;
+};
+
+
+/*     CLUSTER BLOCKS    */
+
+//using
+Blockly.Blocks["observe_environment"] = {
+  init: function () {
+    this.appendDummyInput()
+      .appendField("Observe Environment")
+      .appendField("Blue Threshold1")
+      .appendField(new Blockly.FieldNumber(115), "blueThreshold_value1")
+      .appendField("Blue Threshold2")
+      .appendField(new Blockly.FieldNumber(130), "blueThreshold_value2");
+    this.setOutput(true, "Boolean");
+    this.setColour(230);
+    this.setTooltip("");
+    this.setHelpUrl("");
+  },
+};
+cppGenerator["observe_environment"] = function (block) {
+  //var body = cppGenerator.statementToCode(block, "collision_avoidance_body");
+  cppGenerator.definitions_[`include#cluster_bahaviors`] = `#include "cluster_behaviours/cluster_behaviours.h"`;
+  var number_blueThreshold_value1 = block.getFieldValue("blueThreshold_value1");
+  var number_blueThreshold_value2 = block.getFieldValue("blueThreshold_value2");
+  var code = `observe_environment(${number_blueThreshold_value1},${number_blueThreshold_value2})`;
+  return [code, cppGenerator.ORDER_ATOMIC];
+};
+
 /*
 Blockly.Blocks["obs_color_variable"] = {
   init: function () {
@@ -296,6 +320,12 @@ Blockly.Blocks["algorithm"] = {
         new Blockly.FieldVariable("isTaskFound"),
         "isTaskFound"
       );
+    /*this.appendDummyInput()
+      .appendField(
+        new Blockly.FieldVariable("Collision_Threshold"),
+        "collisionThreshold"
+      )
+      .appendField(new Blockly.FieldNumber(0, 0, 255), "collisionThreshold_value");*/
       //.appendField(new Blockly.FieldVariable("obsColor"), "VAR");
     /*this.appendDummyInput()
       .appendField(
@@ -345,6 +375,12 @@ cppGenerator["algorithm"] = function (block) {
     NameType.VARIABLE
   );
 
+  /*var variable_collisionThreshold = cppGenerator.nameDB_.getName(
+    block.getFieldValue("collisionThreshold"),
+    NameType.VARIABLE
+  );
+  var number_collisionThreshold_value = block.getFieldValue("collisionThreshold_value");*/
+
   var body = cppGenerator.statementToCode(block, "algo_body");
   // var statements_loop = cppGenerator.statementToCode(block, "loop");
   // var statements_interrupt = cppGenerator.statementToCode(block, "interrupt");
@@ -365,28 +401,6 @@ cppGenerator["algorithm"] = function (block) {
   return code;
 };
 
-/*
-cppGenerator["read_distance"] = function (block) {
-  cppGenerator.definitions_[
-    `include#distance_read`
-  ] = `#include "atomic_behaviours/atomic_behaviours.h"`;
-  var code = `
-    motors.stop();
-    int d = distance_read();
-    Serial.printf("algo_dist: %d\\n", d);
-    ${cppGenerator.INDENT}return d;
-  `;
-  return [code, cppGenerator.ORDER_ATOMIC];
-};
-
-cppGenerator["read_color"] = function (block) {
-  var code = `
-    motors.stop();
-    color_t obsColor;
-    color_read(&obsColor);
-  `;
-  return code;
-};*/
 
 Blockly.Blocks["variable"] = {
   init: function () {

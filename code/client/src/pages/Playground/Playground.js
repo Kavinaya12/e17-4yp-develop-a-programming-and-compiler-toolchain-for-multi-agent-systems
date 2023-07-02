@@ -26,6 +26,12 @@ export default function Playground() {
     <statement name="STACK">
       <block type="serial_print" id="[VfaL~(d|rSee|Gn]GkT">
         <field name="msg">algorithm: setup</field>
+        <next>
+          <block type="neo_color_wave" id="TD/QUmbC5]_](A+90zlv">
+            <field name="dtext1">NeoPixel colorwave</field>
+            <field name="color_input">100, 100, 100</field>
+          </block>
+        </next>
       </block>
     </statement>
   </block>
@@ -91,45 +97,12 @@ export default function Playground() {
     <comment pinned="false" h="80" w="160">Describe this function...</comment>
     <statement name="STACK">
       <block type="serial_print" id="|;wv;a=c3;h\`A.b3-4E/">
-        <field name="msg">algorithm: execute</field>
-        <next>
-          <block type="neo_color_wave" id="RDfH\`t18+MlEFez0dulF">
-            <field name="dtext1">NeoPixel colorwave</field>
-            <field name="color_input">100, 0, 0</field>
-            <next>
-              <block type="delay" id="@x#{ZyF|tt$te.tQ\`:Sc">
-                <field name="delay_s">1000</field>
-                <next>
-                  <block type="neo_color_wave" id="|EzJ?yXA(fB[7[7hOOnW">
-                    <field name="dtext1">NeoPixel colorwave</field>
-                    <field name="color_input">0, 100, 0</field>
-                    <next>
-                      <block type="delay" id="\`LN6VdukES!R{lCPw;jr">
-                        <field name="delay_s">1000</field>
-                        <next>
-                          <block type="neo_color_wave" id="TD/QUmbC5]_](A+90zlv">
-                            <field name="dtext1">NeoPixel colorwave</field>
-                            <field name="color_input">100, 100, 100</field>
-                            <next>
-                              <block type="delay" id="DB*s$Ta56(*goM5,M2ES">
-                                <field name="delay_s">1000</field>
-                              </block>
-                            </next>
-                          </block>
-                        </next>
-                      </block>
-                    </next>
-                  </block>
-                </next>
-              </block>
-            </next>
-          </block>
-        </next>
+        <field name="msg">algorithm: execute</field>      
       </block>
     </statement>
   </block>
   <block type="algorithm" id="^p}^aaT[%+\`,i9VU(A)Y" x="127" y="255">
-    <field name="algorithm_name">color_change</field>
+    <field name="algorithm_name">dynamic_task_allocation</field>
     <field name="robot_state_label" id="s]bRmbZ++\`1c?{z!/d_:">ROBOT_STATE</field>
     <field name="robot_state_value">1</field>
     <field name="isTaskFound">isTaskFound</field>
@@ -234,104 +207,106 @@ export default function Playground() {
         }}
         initialXml={generatedXmlCode ? generatedXmlCode : initialXml}
       >
-        <Category name="Logic">
-          <Block type="logic_compare" />
-          <Block type="logic_operation" />
-          <Block type="logic_negate" />
-          <Block type="logic_boolean" />
-          <Block type="logic_null" />
-          <Block type="logic_ternary" />
+        <Category name="Behavioural">
+          <Category name="Atomic">
+            <Block type="move_random" />
+            <Block type="assign_task" />
+            <Block type="random_turn" />
+            <Block type="move_back" />
+            <Block type="read_distance" />
+            <Block type="read_color" />
+          </Category>
+          <Category name="Pair">
+            <Block type="collision_avoidance" />
+          </Category>
+          <Category name="Cluster">
+            <Block type="observe_environment" />
+          </Category>
         </Category>
 
-        <Category name="Algorithm">
-          <Block type="algorithm" />
-          <Block type="algorithm_interrupt" />
+        <Category name="General">
+          <Category name="Logic">
+            <Block type="logic_compare" />
+            <Block type="logic_operation" />
+            <Block type="logic_negate" />
+            <Block type="logic_boolean" />
+            <Block type="logic_null" />
+            <Block type="logic_ternary" />
+          </Category>
+
+          <Category name="Algorithm">
+            <Block type="algorithm" />
+            <Block type="algorithm_interrupt" />
+          </Category>
+          <Category name="Control Flow">
+            <Block type="controls_if" />
+            <Block type="delay" />
+          </Category>
+          <Category name="MQTT">
+            <Block type="check_mqtt_messages" />
+            <Block type="publish" />
+            <Block type="publish_with_content" />
+            <Block type="subscribe" />
+          </Category>
+          <Category name="Variables">
+            {/* <Block type="serial_print" /> */}
+            <Block type="variables_init"></Block>
+            <Block type="variables_get"></Block>
+            <Block type="variables_set"></Block>
+            
+          </Category>
+
+          <Category name="String">
+            <Block type="text" />
+            <Block type="text_multiline" />
+            <Block type="text_join" />
+            <Block type="text_create_join_container" />
+            <Block type="text_create_join_item" />
+            <Block type="text_append" />
+            <Block type="text_length" />
+            <Block type="text_isEmpty" />
+            <Block type="text_indexOf" />
+            <Block type="text_charAt" />
+            <Block type="text_getSubstring" />
+            <Block type="text_changeCase" />
+            <Block type="text_replace" />
+            <Block type="text_reverse" />
+          </Category>
+
+          <Category name="Math">
+            <Block type="math_number"></Block>
+            <Block type="math_arithmetic"></Block>
+            <Block type="math_trig"></Block>
+            <Block type="math_number_property"></Block>
+            <Block type="math_change"></Block>
+            <Block type="math_constant"></Block>
+            <Block type="math_round"></Block>
+            <Block type="math_modulo"></Block>
+            <Block type="math_constrain"></Block>
+            <Block type="math_random_float"></Block>
+          </Category>
+          <Category name="Functions" custom="PROCEDURE"></Category>
+
+          <Category name="ESP">
+            <Block type="chip_id"></Block>
+          </Category>
         </Category>
 
-        <Category name="Control Flow">
-          <Block type="controls_if" />
-          <Block type="delay" />
+        <Category name="I/O">
+          <Category name="Inputs"></Category>
+
+          <Category name="Motors">
+            <Block type="drive_motors" />
+            <Block type="motors_stop" />
+          </Category>
+
+          <Category name="Outputs">
+            <Block type="serial_print" />
+            <Block type="neo_color_wave" />
+            <Block type="obs_color" />
+          </Category>
         </Category>
 
-        <Category name="Inputs"></Category>
-
-        <Category name="MQTT">
-          <Block type="check_mqtt_messages" />
-          <Block type="publish" />
-          <Block type="publish_with_content" />
-          <Block type="subscribe" />
-        </Category>
-
-        <Category name="Motors">
-          <Block type="drive_motors" />
-          <Block type="motors_stop" />
-        </Category>
-
-        <Category name="Outputs">
-          <Block type="serial_print" />
-          <Block type="neo_color_wave" />
-          <Block type="obs_color" />
-        </Category>
-
-        <Category name="Variables">
-          {/* <Block type="serial_print" /> */}
-          <Block type="variables_init"></Block>
-          <Block type="variables_get"></Block>
-          <Block type="variables_set"></Block>
-          
-        </Category>
-
-        <Category name="String">
-          <Block type="text" />
-          <Block type="text_multiline" />
-          <Block type="text_join" />
-          <Block type="text_create_join_container" />
-          <Block type="text_create_join_item" />
-          <Block type="text_append" />
-          <Block type="text_length" />
-          <Block type="text_isEmpty" />
-          <Block type="text_indexOf" />
-          <Block type="text_charAt" />
-          <Block type="text_getSubstring" />
-          <Block type="text_changeCase" />
-          <Block type="text_replace" />
-          <Block type="text_reverse" />
-        </Category>
-
-        <Category name="Math">
-          <Block type="math_number"></Block>
-          <Block type="math_arithmetic"></Block>
-          <Block type="math_trig"></Block>
-          <Block type="math_number_property"></Block>
-          <Block type="math_change"></Block>
-          <Block type="math_constant"></Block>
-          <Block type="math_round"></Block>
-          <Block type="math_modulo"></Block>
-          <Block type="math_constrain"></Block>
-          <Block type="math_random_float"></Block>
-        </Category>
-        <Category name="Functions" custom="PROCEDURE"></Category>
-
-        <Category name="ESP">
-          <Block type="chip_id"></Block>
-        </Category>
-
-        <Category name="Atomic">
-          <Block type="move_random" />
-          <Block type="assign_task" />
-          <Block type="random_turn" />
-          <Block type="move_back" />
-          <Block type="read_distance" />
-          <Block type="read_color" />
-        </Category>
-
-        <Category name="Pair">
-          <Block type="collision_avoidance" />
-        </Category>
-
-        <Category name="Cluster">
-          <Block type="observe_environment" />
-        </Category>
       </BlocklyComponent>
     </div>
   );
