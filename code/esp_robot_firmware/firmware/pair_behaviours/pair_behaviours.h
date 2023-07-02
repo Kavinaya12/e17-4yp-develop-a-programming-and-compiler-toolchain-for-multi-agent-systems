@@ -5,4 +5,4 @@
 #include "mqtt/mqtt.h"
 #include "atomic_behaviours/atomic_behaviours.h"
 
-void collision_avoidance();
+void collision_avoidance(int collisionThreshold);
