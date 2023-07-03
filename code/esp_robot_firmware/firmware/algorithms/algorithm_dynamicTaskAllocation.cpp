@@ -68,12 +68,11 @@ void algorithm_execute()
     int blueThreshold1 = 115; 
     int blueThreshold2 = 130;
     move_random(90, 90);
-    collision_avoidance(collisionThreshold);
     bool isTaskFound = observe_environment(blueThreshold1, blueThreshold2);
     if(isTaskFound){
         assign_task();
     }
-    
+    collision_avoidance(collisionThreshold);  
     
 }
 
