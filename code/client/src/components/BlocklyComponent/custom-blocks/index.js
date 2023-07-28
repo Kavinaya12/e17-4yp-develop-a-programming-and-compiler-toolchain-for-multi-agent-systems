@@ -17,6 +17,11 @@ Blockly.Blocks["delay"] = {
   },
 };
 
+cppGenerator["delay"] = function (block) {
+  var number_delay_s = block.getFieldValue("delay_s");
+  var code = `delay(${number_delay_s});\n`;
+  return code;
+};
 
 Blockly.Blocks["serial_print"] = {
   init: function () {
@@ -31,6 +36,235 @@ Blockly.Blocks["serial_print"] = {
     this.setHelpUrl("");
   },
 };
+cppGenerator["serial_print"] = function (block) {
+  var text_msg = block.getFieldValue("msg");
+  var code = `Serial.println("${text_msg}");\n`;
+  return code;
+};
+
+/*    ATOMIC BLOCKS   */
+
+//using
+Blockly.Blocks["move_random"] = {
+  init: function () {
+  this.appendDummyInput()
+  .appendField("Random Movement")
+  .appendField("Left")
+  .appendField(new Blockly.FieldNumber(0), "left")
+  .appendField("Right")
+  .appendField(new Blockly.FieldNumber(0), "right")
+  this.setPreviousStatement(true, null);
+  this.setNextStatement(true, null);
+  this.setColour(230);
+  this.setTooltip("Performs random movement with the given parameters");
+  this.setHelpUrl("");
+  },
+};
+cppGenerator["move_random"] = function (block) {
+  cppGenerator.definitions_[`include#atomic_behaviors`] = `#include "atomic_behaviours/atomic_behaviours.h"`;
+  var left = block.getFieldValue("left");
+  var right = block.getFieldValue("right");
+  
+  var code = `move_random(${left}, ${right});\n`;
+  return code;
+  };
+
+//using
+Blockly.Blocks["assign_task"] = {
+  init: function () {
+    this.appendDummyInput().appendField("Assign Task");
+    this.setPreviousStatement(true, null);
+    this.setNextStatement(true, null);
+    this.setColour(230);
+    this.setTooltip("");
+    this.setHelpUrl("");
+  },
+};
+cppGenerator["assign_task"] = function (block) {
+  
+  var code = `assign_task();`;
+  return code;
+};
+
+//not using
+Blockly.Blocks["random_turn"] = {
+  init: function () {
+    this.appendDummyInput()
+      .appendField("Random Turn")
+      .appendField("Angle")
+      .appendField(new Blockly.FieldNumber(0), "angle")
+      .appendField("Delay (ms)")
+      .appendField(new Blockly.FieldNumber(0), "delay_ms");
+    this.setPreviousStatement(true, null);
+    this.setNextStatement(true, null);
+    this.setColour(230);
+    this.setTooltip("Performs a random turn with the given angle and delay");
+    this.setHelpUrl("");
+  },
+};
+cppGenerator["random_turn"] = function (block) {
+  
+  var angle = block.getFieldValue("angle");
+  var delay_ms = block.getFieldValue("delay_ms");
+
+  var code = `random_turn(${angle}, ${delay_ms});`;
+  return code;
+};
+
+//not using
+Blockly.Blocks["move_back"] = {
+  init: function () {
+    this.appendDummyInput()
+      .appendField("Move Backward")
+      .appendField("Left")
+      .appendField(new Blockly.FieldNumber(0), "left")
+      .appendField("Right")
+      .appendField(new Blockly.FieldNumber(0), "right")
+      .appendField("Delay (ms)")
+      .appendField(new Blockly.FieldNumber(0), "delay_ms");
+    this.setPreviousStatement(true, null);
+    this.setNextStatement(true, null);
+    this.setColour(230);
+    this.setTooltip("Moves backward with the given motor values and delay");
+    this.setHelpUrl("");
+  },
+};
+cppGenerator["move_back"] = function (block) {
+  
+  var left = block.getFieldValue("left");
+  var right = block.getFieldValue("right");
+  var delay_ms = block.getFieldValue("delay_ms");
+
+  var code = `move_back(${left}, ${right}, ${delay_ms});`;
+  return code;
+};
+
+//not using
+Blockly.Blocks["read_distance"] = {
+  init: function () {
+    this.appendDummyInput().appendField("Read Distance");
+    this.setOutput(true, "Number");
+    this.setColour(230);
+    this.setTooltip("Reads the distance and returns the value");
+    this.setHelpUrl("");
+  },
+};
+cppGenerator["read_distance"] = function (block) {
+  cppGenerator.definitions_[
+    `include#distance_read`
+  ] = `#include "atomic_behaviours/atomic_behaviours.h"`;
+  var code = `read_distance()`;
+  return [code, cppGenerator.ORDER_ATOMIC];
+};
+
+//not using
+Blockly.Blocks["read_color"] = {
+  init: function () {
+    this.appendDummyInput().appendField("Read Color");
+    this.setPreviousStatement(true, null);
+    this.setNextStatement(true, null);
+    this.setColour(230);
+    this.setTooltip("Reads the color and stores it in the provided variable");
+    this.setHelpUrl("");
+  },
+};
+cppGenerator["read_color"] = function (block) {
+ 
+  var code = `read_color(&obsColor);`;
+  return code;
+};
+
+
+/*    PAIR BLOCKS   */
+
+//using
+Blockly.Blocks["collision_avoidance"] = {
+  init: function () {
+    this.appendDummyInput()
+    .appendField("Collision Avoidance")
+    .appendField("Collision Threshold")
+    .appendField(new Blockly.FieldNumber(20), "collisionThreshold_value");
+    this.setPreviousStatement(true, null);
+    this.setNextStatement(true, null);
+    this.setColour(230);
+    this.setTooltip("");
+    this.setHelpUrl("");
+  },
+};
+cppGenerator["collision_avoidance"] = function (block) {
+  //var body = cppGenerator.statementToCode(block, "collision_avoidance_body");
+  cppGenerator.definitions_[`include#pair_bahaviors`] = `#include "pair_behaviours/pair_behaviours.h"`;
+  var number_collisionThreshold_value = block.getFieldValue("collisionThreshold_value");
+  var code = `collision_avoidance(${number_collisionThreshold_value});\n`;
+  return code;
+};
+
+
+/*     CLUSTER BLOCKS    */
+
+//using
+Blockly.Blocks["observe_environment"] = {
+  init: function () {
+    this.appendDummyInput()
+      .appendField("Observe Environment")
+      .appendField("Blue Threshold1")
+      .appendField(new Blockly.FieldNumber(115), "blueThreshold_value1")
+      .appendField("Blue Threshold2")
+      .appendField(new Blockly.FieldNumber(130), "blueThreshold_value2");
+    this.setOutput(true, "Boolean");
+    this.setColour(230);
+    this.setTooltip("");
+    this.setHelpUrl("");
+  },
+};
+cppGenerator["observe_environment"] = function (block) {
+  //var body = cppGenerator.statementToCode(block, "collision_avoidance_body");
+  cppGenerator.definitions_[`include#cluster_bahaviors`] = `#include "cluster_behaviours/cluster_behaviours.h"`;
+  var number_blueThreshold_value1 = block.getFieldValue("blueThreshold_value1");
+  var number_blueThreshold_value2 = block.getFieldValue("blueThreshold_value2");
+  var code = `observe_environment(${number_blueThreshold_value1},${number_blueThreshold_value2})`;
+  return [code, cppGenerator.ORDER_ATOMIC];
+};
+
+/*
+Blockly.Blocks["obs_color_variable"] = {
+  init: function () {
+    this.appendDummyInput()
+      .appendField(new Blockly.FieldVariable("obsColor"), "VAR");
+    this.setOutput(true, null);
+    this.setColour(230);
+    this.setTooltip("");
+    this.setHelpUrl("");
+  },
+};
+// Generate the code for the obs_color_variable block
+cppGenerator["obs_color_variable"] = function (block) {
+  var variableName = block.getFieldValue("VAR");
+  return [variableName, cppGenerator.ORDER_ATOMIC];
+};*/
+
+Blockly.Blocks["obs_color"] = {
+  init: function () {
+    this.appendDummyInput()
+      .appendField("obsColor")
+      .appendField(new Blockly.FieldDropdown([
+        ["R", "R"],
+        ["G", "G"],
+        ["B", "B"]
+      ]), "color_property");
+    this.setOutput(true, null);
+    this.setColour(230);
+    this.setTooltip("");
+    this.setHelpUrl("");
+  },
+};
+cppGenerator["obs_color"] = function (block) {
+  //var variableName = block.getFieldValue("VAR");
+  var colorProperty = block.getFieldValue("color_property");
+  var code = `obsColor.${colorProperty}`;
+  return [code, cppGenerator.ORDER_ATOMIC];
+};
+
 
 Blockly.Blocks["drive_motors"] = {
   init: function () {
@@ -50,6 +284,25 @@ Blockly.Blocks["drive_motors"] = {
   },
 };
 
+Blockly.Blocks["motors_stop"] = {
+  init: function () {
+    this.appendDummyInput()
+      .appendField("Stop Motors");
+    this.setPreviousStatement(true, null);
+    this.setNextStatement(true, null);
+    this.setColour(230);
+    this.setTooltip("");
+    this.setHelpUrl("");
+  },
+};
+cppGenerator["motors_stop"] = function (block) {
+  cppGenerator.definitions_[
+    `include#motors_stop`
+  ] = `#include "modules/motors/motors.h"`;
+  var code = `motors.stop();`;
+  return code;
+};
+
 Blockly.Blocks["algorithm"] = {
   init: function () {
     this.appendDummyInput().appendField(
@@ -62,6 +315,23 @@ Blockly.Blocks["algorithm"] = {
         "robot_state_label"
       )
       .appendField(new Blockly.FieldNumber(0, 0, 10), "robot_state_value");
+    this.appendDummyInput()
+      .appendField(
+        new Blockly.FieldVariable("isTaskFound"),
+        "isTaskFound"
+      );
+    /*this.appendDummyInput()
+      .appendField(
+        new Blockly.FieldVariable("Collision_Threshold"),
+        "collisionThreshold"
+      )
+      .appendField(new Blockly.FieldNumber(0, 0, 255), "collisionThreshold_value");*/
+      //.appendField(new Blockly.FieldVariable("obsColor"), "VAR");
+    /*this.appendDummyInput()
+      .appendField(
+        new Blockly.FieldVariable("obsColor"),
+        "VAR"
+      );*/
     this.appendStatementInput("algo_body")
       .setCheck(null)
       .appendField("algorithm_loop");
@@ -77,22 +347,10 @@ Blockly.Blocks["algorithm"] = {
     this.setHelpUrl("");
   },
 };
-
-cppGenerator["serial_print"] = function (block) {
-  var text_msg = block.getFieldValue("msg");
-  var code = `Serial.println("${text_msg}");\n`;
-  return code;
-};
-
-cppGenerator["delay"] = function (block) {
-  var number_delay_s = block.getFieldValue("delay_s");
-  var code = `delay(${number_delay_s});\n`;
-  return code;
-};
-
 cppGenerator["algorithm"] = function (block) {
   console.log(cppGenerator.nameDB_, NameType.VARIABLE);
   cppGenerator.definitions_[`include#algorithm`] = `#include "algorithm.h"`;
+  cppGenerator.definitions_[`include#mqtt`] = `#include "mqtt/mqtt.h"`;
   var variable_name = cppGenerator.nameDB_.getName(
     block.getFieldValue("algorithm_name"),
     NameType.VARIABLE
@@ -104,6 +362,24 @@ cppGenerator["algorithm"] = function (block) {
   );
   console.log(variable_robot_state_label);
   var number_robot_state_value = block.getFieldValue("robot_state_value");
+/*
+  var variable_obsColor = cppGenerator.nameDB_.getName(
+    block.getFieldValue("obsColor"),
+    NameType.VARIABLE
+  );
+*/
+
+  
+  var variable_isTaskFound = cppGenerator.nameDB_.getName(
+    block.getFieldValue("isTaskFound"),
+    NameType.VARIABLE
+  );
+
+  /*var variable_collisionThreshold = cppGenerator.nameDB_.getName(
+    block.getFieldValue("collisionThreshold"),
+    NameType.VARIABLE
+  );
+  var number_collisionThreshold_value = block.getFieldValue("collisionThreshold_value");*/
 
   var body = cppGenerator.statementToCode(block, "algo_body");
   // var statements_loop = cppGenerator.statementToCode(block, "loop");
@@ -114,6 +390,8 @@ cppGenerator["algorithm"] = function (block) {
   // TODO: Assemble JavaScript into code variable.
   var code = `
     int ${variable_robot_state_label} = ${number_robot_state_value};
+    
+    bool ${variable_isTaskFound};
 
     void algorithm_loop() {
       \t${body}
@@ -122,6 +400,7 @@ cppGenerator["algorithm"] = function (block) {
   `;
   return code;
 };
+
 
 Blockly.Blocks["variable"] = {
   init: function () {
