@@ -1,6 +1,7 @@
 import Blockly from "blockly";
 import { Names } from "blockly/core";
 import cppGenerator from "../generator/cpp";
+import javaGenerator from "../java_generator/java";
 const NameType = Names.NameType;
 
 Blockly.Blocks["delay"] = {
@@ -23,6 +24,12 @@ cppGenerator["delay"] = function (block) {
   return code;
 };
 
+javaGenerator["delay"] = function (block) {
+  var number_delay_s = block.getFieldValue("delay_s");
+  var code = `delay(${number_delay_s});\n`;
+  return code;
+};
+
 Blockly.Blocks["serial_print"] = {
   init: function () {
     this.appendDummyInput()
@@ -39,6 +46,11 @@ Blockly.Blocks["serial_print"] = {
 cppGenerator["serial_print"] = function (block) {
   var text_msg = block.getFieldValue("msg");
   var code = `Serial.println("${text_msg}");\n`;
+  return code;
+};
+javaGenerator["serial_print"] = function (block) {
+  var text_msg = block.getFieldValue("msg");
+  var code = `System.out.println("${text_msg}");\n`;
   return code;
 };
 
@@ -68,6 +80,14 @@ cppGenerator["move_random"] = function (block) {
   var code = `move_random(${left}, ${right});\n`;
   return code;
   };
+javaGenerator["move_random"] = function (block) {
+  javaGenerator.definitions_[`import#atomic_behaviours`] = `import atomic_behaviours.AtomicBehaviours;`;
+  var left = block.getFieldValue("left");
+  var right = block.getFieldValue("right");
+  
+  var code = `move_random(${left}, ${right});\n`;
+  return code;
+  };
 
 //using
 Blockly.Blocks["assign_task"] = {
@@ -81,6 +101,11 @@ Blockly.Blocks["assign_task"] = {
   },
 };
 cppGenerator["assign_task"] = function (block) {
+  
+  var code = `assign_task();`;
+  return code;
+};
+javaGenerator["assign_task"] = function (block) {
   
   var code = `assign_task();`;
   return code;
@@ -198,6 +223,13 @@ cppGenerator["collision_avoidance"] = function (block) {
   var code = `collision_avoidance(${number_collisionThreshold_value});\n`;
   return code;
 };
+javaGenerator["collision_avoidance"] = function (block) {
+  //var body = cppGenerator.statementToCode(block, "collision_avoidance_body");
+  javaGenerator.definitions_[`import#pair_bahaviors`] = `import pair_behaviours.PairBehaviours;`;
+  var number_collisionThreshold_value = block.getFieldValue("collisionThreshold_value");
+  var code = `collision_avoidance(${number_collisionThreshold_value});\n`;
+  return code;
+};
 
 
 /*     CLUSTER BLOCKS    */
@@ -220,6 +252,14 @@ Blockly.Blocks["observe_environment"] = {
 cppGenerator["observe_environment"] = function (block) {
   //var body = cppGenerator.statementToCode(block, "collision_avoidance_body");
   cppGenerator.definitions_[`include#cluster_bahaviors`] = `#include "cluster_behaviours/cluster_behaviours.h"`;
+  var number_blueThreshold_value1 = block.getFieldValue("blueThreshold_value1");
+  var number_blueThreshold_value2 = block.getFieldValue("blueThreshold_value2");
+  var code = `observe_environment(${number_blueThreshold_value1},${number_blueThreshold_value2})`;
+  return [code, cppGenerator.ORDER_ATOMIC];
+};
+javaGenerator["observe_environment"] = function (block) {
+  //var body = cppGenerator.statementToCode(block, "collision_avoidance_body");
+  javaGenerator.definitions_[`import#cluster_bahaviors`] = `import cluster_behaviours.ClusterBehaviours;`;
   var number_blueThreshold_value1 = block.getFieldValue("blueThreshold_value1");
   var number_blueThreshold_value2 = block.getFieldValue("blueThreshold_value2");
   var code = `observe_environment(${number_blueThreshold_value1},${number_blueThreshold_value2})`;
@@ -299,6 +339,11 @@ cppGenerator["motors_stop"] = function (block) {
   cppGenerator.definitions_[
     `include#motors_stop`
   ] = `#include "modules/motors/motors.h"`;
+  var code = `motors.stop();`;
+  return code;
+};
+javaGenerator["motors_stop"] = function (block) {
+  javaGenerator.definitions_[`import#motors_stop`] = `import modules.motors.Motors;`;
   var code = `motors.stop();`;
   return code;
 };
@@ -400,8 +445,74 @@ cppGenerator["algorithm"] = function (block) {
   `;
   return code;
 };
+javaGenerator["algorithm"] = function (block) {
+  //console.log(cppGenerator.nameDB_, NameType.VARIABLE);
+  javaGenerator.definitions_[`import#algorithm`] = `import algorithm.Algorithm;`;
+  javaGenerator.definitions_[`import#mqtt`] = `import mqtt.Mqtt;`;
+  var variable_name = javaGenerator.nameDB_.getName(
+    block.getFieldValue("algorithm_name"),
+    NameType.VARIABLE
+  );
+  javaGenerator.algorithm_ = variable_name;
+  var variable_robot_state_label = javaGenerator.nameDB_.getName(
+    block.getFieldValue("robot_state_label"),
+    NameType.VARIABLE
+  );
+  //console.log(variable_robot_state_label);
+  var number_robot_state_value = block.getFieldValue("robot_state_value");
+/*
+  var variable_obsColor = cppGenerator.nameDB_.getName(
+    block.getFieldValue("obsColor"),
+    NameType.VARIABLE
+  );
+*/
 
+  
+  var variable_isTaskFound = javaGenerator.nameDB_.getName(
+    block.getFieldValue("isTaskFound"),
+    NameType.VARIABLE
+  );
 
+  /*var variable_collisionThreshold = cppGenerator.nameDB_.getName(
+    block.getFieldValue("collisionThreshold"),
+    NameType.VARIABLE
+  );
+  var number_collisionThreshold_value = block.getFieldValue("collisionThreshold_value");*/
+
+  var body = javaGenerator.statementToCode(block, "algo_body");
+  // var statements_loop = cppGenerator.statementToCode(block, "loop");
+  // var statements_interrupt = cppGenerator.statementToCode(block, "interrupt");
+  // var statements_start = cppGenerator.statementToCode(block, "start");
+  // var statements_stop = cppGenerator.statementToCode(block, "stop");
+  // var statements_reset = cppGenerator.statementToCode(block, "reset");
+  // TODO: Assemble JavaScript into code variable.
+  
+  var code =`
+  public class Main {
+
+    private static int ${variable_robot_state_label} = ${number_robot_state_value};
+    private static boolean ${variable_isTaskFound};
+
+    public static void main(String[] args) {
+        // ALGO_DYNAMIC_TASK_ALLOCATION condition
+        if (ALGO_${Blockly.cpp.algorithm_}()) {
+            while (true) {
+                algorithm_loop();
+            }
+        }
+    }
+
+    // Algorithm loop
+    public static void algorithm_loop() {
+      \t${body}
+    }
+
+  `
+  console.log(code);
+  return code;
+};
+
+ 
 Blockly.Blocks["variable"] = {
   init: function () {
     this.appendDummyInput()
@@ -633,6 +744,17 @@ cppGenerator["neo_color_wave"] = function (block) {
     ${neopixelDefStart}
     \tpixelColorWave(${dropdown_color_input});
     ${neopixelDefEnd}
+  `;
+  return code;
+};
+
+javaGenerator["neo_color_wave"] = function (block) {
+  javaGenerator.definitions_[
+    `import#neo_color_wave`
+  ] = `import modules.neopixel.NeoPixel;`;
+  var dropdown_color_input = block.getFieldValue("color_input");
+  var code = `
+    pixelColorWave(${dropdown_color_input});
   `;
   return code;
 };
