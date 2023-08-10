@@ -4,10 +4,11 @@
   This is an auto-generated file.
 */
 
-#define DYNAMIC_TASK_ALLOCATION
+#define ALGO_INFRARED_TEST
+// DYNAMIC_TASK_ALLOCATION
 // ALGO_COLOR_CHANGE
 
-#define ENABLE_SERIAL_COMMUNICATION1
+#define ENABLE_SERIAL_COMMUNICATION 1
 
 #define NEOPIXEL_INDICATIONS
 
@@ -36,5 +37,7 @@
 #define ENABLE_MQTT
 
 #define ENABLE_WIFI
+
+#define ENABLE_INFARED
 
 /* ------- End of file ------- */
