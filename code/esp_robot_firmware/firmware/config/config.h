@@ -8,18 +8,18 @@
 
 // ---------------------------------------------------------- MQTT Communication
 #ifdef ENABLE_MQTT
-#define MQTT_SERVER "68.183.188.135"
-#define MQTT_PORT 1883
-#define MQTT_CLIENT "Robot_"
-#define MQTT_USERNAME "swarm_user"
-#define MQTT_PASSWORD "swarm_usere15"
+#define MQTT_SERVER ""
+#define MQTT_PORT 
+#define MQTT_CLIENT ""
+#define MQTT_USERNAME ""
+#define MQTT_PASSWORD ""
 #endif
 
 // ------------------------------------------------------------- WiFi Client API
 #ifdef ENABLE_WIFI_CLIENT
 
-#define HOST "http://192.168.8.1/";
-#define PORT 8081
+#define HOST "";
+#define PORT 
 
 #endif
 
