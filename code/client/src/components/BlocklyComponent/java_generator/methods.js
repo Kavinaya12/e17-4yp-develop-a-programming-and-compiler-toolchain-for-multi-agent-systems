@@ -46,13 +46,14 @@ javaGenerator['procedures_defreturn'] = function(block) {
       );
     }
     let code =
-      'public static ' +
+      'public ' +
       returnType +
       ' ' +
       funcName +
       '(' +
       args.join(', ') +
       ') {\n' +
+      'super.'+funcName+'();\n'+
       xfix1 +
       loopTrap +
       branch +

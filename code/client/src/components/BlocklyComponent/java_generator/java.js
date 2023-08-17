@@ -189,6 +189,7 @@ Blockly.java.init = function(workspace) {
   
     // Convert the definitions dictionary into a list.
     var imports = [];
+    var packages = [];
     var classDeclarations = [];
     var methodDeclarations = [];
     var methodDefinitions = [];
@@ -198,7 +199,9 @@ Blockly.java.init = function(workspace) {
   
       if (name.startsWith("import")) {
         imports.push(def);
-      } else if (name.startsWith("class_declare")) {
+      } else if (name.startsWith("package")) {
+        packages.push(def);
+      }else if (name.startsWith("class_declare")) {
         classDeclarations.push(def);
       } else if (name.startsWith("method_declare")) {
         methodDeclarations.push(def);
@@ -208,12 +211,13 @@ Blockly.java.init = function(workspace) {
     }
   
     // Combine the code snippets into the final java code.
+    var allPackages = packages.join("\n") + "\n\n";
     var allImports = imports.join("\n") + "\n\n";
     var allClassDeclarations = classDeclarations.join("\n\n") + "\n\n";
     var allMethodDeclarations = methodDeclarations.join("\n\n") + "\n\n";
     var allMethodDefinitions = methodDefinitions.join("\n\n");
   
-    var finalCode = allImports + code + allClassDeclarations + allMethodDeclarations + allMethodDefinitions + "\n"+'}';
+    var finalCode = allPackages + allImports + code + allClassDeclarations + allMethodDeclarations + allMethodDefinitions + "\n"+'}';
 
     this.isInitialized = false;
     this.nameDB_.reset();
