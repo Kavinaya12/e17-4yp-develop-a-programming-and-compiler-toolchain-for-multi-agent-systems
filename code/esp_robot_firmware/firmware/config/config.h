@@ -8,18 +8,18 @@
 
 // ---------------------------------------------------------- MQTT Communication
 #ifdef ENABLE_MQTT
-#define MQTT_SERVER "68.183.188.135"
-#define MQTT_PORT 1883
-#define MQTT_CLIENT "Robot_"
-#define MQTT_USERNAME "swarm_user"
-#define MQTT_PASSWORD "swarm_usere15"
+#define MQTT_SERVER ""
+#define MQTT_PORT 
+#define MQTT_CLIENT ""
+#define MQTT_USERNAME ""
+#define MQTT_PASSWORD ""
 #endif
 
 // ------------------------------------------------------------- WiFi Client API
 #ifdef ENABLE_WIFI_CLIENT
 
-#define HOST "http://192.168.8.1/";
-#define PORT 8081
+#define HOST "";
+#define PORT 
 
 #endif
 
@@ -30,8 +30,8 @@
 #define WIFI_SSID "Dialog 4G 733"
 #define WIFI_PASS "b71617D3"
 
-#define OTA_SERVER_IP "192.168.8.140"
-#define OTA_SERVER_PORT "5001"
+#define OTA_SERVER_IP ""
+#define OTA_SERVER_PORT ""
 
 // const char* ssid = WIFI_SSID;
 // const char* password = WIFI_PASS;
