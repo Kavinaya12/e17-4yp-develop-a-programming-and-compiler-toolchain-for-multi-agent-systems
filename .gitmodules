@@ -1,0 +1,3 @@
+[submodule "code/java_virtual_robot/robot-library-java"]
+	path = code/java_virtual_robot/robot-library-java
+	url = https://github.com/IsaraTillekeratne/robot-library-java.git
