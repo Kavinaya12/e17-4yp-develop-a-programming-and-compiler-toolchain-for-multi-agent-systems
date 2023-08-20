@@ -6,6 +6,7 @@ const initialState = {
   formResult: null,
   algorithmName: null,
   generatedCppCode: null,
+  generatedJavaCode: null,
   generatedXmlCode: null
 };
 
@@ -28,6 +29,9 @@ export const firmwareFileSlice = createSlice({
     setGeneratedCppCode: (state, action) => {
       state.generatedCppCode = action.payload
     },
+    setGeneratedJavaCode: (state, action) => {
+      state.generatedJavaCode = action.payload
+    },
     setGeneratedXmlCode: (state, action) => {
       state.generatedXmlCode = action.payload
     }
@@ -35,6 +39,6 @@ export const firmwareFileSlice = createSlice({
 });
 
 // Action creators are generated for each case reducer function
-export const { change, setDynamicCode, setFormResult, setAlgorithmName, setGeneratedCppCode, setGeneratedXmlCode } = firmwareFileSlice.actions;
+export const { change, setDynamicCode, setFormResult, setAlgorithmName, setGeneratedCppCode, setGeneratedJavaCode, setGeneratedXmlCode } = firmwareFileSlice.actions;
 
 export default firmwareFileSlice.reducer;

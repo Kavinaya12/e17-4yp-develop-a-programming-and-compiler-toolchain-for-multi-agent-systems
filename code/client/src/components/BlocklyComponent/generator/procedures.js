@@ -59,6 +59,7 @@ cppGenerator["procedures_defreturn"] = function (block) {
     returnValue +
     "}";
   code = cppGenerator.scrub_(block, code);
+  console.log(code);
   // Add % so as not to collide with helper functions in definitions list.
   cppGenerator.definitions_["%" + funcName] = code;
   return null;
@@ -82,6 +83,7 @@ cppGenerator["procedures_callreturn"] = function (block) {
       "null";
   }
   let code = funcName + "(" + args.join(", ") + ")";
+  console.log(code);
   return [code, cppGenerator.ORDER_UNARY_POSTFIX];
 };
 
@@ -90,6 +92,7 @@ cppGenerator["procedures_callnoreturn"] = function (block) {
   // Generated code is for a function call as a statement is the same as a
   // function call as a value, with the addition of line ending.
   const tuple = cppGenerator["procedures_callreturn"](block);
+  console.log(tuple);
   return tuple[0] + ";\n";
 };
 

@@ -1,0 +1,6 @@
+[submodule "code/java_virtual_robot/robot-library-java"]
+	path = code/java_virtual_robot/robot-library-java
+	url = https://github.com/IsaraTillekeratne/robot-library-java.git
+[submodule "code/virtual_robot_simulator/swarm-simulator"]
+	path = code/virtual_robot_simulator/swarm-simulator
+	url = https://github.com/IsaraTillekeratne/swarm-simulator.git

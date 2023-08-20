@@ -139,6 +139,7 @@ Blockly.cpp.finish = function (code) {
       func_definitions.push(def); //definition
     }
   }
+  
   //imports--> #include
   //definitions--> function def, #def
   var allDefs =
@@ -184,6 +185,7 @@ Blockly.cpp.finishFull = function (code) {
 };
 
 Blockly.cpp.scrubNakedValue = function (line) {
+  
   return line + ";\n";
   //ZR editor should ignore all blocks that are not children of the page's function block
   // return '';
@@ -268,7 +270,6 @@ Blockly.cpp["class-container"] = function (block) {
     "}";
 
   var res = code.replace("$$CONSTRUCTOR_NAME$$", text_class_name);
-
   // Blockly.cpp.validator.refresh();
   return res;
 };
@@ -316,7 +317,6 @@ Blockly.cpp["method-container"] = function (block) {
   var dropdown_access_modifier = block.getFieldValue("access-modifier");
   var statements_inputs = Blockly.cpp.statementToCode(block, "inputs");
   var code = dropdown_access_modifier + ":\n" + statements_inputs;
-
   return code;
 };
 
