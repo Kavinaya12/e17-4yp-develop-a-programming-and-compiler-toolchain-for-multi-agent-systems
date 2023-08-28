@@ -18,7 +18,8 @@ import {
 } from "@ant-design/icons";
 
 // socket.io connection socket
-const socket = io("http://localhost:5001");
+const socket = io("http://localhost:5001"); //physical robot backend
+//const socket = io("http://localhost:8080"); //virtual robot backend
 
 function Dashboard() {
   // antd steps
@@ -27,6 +28,7 @@ function Dashboard() {
   // socket related variables
   const [isConnected, setIsConnected] = useState(socket.connected);
   const [msgs, setMsgs] = useState([]);
+  const [status, setStatus] = useState(''); //virtual robot status
 
   // redux related variables
   const dispatch = useDispatch();
@@ -63,6 +65,19 @@ function Dashboard() {
       socket.off("disconnect");
       socket.off("build");
     };
+    /*socket.on('connect', () => {
+      console.log('Connected to WebSocket');
+      setIsConnected(true);
+    });
+
+    socket.on('message', (message) => {
+      setStatus(message);
+      console.log(message);
+    });
+
+    return () => {
+      socket.disconnect();
+    };*/
   }, []);
 
   useEffect(() => {
@@ -88,6 +103,33 @@ function Dashboard() {
       }
     } catch (error) {
       message.error(error.message);
+    }
+  };
+
+  //build virtual robot 
+  const handleVirtualBuild = async () => {
+    setMsgs([]);
+    try {
+      const response = await axios.post(
+        `http://localhost:5001/build`
+      );
+
+      if (response?.data?.msg) {
+        message.loading(response.data.msg);
+      }
+    } catch (error) {
+      message.error(error.message);
+    }
+  };
+
+  //virtual robot build
+  const handleBuildStart = async () => {
+    try {
+      await axios.post('http://localhost:8080/build', {});
+      setStatus('Build started...');
+    } catch (error) {
+      console.error('Error during build:', error);
+      //setStatus('Error during build');
     }
   };
 
@@ -165,7 +207,7 @@ function Dashboard() {
 
             <Button
               type="primary"
-              onClick={() => handleBuild()}
+              onClick={() => handleVirtualBuild()}
               style={{ marginLeft: "5px" }}
             >
               <div className="d-flex">
@@ -175,6 +217,7 @@ function Dashboard() {
                 <div>Build</div>
               </div>
             </Button>
+            <div>{status}</div>
           </div>
 
           <div className="mt-4 d-flex justify-content-center">

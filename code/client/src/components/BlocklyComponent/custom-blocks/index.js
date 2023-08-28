@@ -354,6 +354,10 @@ Blockly.Blocks["algorithm"] = {
       new Blockly.FieldTextInput("Algorithm"),
       "algorithm_name"
     );
+    this.appendDummyInput().appendField(
+      new Blockly.FieldTextInput("Virtual_Robot_Name"),
+      "virtualRobot_name"
+    );
     this.appendDummyInput()
       .appendField(
         new Blockly.FieldVariable("ROBOT_STATE"),
@@ -401,6 +405,7 @@ cppGenerator["algorithm"] = function (block) {
     NameType.VARIABLE
   );
   cppGenerator.algorithm_ = variable_name;
+
   var variable_robot_state_label = cppGenerator.nameDB_.getName(
     block.getFieldValue("robot_state_label"),
     NameType.VARIABLE
@@ -447,15 +452,22 @@ cppGenerator["algorithm"] = function (block) {
 };
 javaGenerator["algorithm"] = function (block) {
   //console.log(cppGenerator.nameDB_, NameType.VARIABLE);
-  javaGenerator.definitions_[`import#algorithm`] = `import algorithm.Algorithm;`;
-  javaGenerator.definitions_[`import#mqtt`] = `import mqtt.Mqtt;`;
-  javaGenerator.definitions_[`package#robots_samples`] = `package Robots.samples;`;
+  //javaGenerator.definitions_[`import#algorithm`] = `import algorithm.Algorithm;`;
+  //javaGenerator.definitions_[`import#mqtt`] = `import mqtt.Mqtt;`;
+  //javaGenerator.definitions_[`package#robots_samples`] = `package Robots.samples;`;
+  javaGenerator.definitions_[`package#robots_samples`] = `package Robots;`;
   javaGenerator.definitions_[`import#virtualRobot`] = `import swarm.robot.VirtualRobot;`;
   var variable_name = javaGenerator.nameDB_.getName(
     block.getFieldValue("algorithm_name"),
     NameType.VARIABLE
   );
   javaGenerator.algorithm_ = variable_name;
+
+  var virtualRobot_name = javaGenerator.nameDB_.getName(
+    block.getFieldValue("virtualRobot_name"),
+    NameType.VARIABLE
+  );
+
   var variable_robot_state_label = javaGenerator.nameDB_.getName(
     block.getFieldValue("robot_state_label"),
     NameType.VARIABLE
@@ -482,7 +494,6 @@ javaGenerator["algorithm"] = function (block) {
   var number_collisionThreshold_value = block.getFieldValue("collisionThreshold_value");*/
 
   var body = javaGenerator.statementToCode(block, "algo_body");
-  console.log(body);
   // var statements_loop = cppGenerator.statementToCode(block, "loop");
   // var statements_interrupt = cppGenerator.statementToCode(block, "interrupt");
   // var statements_start = cppGenerator.statementToCode(block, "start");
@@ -491,18 +502,22 @@ javaGenerator["algorithm"] = function (block) {
   // TODO: Assemble JavaScript into code variable.
   
   var code =`
-  public class VRobot extends VirtualRobot {
+  public class ${virtualRobot_name} extends VirtualRobot {
 
-    private static int ${variable_robot_state_label} = ${number_robot_state_value};
-    private static boolean ${variable_isTaskFound};
+    //private static int ${variable_robot_state_label} = ${number_robot_state_value};
+    //private static boolean ${variable_isTaskFound};
+
+    public ${virtualRobot_name}(int id, double x, double y, double heading) {
+      super(id, x, y, heading);
+  }
 
     // Algorithm loop
-    public void algorithm_loop() throws Exception {
-      \tsuper.algorithm_loop();\n${body}
+    public void loop() throws Exception {
+      \tsuper.loop();\n${body}
     }
 
   `
-  console.log(code);
+  
   return code;
 };
 /*
