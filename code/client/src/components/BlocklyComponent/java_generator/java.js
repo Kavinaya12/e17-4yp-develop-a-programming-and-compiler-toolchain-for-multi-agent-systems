@@ -180,7 +180,7 @@ Blockly.java.init = function(workspace) {
   };
 
   Blockly.java.finish = function (code) {
-    console.log(code);
+    
     // Indent every line.
     if (code) {
       code = this.prefixLines(code, Blockly.java.INDENT);
@@ -221,7 +221,7 @@ Blockly.java.init = function(workspace) {
 
     this.isInitialized = false;
     this.nameDB_.reset();
-    console.log(finalCode);
+    
     return finalCode;
   };
 

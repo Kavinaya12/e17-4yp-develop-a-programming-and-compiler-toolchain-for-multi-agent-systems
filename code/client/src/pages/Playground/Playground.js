@@ -15,6 +15,7 @@ export default function Playground() {
   const initialXml = `<xml xmlns="https://developers.google.com/blockly/xml">
   <variables>
     <variable id="s]bRmbZ++\`1c?{z!/d_:">ROBOT_STATE</variable>
+    <variable>state</variable>
     <variable id="x$leYs{fIiSO1QApRb*c">interrupt</variable>
     <variable id="C}k8;%~r]6mMiJiCA2b%">msg</variable>
     <variable>d</variable>
@@ -103,6 +104,7 @@ export default function Playground() {
   </block>
   <block type="algorithm" id="^p}^aaT[%+\`,i9VU(A)Y" x="127" y="255">
     <field name="algorithm_name">dynamic_task_allocation</field>
+    <field name="virtualRobot_name">VRobot</field>
     <field name="robot_state_label" id="s]bRmbZ++\`1c?{z!/d_:">ROBOT_STATE</field>
     <field name="robot_state_value">1</field>
     <field name="isTaskFound">isTaskFound</field>

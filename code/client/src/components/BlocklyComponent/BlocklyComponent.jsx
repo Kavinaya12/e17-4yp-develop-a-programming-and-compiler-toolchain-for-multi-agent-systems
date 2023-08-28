@@ -47,7 +47,7 @@ function BlocklyComponent(props) {
     //var code = cppGen.workspaceToCode(primaryWorkspace.current);
     var generatedcode = codeGen.workspaceToCode(primaryWorkspace.current);
     //console.log(javacode);
-    console.log(generatedcode);
+    
     const algorithmName = codeGen.algorithm_
     dispatch(setAlgorithmName(algorithmName)) // set algorithm name in redux state
     dispatch(setGeneratedCppCode(generatedcode)) // set generated cpp code in redux state
