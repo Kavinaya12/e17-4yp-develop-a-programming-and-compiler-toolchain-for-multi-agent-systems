@@ -100,7 +100,7 @@ app.get("/update", (req, res) => {
   res.download(file);
 });
 
-app.post("/build", async (req, res) => {
+/*app.post("/build", async (req, res) => {
   const firmwareDir = req.query.dir || "esp_robot_firmware";
   console.log(req.body);
 
@@ -137,7 +137,33 @@ app.post("/build", async (req, res) => {
   bash_run.stderr.on("data", function (data) {
     socketIO.emit("build", data.toString());
   });
+});*/
+
+//build virtual robot code
+app.post("/build", async (req, res) => {
+  //const virtualRobotDir = req.query.virtualDir || "java_virtual_robot/java-robot-library"; 
+  const virtualRobotDir = "java_virtual_robot/robot-library-java";
+
+  res.json({ msg: `${virtualRobotDir} build started!` });
+
+  const mavenCommand = `cd ${virtualRobotDir} && mvn -f pom.xml clean install && cp ${virtualRobotDir}/target/java-robot-1.0.2.jar ./recent_builds`;
+  console.log("Executing command:", mavenCommand);
+
+  // Execute Maven build command
+  const bash_run = childProcess.spawn(mavenCommand, { shell: true });
+
+  // Execute Maven build command
+  //const bash_run = childProcess.spawn(`cd ${virtualRobotDir} && mvn clean install`, { shell: true });
+
+  bash_run.stdout.on("data", function (data) {
+    socketIO.emit("build", data.toString());
+  });
+
+  bash_run.stderr.on("data", function (data) {
+    socketIO.emit("build", data.toString());
+  });
 });
+
 
 httpServer.listen(port, () => {
   console.log(`Example app listening on port ${port}`);
