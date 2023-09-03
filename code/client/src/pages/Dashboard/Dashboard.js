@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { Button, Input, message, Steps } from "antd";
+import { Row, Col } from 'reactstrap';
 import io from "socket.io-client";
 import { decrease, increase } from "../../Redux/CodeGenSteps";
 import { CodeOutlined } from "@ant-design/icons";
@@ -18,8 +19,7 @@ import {
 } from "@ant-design/icons";
 
 // socket.io connection socket
-const socket = io("http://localhost:5001"); //physical robot backend
-//const socket = io("http://localhost:8080"); //virtual robot backend
+const socket = io("http://localhost:5001"); 
 
 function Dashboard() {
   // antd steps
@@ -30,13 +30,27 @@ function Dashboard() {
   const [msgs, setMsgs] = useState([]);
   const [status, setStatus] = useState(''); //virtual robot status
 
+  // State for robot information
+  const [vrobotInfo, setVrobotInfo] = useState({
+    vRobotId: '',
+    xCoordinate: '',
+    yCoordinate: '',
+    heading: '',
+  });
+
+  // State for multiple robots
+  const [vrobots, setVrobots] = useState([]);
+  console.log(vrobots);
   // redux related variables
   const dispatch = useDispatch();
   const {
+    selectedLanguage,
     firmwareFile,
     dynamicCodeObject,
     algorithmName,
     generatedCppCode,
+    generatedJavaCode,
+    generatedCode,
     generatedXmlCode,
   } = useSelector((state) => state.firmware);
   const { step } = useSelector((state) => state.step);
@@ -88,24 +102,40 @@ function Dashboard() {
   const handleBuild = async () => {
     setMsgs([]);
     try {
-      const response = await axios.post(
-        `http://localhost:5001/build?dir=${firmwareFile}`,
-        {
-          features: dynamicCodeObject,
-          algorithm_name: algorithmName,
-          algorithm_body: generatedCppCode,
-          robot_id: robotId,
-        }
-      );
+      if (selectedLanguage === "cpp") {
+        const response = await axios.post(
+          `http://localhost:5001/physicalrobot/build?dir=${firmwareFile}`,
+          {
+            features: dynamicCodeObject,
+            algorithm_name: algorithmName,
+            algorithm_body: generatedCode,
+            robot_id: robotId,
+          }
+        );
 
-      if (response?.data?.msg) {
-        message.loading(response.data.msg);
+        if (response?.data?.msg) {
+          message.loading(response.data.msg);
+        }
+      }else if (selectedLanguage === "java") {
+        // Call the Java build request
+        const response = await axios.post(
+          `http://localhost:5001/virtualrobot/build`,
+          {
+            algorithm_name: algorithmName,
+            algorithm_body: generatedCode,
+            robot_array: vrobots,
+          }
+        );
+          console.log(algorithmName);
+        if (response?.data?.msg) {
+          message.loading(response.data.msg);
+        }
       }
     } catch (error) {
       message.error(error.message);
     }
   };
-
+/*
   //build virtual robot 
   const handleVirtualBuild = async () => {
     setMsgs([]);
@@ -121,17 +151,8 @@ function Dashboard() {
       message.error(error.message);
     }
   };
-
-  //virtual robot build
-  const handleBuildStart = async () => {
-    try {
-      await axios.post('http://localhost:8080/build', {});
-      setStatus('Build started...');
-    } catch (error) {
-      console.error('Error during build:', error);
-      //setStatus('Error during build');
-    }
-  };
+*/
+  
 
   const handleRobotId = (value) => {
     if (value < 0 || value > 15) {
@@ -141,6 +162,38 @@ function Dashboard() {
       setRobotId(value);
     }
   };
+
+  // Function to add a new robot
+  const handleAddVrobot = () => {
+    // Validate robot information, you can add more validation as needed
+    if (
+        vrobotInfo.vRobotId &&
+        vrobotInfo.xCoordinate &&
+        vrobotInfo.yCoordinate &&
+        vrobotInfo.heading
+    ) {
+    // Add the new robot to the array
+    setVrobots([...vrobots, vrobotInfo]);
+      console.log(vrobots);
+    // Clear the input fields
+    setVrobotInfo({
+        vRobotId: '',
+        xCoordinate: '',
+        yCoordinate: '',
+        heading: '',
+    });
+    } else {
+    message.error('Please enter valid robot information.');
+    }
+  };
+
+  // Function to handle changes in robot information inputs
+  const handlevRobotInfoChange = (field, value) => {
+    setVrobotInfo({
+    ...vrobotInfo,
+    [field]: value,
+    });
+};
 
   return (
     <div className="mt-5 mb-5">
@@ -197,28 +250,111 @@ function Dashboard() {
             </div>
           </div>
 
-          <div className="mt-4 d-flex">
-            <Input
-              onChange={(e) => handleRobotId(e.target.value)}
-              value={robotId}
-              type="number"
-              placeholder="Specify the robot ID"
-            />
+          
+            {selectedLanguage === 'java' && (
+                <Row className='mt-3'>
+                  {/* Render Robot Information Input Fields */}
+    
+                  <Col xxl='6' xl='6' lg='6' md='6' sm='12' xs='12'>
+                  <h6>Virtual Robot ID</h6>
+                  <Input
+                      value={vrobotInfo.vRobotId}
+                      onChange={(e) => handlevRobotInfoChange('vRobotId', e.target.value)}
+                  />
+                  </Col>
+                  <Col xxl='6' xl='6' lg='6' md='6' sm='12' xs='12'>
+                  <h6>X Coordinate</h6>
+                  <Input
+                      value={vrobotInfo.xCoordinate}
+                      onChange={(e) => handlevRobotInfoChange('xCoordinate', e.target.value)}
+                  />
+                  </Col>
+                  <Col xxl='6' xl='6' lg='6' md='6' sm='12' xs='12'>
+                  <h6>Y Coordinate</h6>
+                  <Input
+                      value={vrobotInfo.yCoordinate}
+                      onChange={(e) => handlevRobotInfoChange('yCoordinate', e.target.value)}
+                  />
+                  </Col>
+                  <Col xxl='6' xl='6' lg='6' md='6' sm='12' xs='12'>
+                  <h6>Heading</h6>
+                  <Input
+                      value={vrobotInfo.heading}
+                      onChange={(e) => handlevRobotInfoChange('heading', e.target.value)}
+                  />
+                  </Col>
+    
+                </Row>  
+            )}
 
-            <Button
-              type="primary"
-              onClick={() => handleVirtualBuild()}
-              style={{ marginLeft: "5px" }}
-            >
-              <div className="d-flex">
-                <div style={{ marginTop: "-3px", marginRight: "3px" }}>
-                  <CodeOutlined />
-                </div>
-                <div>Build</div>
-              </div>
-            </Button>
-            <div>{status}</div>
-          </div>
+            {selectedLanguage === 'java' && (
+                <Row className='mt-3'>
+                    <Col span={24} className='text-center'>
+                    <Button onClick={handleAddVrobot}>Add Robot</Button>
+                    </Col>
+                </Row>
+            )}
+
+            {selectedLanguage === 'java' && (
+                <Row className='mt-3'>
+                    <Col span={24}>
+                    <h6>Added Virtual Robots:</h6>
+                    <ul>
+                        {vrobots.map((robot, index) => (
+                        <li key={index}>
+                            Robot ID: {robot.vRobotId}, X: {robot.xCoordinate}, Y: {robot.yCoordinate}, Heading: {robot.heading}
+                        </li>
+                        ))}
+                    </ul>
+                    </Col>
+                </Row>
+            )}
+            {selectedLanguage === 'java' && (
+                <Row className='mt-3'>
+                    <Col span={24} className='text-center'>
+                    <Button
+                      type="primary"
+                      onClick={() => handleBuild()}
+                      style={{ marginLeft: "5px" }}
+                    >
+                      <div className="d-flex">
+                        <div style={{ marginTop: "-3px", marginRight: "3px" }}>
+                          <CodeOutlined />
+                        </div>
+                        <div>Build</div>
+                      </div>
+                    </Button>
+                    </Col>
+                </Row>
+            )}
+            {selectedLanguage === 'cpp' && (
+              <Row>
+                <Col>
+                  <Input
+                    onChange={(e) => handleRobotId(e.target.value)}
+                    value={robotId}
+                    type="number"
+                    placeholder="Specify the robot ID"
+                  />
+                </Col>
+                <Col>
+                  <Button
+                    type="primary"
+                    onClick={() => handleBuild()}
+                    style={{ marginLeft: "5px" }}
+                  >
+                    <div className="d-flex">
+                      <div style={{ marginTop: "-3px", marginRight: "3px" }}>
+                        <CodeOutlined />
+                      </div>
+                      <div>Build</div>
+                    </div>
+                  </Button>
+                </Col>
+              </Row>
+            )}
+            
+          
 
           <div className="mt-4 d-flex justify-content-center">
             {/* decrease the step to go back */}
