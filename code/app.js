@@ -1,6 +1,7 @@
 const express = require("express");
 const fs = require("fs");
 var bodyParser = require("body-parser");
+// const { exec } = require("child_process");
 
 const app = express();
 const httpServer = require("http").createServer(app);
@@ -100,7 +101,7 @@ app.get("/update", (req, res) => {
   res.download(file);
 });
 
-app.post("/build", async (req, res) => {
+/*app.post("/build", async (req, res) => {
   const firmwareDir = req.query.dir || "esp_robot_firmware";
   console.log(req.body);
 
@@ -137,7 +138,45 @@ app.post("/build", async (req, res) => {
   bash_run.stderr.on("data", function (data) {
     socketIO.emit("build", data.toString());
   });
+});*/
+
+//build virtual robot code
+app.post("/build", async (req, res) => {
+  //const virtualRobotDir = req.query.virtualDir || "java_virtual_robot/java-robot-library";
+  const virtualRobotDir = "java_virtual_robot/robot-library-java";
+
+  res.json({ msg: `${virtualRobotDir} build started!` });
+
+  // Execute Maven build command
+  const bash_run = childProcess.spawn(
+    `cd ${virtualRobotDir} && mvn -f pom.xml clean install`,
+    { shell: true }
+  );
+
+  bash_run.stdout.on("data", function (data) {
+    socketIO.emit("build", data.toString());
+  });
+
+  bash_run.stderr.on("data", function (data) {
+    socketIO.emit("build", data.toString());
+  });
 });
+
+// app.post("/runcmd", async (req, res) => {
+//   // Command to run within the Windows command prompt
+//   const commandToRun = "echo kavi"; // Replace with the command you want to run
+
+//   // Use exec to run a command that starts cmd.exe on the host
+//   exec(`start cmd.exe /k "${commandToRun}"`, (error, stdout, stderr) => {
+//     if (error) {
+//       console.error(`Error: ${error}`);
+//       return res.status(500).send("Error");
+//     }
+//     console.log(`Output: ${stdout}`);
+//     console.error(`Error Output: ${stderr}`);
+//     res.status(200).send("Command started successfully");
+//   });
+// });
 
 httpServer.listen(port, () => {
   console.log(`Example app listening on port ${port}`);
