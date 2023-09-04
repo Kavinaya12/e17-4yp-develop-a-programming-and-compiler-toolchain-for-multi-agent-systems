@@ -5,7 +5,8 @@ import {
     Form,
     Select,
     message,
-    Tooltip
+    Tooltip,
+    Input
   } from 'antd';
 import { Row, Col } from 'reactstrap';
 import { setDynamicCode, setFormResult } from '../../Redux/FirmwareFile';
@@ -25,7 +26,7 @@ function DynamicCodeGenerationForm() {
     const [distanceSensor, setDistanceSensor] = useState(false)
 
     // redux related variables
-    const { formResult, algorithmName, generatedCppCode } = useSelector((state) => state.firmware);
+    const { formResult, algorithmName, generatedCppCode, generatedJavaCode, generatedCode, selectedLanguage } = useSelector((state) => state.firmware);
     const dispatch = useDispatch()
 
     const [copyState, setCopyState] = useState("Copy")
@@ -36,7 +37,7 @@ function DynamicCodeGenerationForm() {
     
     const handleCopy = () => {
         setCopyState("Copied")
-        navigator.clipboard.writeText(generatedCppCode)
+        navigator.clipboard.writeText(generatedCode)
         setTimeout(function() {
           setCopyState("Copy")
         }, 1000);
@@ -91,6 +92,7 @@ function DynamicCodeGenerationForm() {
     const onChange = (value) => {
         console.log(`selected ${value}`);
         dispatch(changeFirmwareFile(value))
+        console.log(selectedLanguage);
     };
     
     const onSearch = (value) => {
@@ -120,7 +122,7 @@ function DynamicCodeGenerationForm() {
         </div> */}
         <div className='code-block mt-3'>
             <CopyBlock
-            text={generatedCppCode}
+            text={generatedCode}
             language={'cpp'}
             theme={googlecode}
             customStyle={{
@@ -159,32 +161,34 @@ function DynamicCodeGenerationForm() {
                 }}
             >
                 <Row>
-                    <Col xxl="6" xl="6" lg="6" md="6" sm="12" xs="12">
-                        <h6>FIRMWARE FILE</h6>
-                        <Form.Item
-                            name="FIRMWARE"
-                            rules={[
-                                {
-                                required: true,
-                                message: 'Please select a firmware file!',
-                                },
-                            ]}
-                        >
-                            <Select
-                                className='col-12'
-                                showSearch
-                                placeholder="Search to select firmware file"
-                                optionFilterProp="children"
-                                onChange={onChange}
-                                onSearch={onSearch}
-                                size="large"
-                                filterOption={(input, option) =>
-                                    (option?.label ?? '').toLowerCase().includes(input.toLowerCase())
-                                }
-                                options={files}
-                            />
-                        </Form.Item>
-                    </Col>
+                    {selectedLanguage === 'cpp' && (
+                        <Col xxl="6" xl="6" lg="6" md="6" sm="12" xs="12">
+                            <h6>FIRMWARE FILE</h6>
+                            <Form.Item
+                                name="FIRMWARE"
+                                rules={[
+                                    {
+                                    required: true,
+                                    message: 'Please select a firmware file!',
+                                    },
+                                ]}
+                            >
+                                <Select
+                                    className='col-12'
+                                    showSearch
+                                    placeholder="Search to select firmware file"
+                                    optionFilterProp="children"
+                                    onChange={onChange}
+                                    onSearch={onSearch}
+                                    size="large"
+                                    filterOption={(input, option) =>
+                                        (option?.label ?? '').toLowerCase().includes(input.toLowerCase())
+                                    }
+                                    options={files}
+                                />
+                            </Form.Item>
+                        </Col>
+                    )}
 
                     <Col xxl="6" xl="6" lg="6" md="6" sm="12" xs="12">
                         <div className='d-flex'>
@@ -216,7 +220,10 @@ function DynamicCodeGenerationForm() {
                         </Form.Item>
                     </Col>
                 </Row>
+
                 
+                
+                {selectedLanguage === 'cpp' && (
                 <Row>
                     <Col xxl="3" xl="3" lg="3" md="4" sm="6" xs="6" className='my-auto'>
                         <Form.Item 
@@ -308,7 +315,8 @@ function DynamicCodeGenerationForm() {
                         </Form.Item>
                     </Col>
                 </Row>
-
+                )}
+                {selectedLanguage === 'cpp' && (
                 <Row className='mt-3'>
                     <Col xxl="3" xl="3" lg="3" md="4" sm="6" xs="6" className='my-auto'>
                         <Form.Item 
@@ -320,7 +328,8 @@ function DynamicCodeGenerationForm() {
                         </Form.Item>
                     </Col>
                 </Row>
-
+                )}
+                {selectedLanguage === 'cpp' && (
                 <Row className='mt-2'>
                     {
                         motors &&
@@ -361,7 +370,8 @@ function DynamicCodeGenerationForm() {
                         </Col>
                     }
                 </Row>
-
+                )}
+                {selectedLanguage === 'cpp' && (
                 <Row className='mt-3'>
                     <Col xxl="3" xl="3" lg="3" md="4" sm="6" xs="6" className='my-auto'>
                         <Form.Item 
@@ -402,7 +412,7 @@ function DynamicCodeGenerationForm() {
                     </Row>
 
                 </Row>
-
+                )}
                 <Row className='text-center mt-3'>
                     <Form.Item>
                         <div className='d-flex justify-content-center'>
