@@ -1,11 +1,13 @@
 import React from "react";
 import { useEffect, useRef, useState } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import {
   setAlgorithmName,
   setGeneratedCppCode,
   setGeneratedXmlCode,
   setGeneratedJavaCode,
+  setGeneratedCode,
+  setSelectedLanguage,
   changeSelectedLanguage,
 } from "../../Redux/FirmwareFile";
 import { increase } from "../../Redux/CodeGenSteps";
@@ -32,11 +34,13 @@ function BlocklyComponent(props) {
 
   // redux related variables
   const dispatch = useDispatch();
-
-  const [selectedLanguage, setSelectedLanguage] = useState("cpp"); // Initialize with 'cpp'
+  const selectedLanguage = useSelector(
+    (state) => state.firmware.selectedLanguage
+  );
+  //const [selectedLanguage, setSelectedLanguage] = useState('cpp'); // Initialize with 'cpp'
 
   const handleLanguageChange = (value) => {
-    setSelectedLanguage(value);
+    dispatch(setSelectedLanguage(value));
   };
 
   const handleNext = (selectedLanguage) => {
@@ -57,7 +61,7 @@ function BlocklyComponent(props) {
 
     const algorithmName = codeGen.algorithm_;
     dispatch(setAlgorithmName(algorithmName)); // set algorithm name in redux state
-    dispatch(setGeneratedCppCode(generatedcode)); // set generated cpp code in redux state
+    dispatch(setGeneratedCode(generatedcode)); // set generated cpp code in redux state
     /*if (selectedLanguage === 'cpp') {
       dispatch(setGeneratedCppCode(generatedcode));
     } else if (selectedLanguage === 'java') {

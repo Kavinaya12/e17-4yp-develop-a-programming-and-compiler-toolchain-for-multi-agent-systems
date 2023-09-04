@@ -1,6 +1,7 @@
 import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
+  selectedLanguage: "cpp",
   firmwareFile: null,
   dynamicCodeObject: null,
   formResult: null,
@@ -8,7 +9,7 @@ const initialState = {
   generatedCppCode: null,
   generatedJavaCode: null,
   generatedXmlCode: null,
-  selectedLanguage: "cpp",
+  generatedCode: null,
 };
 
 export const firmwareFileSlice = createSlice({
@@ -17,6 +18,9 @@ export const firmwareFileSlice = createSlice({
   reducers: {
     change: (state, action) => {
       state.firmwareFile = action.payload;
+    },
+    setSelectedLanguage: (state, action) => {
+      state.selectedLanguage = action.payload;
     },
     setDynamicCode: (state, action) => {
       state.dynamicCodeObject = action.payload;
@@ -32,6 +36,9 @@ export const firmwareFileSlice = createSlice({
     },
     setGeneratedJavaCode: (state, action) => {
       state.generatedJavaCode = action.payload;
+    },
+    setGeneratedCode: (state, action) => {
+      state.generatedCode = action.payload;
     },
     setGeneratedXmlCode: (state, action) => {
       state.generatedXmlCode = action.payload;
@@ -53,6 +60,8 @@ export const {
   setGeneratedJavaCode,
   setGeneratedXmlCode,
   changeSelectedLanguage,
+  setGeneratedCode,
+  setSelectedLanguage,
 } = firmwareFileSlice.actions;
 
 export default firmwareFileSlice.reducer;

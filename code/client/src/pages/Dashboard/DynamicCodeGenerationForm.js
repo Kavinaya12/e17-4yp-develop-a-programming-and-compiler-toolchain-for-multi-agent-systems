@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Button, Checkbox, Form, Select, message, Tooltip } from "antd";
+import { Button, Checkbox, Form, Select, message, Tooltip, Input } from "antd";
 import { Row, Col } from "reactstrap";
 import { setDynamicCode, setFormResult } from "../../Redux/FirmwareFile";
 import {
@@ -32,9 +32,14 @@ function DynamicCodeGenerationForm() {
   );
 
   // redux related variables
-  const { formResult, algorithmName, generatedCppCode } = useSelector(
-    (state) => state.firmware
-  );
+  const {
+    formResult,
+    algorithmName,
+    generatedCppCode,
+    generatedJavaCode,
+    generatedCode,
+    selectedLanguage,
+  } = useSelector((state) => state.firmware);
   const dispatch = useDispatch();
 
   const [copyState, setCopyState] = useState("Copy");
@@ -203,6 +208,7 @@ function DynamicCodeGenerationForm() {
   const onChange = (value) => {
     console.log(`selected ${value}`);
     dispatch(changeFirmwareFile(value));
+    console.log(selectedLanguage);
   };
 
   const onSearch = (value) => {
@@ -252,7 +258,7 @@ function DynamicCodeGenerationForm() {
         </div> */}
       <div className="code-block mt-3">
         <CopyBlock
-          text={generatedCppCode}
+          text={generatedCode}
           language={"cpp"}
           theme={googlecode}
           customStyle={{
@@ -319,7 +325,7 @@ function DynamicCodeGenerationForm() {
           }}
         >
           <Row>
-            {selectedLanguage === "cpp" ? (
+            {selectedLanguage === "cpp" && (
               <Col xxl="6" xl="6" lg="6" md="6" sm="12" xs="12">
                 <h6>FIRMWARE FILE</h6>
                 <Form.Item
@@ -348,8 +354,6 @@ function DynamicCodeGenerationForm() {
                   />
                 </Form.Item>
               </Col>
-            ) : (
-              <></>
             )}
 
             <Col xxl="6" xl="6" lg="6" md="6" sm="12" xs="12">
@@ -384,7 +388,7 @@ function DynamicCodeGenerationForm() {
               </Form.Item>
             </Col>
 
-            {selectedLanguage !== "cpp" ? (
+            {selectedLanguage !== "cpp" && (
               <Col xxl="6" xl="6" lg="6" md="6" sm="12" xs="12">
                 <div className="d-flex">
                   <h6>ARENA</h6>
@@ -427,7 +431,7 @@ function DynamicCodeGenerationForm() {
                 </Form.Item>
                 <Button
                   type="primary"
-                  htmlType="submit"
+                  // htmlType="submit"
                   onClick={() => setArena()}
                 >
                   <div className="d-flex">
@@ -435,14 +439,216 @@ function DynamicCodeGenerationForm() {
                   </div>
                 </Button>
               </Col>
-            ) : (
-              <></>
             )}
           </Row>
 
-          {selectedLanguage === "cpp" ? (
-            <>
-              <Row>
+          {selectedLanguage === "cpp" && (
+            <Row>
+              <Col
+                xxl="3"
+                xl="3"
+                lg="3"
+                md="4"
+                sm="6"
+                xs="6"
+                className="my-auto"
+              >
+                <Form.Item
+                  name="ENABLE_SERIAL_COMMUNICATION"
+                  valuePropName="checked"
+                  noStyle
+                >
+                  <Checkbox>ENABLE SERIAL COMMUNICATION</Checkbox>
+                </Form.Item>
+              </Col>
+
+              <Col
+                xxl="3"
+                xl="3"
+                lg="3"
+                md="4"
+                sm="6"
+                xs="6"
+                className="my-auto"
+              >
+                <Form.Item
+                  name="NEOPIXEL_INDICATIONS"
+                  valuePropName="checked"
+                  noStyle
+                >
+                  <Checkbox>NEOPIXEL INDICATIONS</Checkbox>
+                </Form.Item>
+              </Col>
+
+              <Col
+                xxl="3"
+                xl="3"
+                lg="3"
+                md="4"
+                sm="6"
+                xs="6"
+                className="my-auto"
+              >
+                <Form.Item name="ENABLE_MEMORY" valuePropName="checked" noStyle>
+                  <Checkbox>ENABLE MEMORY</Checkbox>
+                </Form.Item>
+              </Col>
+
+              <Col
+                xxl="3"
+                xl="3"
+                lg="3"
+                md="4"
+                sm="6"
+                xs="6"
+                className="my-auto"
+              >
+                <Form.Item
+                  name="ENABLE_NEOPIXEL_RING"
+                  valuePropName="checked"
+                  noStyle
+                >
+                  <Checkbox>ENABLE NEOPIXEL RING</Checkbox>
+                </Form.Item>
+              </Col>
+
+              <Col
+                xxl="3"
+                xl="3"
+                lg="3"
+                md="4"
+                sm="6"
+                xs="6"
+                className="my-auto"
+              >
+                <Form.Item
+                  name="ENABLE_COLOR_SENSOR"
+                  valuePropName="checked"
+                  noStyle
+                >
+                  <Checkbox>ENABLE COLOR SENSOR</Checkbox>
+                </Form.Item>
+              </Col>
+
+              <Col
+                xxl="3"
+                xl="3"
+                lg="3"
+                md="4"
+                sm="6"
+                xs="6"
+                className="my-auto"
+              >
+                <Form.Item
+                  name="ENABLE_COMPASS_SENSOR"
+                  valuePropName="checked"
+                  noStyle
+                >
+                  <Checkbox>ENABLE COMPASS SENSOR</Checkbox>
+                </Form.Item>
+              </Col>
+
+              <Col
+                xxl="3"
+                xl="3"
+                lg="3"
+                md="4"
+                sm="6"
+                xs="6"
+                className="my-auto"
+              >
+                <Form.Item
+                  name="ENABLE_OTA_UPLOAD"
+                  valuePropName="checked"
+                  noStyle
+                >
+                  <Checkbox>ENABLE OTA UPLOAD</Checkbox>
+                </Form.Item>
+              </Col>
+
+              <Col
+                xxl="3"
+                xl="3"
+                lg="3"
+                md="4"
+                sm="6"
+                xs="6"
+                className="my-auto"
+              >
+                <Form.Item name="ENABLE_MQTT" valuePropName="checked" noStyle>
+                  <Checkbox>ENABLE MQTT</Checkbox>
+                </Form.Item>
+              </Col>
+
+              <Col
+                xxl="3"
+                xl="3"
+                lg="3"
+                md="4"
+                sm="6"
+                xs="6"
+                className="my-auto"
+              >
+                <Form.Item name="ENABLE_WIFI" valuePropName="checked" noStyle>
+                  <Checkbox>ENABLE WIFI</Checkbox>
+                </Form.Item>
+              </Col>
+            </Row>
+          )}
+          {selectedLanguage === "cpp" && (
+            <Row className="mt-3">
+              <Col
+                xxl="3"
+                xl="3"
+                lg="3"
+                md="4"
+                sm="6"
+                xs="6"
+                className="my-auto"
+              >
+                <Form.Item name="ENABLE_MOTORS" valuePropName="checked" noStyle>
+                  <Checkbox onChange={(e) => setMotors(e.target.checked)}>
+                    <h6>MOTORS</h6>
+                  </Checkbox>
+                </Form.Item>
+              </Col>
+            </Row>
+          )}
+          {selectedLanguage === "cpp" && (
+            <Row className="mt-2">
+              {motors && (
+                <Col
+                  xxl="3"
+                  xl="3"
+                  lg="3"
+                  md="4"
+                  sm="6"
+                  xs="6"
+                  className="my-auto"
+                >
+                  <Form.Item name="DRIVE_PWM" valuePropName="checked" noStyle>
+                    <Checkbox>DRIVE PWM</Checkbox>
+                  </Form.Item>
+                </Col>
+              )}
+
+              {motors && (
+                <Col
+                  xxl="3"
+                  xl="3"
+                  lg="3"
+                  md="4"
+                  sm="6"
+                  xs="6"
+                  className="my-auto"
+                >
+                  <Form.Item name="DRIVE_SERVO" valuePropName="checked" noStyle>
+                    <Checkbox>DRIVE SERVO</Checkbox>
+                  </Form.Item>
+                </Col>
+              )}
+
+              {motors && (
                 <Col
                   xxl="3"
                   xl="3"
@@ -453,191 +659,42 @@ function DynamicCodeGenerationForm() {
                   className="my-auto"
                 >
                   <Form.Item
-                    name="ENABLE_SERIAL_COMMUNICATION"
+                    name="WHEEL_ENCODER"
                     valuePropName="checked"
                     noStyle
                   >
-                    <Checkbox>ENABLE SERIAL COMMUNICATION</Checkbox>
+                    <Checkbox>WHEEL ENCODER</Checkbox>
                   </Form.Item>
                 </Col>
-
-                <Col
-                  xxl="3"
-                  xl="3"
-                  lg="3"
-                  md="4"
-                  sm="6"
-                  xs="6"
-                  className="my-auto"
+              )}
+            </Row>
+          )}
+          {selectedLanguage === "cpp" && (
+            <Row className="mt-3">
+              <Col
+                xxl="3"
+                xl="3"
+                lg="3"
+                md="4"
+                sm="6"
+                xs="6"
+                className="my-auto"
+              >
+                <Form.Item
+                  name="ENABLE_DISTANCE_SENSOR"
+                  valuePropName="checked"
+                  noStyle
                 >
-                  <Form.Item
-                    name="NEOPIXEL_INDICATIONS"
-                    valuePropName="checked"
-                    noStyle
+                  <Checkbox
+                    onChange={(e) => setDistanceSensor(e.target.checked)}
                   >
-                    <Checkbox>NEOPIXEL INDICATIONS</Checkbox>
-                  </Form.Item>
-                </Col>
-
-                <Col
-                  xxl="3"
-                  xl="3"
-                  lg="3"
-                  md="4"
-                  sm="6"
-                  xs="6"
-                  className="my-auto"
-                >
-                  <Form.Item
-                    name="ENABLE_MEMORY"
-                    valuePropName="checked"
-                    noStyle
-                  >
-                    <Checkbox>ENABLE MEMORY</Checkbox>
-                  </Form.Item>
-                </Col>
-
-                <Col
-                  xxl="3"
-                  xl="3"
-                  lg="3"
-                  md="4"
-                  sm="6"
-                  xs="6"
-                  className="my-auto"
-                >
-                  <Form.Item
-                    name="ENABLE_NEOPIXEL_RING"
-                    valuePropName="checked"
-                    noStyle
-                  >
-                    <Checkbox>ENABLE NEOPIXEL RING</Checkbox>
-                  </Form.Item>
-                </Col>
-
-                <Col
-                  xxl="3"
-                  xl="3"
-                  lg="3"
-                  md="4"
-                  sm="6"
-                  xs="6"
-                  className="my-auto"
-                >
-                  <Form.Item
-                    name="ENABLE_COLOR_SENSOR"
-                    valuePropName="checked"
-                    noStyle
-                  >
-                    <Checkbox>ENABLE COLOR SENSOR</Checkbox>
-                  </Form.Item>
-                </Col>
-
-                <Col
-                  xxl="3"
-                  xl="3"
-                  lg="3"
-                  md="4"
-                  sm="6"
-                  xs="6"
-                  className="my-auto"
-                >
-                  <Form.Item
-                    name="ENABLE_COMPASS_SENSOR"
-                    valuePropName="checked"
-                    noStyle
-                  >
-                    <Checkbox>ENABLE COMPASS SENSOR</Checkbox>
-                  </Form.Item>
-                </Col>
-
-                <Col
-                  xxl="3"
-                  xl="3"
-                  lg="3"
-                  md="4"
-                  sm="6"
-                  xs="6"
-                  className="my-auto"
-                >
-                  <Form.Item
-                    name="ENABLE_OTA_UPLOAD"
-                    valuePropName="checked"
-                    noStyle
-                  >
-                    <Checkbox>ENABLE OTA UPLOAD</Checkbox>
-                  </Form.Item>
-                </Col>
-
-                <Col
-                  xxl="3"
-                  xl="3"
-                  lg="3"
-                  md="4"
-                  sm="6"
-                  xs="6"
-                  className="my-auto"
-                >
-                  <Form.Item name="ENABLE_MQTT" valuePropName="checked" noStyle>
-                    <Checkbox>ENABLE MQTT</Checkbox>
-                  </Form.Item>
-                </Col>
-
-                <Col
-                  xxl="3"
-                  xl="3"
-                  lg="3"
-                  md="4"
-                  sm="6"
-                  xs="6"
-                  className="my-auto"
-                >
-                  <Form.Item name="ENABLE_WIFI" valuePropName="checked" noStyle>
-                    <Checkbox>ENABLE WIFI</Checkbox>
-                  </Form.Item>
-                </Col>
-              </Row>
-
-              <Row className="mt-3">
-                <Col
-                  xxl="3"
-                  xl="3"
-                  lg="3"
-                  md="4"
-                  sm="6"
-                  xs="6"
-                  className="my-auto"
-                >
-                  <Form.Item
-                    name="ENABLE_MOTORS"
-                    valuePropName="checked"
-                    noStyle
-                  >
-                    <Checkbox onChange={(e) => setMotors(e.target.checked)}>
-                      <h6>MOTORS</h6>
-                    </Checkbox>
-                  </Form.Item>
-                </Col>
-              </Row>
+                    <h6>DISTANCE SENSOR</h6>
+                  </Checkbox>
+                </Form.Item>
+              </Col>
 
               <Row className="mt-2">
-                {motors && (
-                  <Col
-                    xxl="3"
-                    xl="3"
-                    lg="3"
-                    md="4"
-                    sm="6"
-                    xs="6"
-                    className="my-auto"
-                  >
-                    <Form.Item name="DRIVE_PWM" valuePropName="checked" noStyle>
-                      <Checkbox>DRIVE PWM</Checkbox>
-                    </Form.Item>
-                  </Col>
-                )}
-
-                {motors && (
+                {distanceSensor && (
                   <Col
                     xxl="3"
                     xl="3"
@@ -648,16 +705,16 @@ function DynamicCodeGenerationForm() {
                     className="my-auto"
                   >
                     <Form.Item
-                      name="DRIVE_SERVO"
+                      name="DISTANCE_GP2Y0A21YK0F"
                       valuePropName="checked"
                       noStyle
                     >
-                      <Checkbox>DRIVE SERVO</Checkbox>
+                      <Checkbox>DISTANCE GP2Y0A21YK0F</Checkbox>
                     </Form.Item>
                   </Col>
                 )}
 
-                {motors && (
+                {distanceSensor && (
                   <Col
                     xxl="3"
                     xl="3"
@@ -668,86 +725,17 @@ function DynamicCodeGenerationForm() {
                     className="my-auto"
                   >
                     <Form.Item
-                      name="WHEEL_ENCODER"
+                      name="DISTANCE_VL53LX0"
                       valuePropName="checked"
                       noStyle
                     >
-                      <Checkbox>WHEEL ENCODER</Checkbox>
+                      <Checkbox>DISTANCE VL53LX0</Checkbox>
                     </Form.Item>
                   </Col>
                 )}
               </Row>
-
-              <Row className="mt-3">
-                <Col
-                  xxl="3"
-                  xl="3"
-                  lg="3"
-                  md="4"
-                  sm="6"
-                  xs="6"
-                  className="my-auto"
-                >
-                  <Form.Item
-                    name="ENABLE_DISTANCE_SENSOR"
-                    valuePropName="checked"
-                    noStyle
-                  >
-                    <Checkbox
-                      onChange={(e) => setDistanceSensor(e.target.checked)}
-                    >
-                      <h6>DISTANCE SENSOR</h6>
-                    </Checkbox>
-                  </Form.Item>
-                </Col>
-
-                <Row className="mt-2">
-                  {distanceSensor && (
-                    <Col
-                      xxl="3"
-                      xl="3"
-                      lg="3"
-                      md="4"
-                      sm="6"
-                      xs="6"
-                      className="my-auto"
-                    >
-                      <Form.Item
-                        name="DISTANCE_GP2Y0A21YK0F"
-                        valuePropName="checked"
-                        noStyle
-                      >
-                        <Checkbox>DISTANCE GP2Y0A21YK0F</Checkbox>
-                      </Form.Item>
-                    </Col>
-                  )}
-
-                  {distanceSensor && (
-                    <Col
-                      xxl="3"
-                      xl="3"
-                      lg="3"
-                      md="4"
-                      sm="6"
-                      xs="6"
-                      className="my-auto"
-                    >
-                      <Form.Item
-                        name="DISTANCE_VL53LX0"
-                        valuePropName="checked"
-                        noStyle
-                      >
-                        <Checkbox>DISTANCE VL53LX0</Checkbox>
-                      </Form.Item>
-                    </Col>
-                  )}
-                </Row>
-              </Row>
-            </>
-          ) : (
-            <></>
+            </Row>
           )}
-
           <Row className="text-center mt-3">
             <Form.Item>
               <div className="d-flex justify-content-center">
