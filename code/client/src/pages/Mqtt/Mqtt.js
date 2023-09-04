@@ -62,6 +62,7 @@ const Mqtt = () => {
   const mqttPublish = (context) => {
     if (client) {
       const { topic, qos, payload } = context;
+      console.log(topic, qos, payload);
       client.publish(topic, payload, { qos }, (error) => {
         if (error) {
           console.log("Publish error: ", error);
