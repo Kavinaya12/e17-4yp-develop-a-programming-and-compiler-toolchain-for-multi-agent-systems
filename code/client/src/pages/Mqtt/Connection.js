@@ -1,5 +1,6 @@
 import React from "react";
 import { Card, Button, Form, Input, Row, Col } from "antd";
+import ConnectToBroker from "./ConnectToBroker";
 
 const Connection = ({ connect, disconnect, connectBtn }) => {
   const [form] = Form.useForm();
@@ -11,29 +12,6 @@ const Connection = ({ connect, disconnect, connectBtn }) => {
     port: 9001,
     username: "swarm_user",
     password: "swarm_usere15",
-  };
-  const onFinish = (values) => {
-    const { host, clientId, port, username, password } = values;
-    const url = `ws://${host}:${port}/ws`;
-    const options = {
-      keepalive: 30,
-      protocolId: "MQTT",
-      protocolVersion: 4,
-      clean: true,
-      reconnectPeriod: 1000,
-      connectTimeout: 30 * 1000,
-      will: {
-        topic: "WillMsg",
-        payload: "Connection Closed abnormally..!",
-        qos: 0,
-        retain: false,
-      },
-      rejectUnauthorized: false,
-    };
-    options.clientId = clientId;
-    options.username = username;
-    options.password = password;
-    connect(url, options);
   };
 
   const handleConnect = () => {
@@ -50,7 +28,7 @@ const Connection = ({ connect, disconnect, connectBtn }) => {
       name="basic"
       form={form}
       initialValues={record}
-      onFinish={onFinish}
+      onFinish={(values) => ConnectToBroker(connect, values)}
     >
       <Row gutter={20}>
         <Col span={8}>

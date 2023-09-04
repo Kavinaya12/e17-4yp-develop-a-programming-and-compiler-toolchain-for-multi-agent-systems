@@ -1,6 +1,7 @@
 const express = require("express");
 const fs = require("fs");
 var bodyParser = require("body-parser");
+// const { exec } = require("child_process");
 
 const app = express();
 const httpServer = require("http").createServer(app);
@@ -86,11 +87,11 @@ const generateMainAppForVirtualRobot = (dir, robotArr) => {
   console.log(robotArr);
 
   // Start building the dynamic portion of the code based on robotArr
-  let dynamicCode = '';
-  
+  let dynamicCode = "";
+
   for (let i = 0; i < robotArr.length; i++) {
     const { vRobotId, xCoordinate, yCoordinate, heading } = robotArr[i];
-    
+
     // Build code for creating MyTestRobot objects
     dynamicCode += `
     MyTestRobot robot${vRobotId} = new MyTestRobot(${vRobotId}, ${xCoordinate}, ${yCoordinate}, ${heading});
@@ -258,8 +259,45 @@ app.post("/physicalrobot/build", async (req, res) => {
 });
 
 //build virtual robot code
+app.post("/build", async (req, res) => {
+  //const virtualRobotDir = req.query.virtualDir || "java_virtual_robot/java-robot-library";
+  const virtualRobotDir = "java_virtual_robot/robot-library-java";
+
+  res.json({ msg: `${virtualRobotDir} build started!` });
+
+  // Execute Maven build command
+  const bash_run = childProcess.spawn(
+    `cd ${virtualRobotDir} && mvn -f pom.xml clean install`,
+    { shell: true }
+  );
+
+  bash_run.stdout.on("data", function (data) {
+    socketIO.emit("build", data.toString());
+  });
+
+  bash_run.stderr.on("data", function (data) {
+    socketIO.emit("build", data.toString());
+  });
+});
+
+// app.post("/runcmd", async (req, res) => {
+//   // Command to run within the Windows command prompt
+//   const commandToRun = "echo kavi"; // Replace with the command you want to run
+
+//   // Use exec to run a command that starts cmd.exe on the host
+//   exec(`start cmd.exe /k "${commandToRun}"`, (error, stdout, stderr) => {
+//     if (error) {
+//       console.error(`Error: ${error}`);
+//       return res.status(500).send("Error");
+//     }
+//     console.log(`Output: ${stdout}`);
+//     console.error(`Error Output: ${stderr}`);
+//     res.status(200).send("Command started successfully");
+//   });
+// });
+//build virtual robot code
 app.post("/virtualrobot/build", async (req, res) => {
-  //const virtualRobotDir = req.query.virtualDir || "java_virtual_robot/java-robot-library"; 
+  //const virtualRobotDir = req.query.virtualDir || "java_virtual_robot/java-robot-library";
   const virtualRobotDir = "java_virtual_robot/robot-library-java";
 
   res.json({ msg: `${virtualRobotDir} build started!` });
@@ -267,7 +305,7 @@ app.post("/virtualrobot/build", async (req, res) => {
   // generate algorithm
   const algorithm_name = req.body?.algorithm_name;
   socketIO.emit(`Writing algorithm to file ${algorithm_name}...\n`);
-  
+
   generateVirtualRobotAlgorithmFile(
     `${virtualRobotDir}/src/main/java/robots`,
     algorithm_name,
@@ -275,7 +313,7 @@ app.post("/virtualrobot/build", async (req, res) => {
   );
   socketIO.emit("File written successfully...\n\n");
 
-  generateMainAppForVirtualRobot(virtualRobotDir, req.body?.robot_array); 
+  generateMainAppForVirtualRobot(virtualRobotDir, req.body?.robot_array);
 
   const mavenCommand = `cd ${virtualRobotDir} && mvn -f pom.xml clean install && cp ./target/java-robot-1.0.2.jar ./recent_builds`;
 
@@ -293,7 +331,6 @@ app.post("/virtualrobot/build", async (req, res) => {
     socketIO.emit("build", data.toString());
   });
 });
-
 
 httpServer.listen(port, () => {
   console.log(`Example app listening on port ${port}`);
