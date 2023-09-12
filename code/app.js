@@ -280,21 +280,6 @@ app.post("/build", async (req, res) => {
   });
 });
 
-// app.post("/runcmd", async (req, res) => {
-//   // Command to run within the Windows command prompt
-//   const commandToRun = "echo kavi"; // Replace with the command you want to run
-
-//   // Use exec to run a command that starts cmd.exe on the host
-//   exec(`start cmd.exe /k "${commandToRun}"`, (error, stdout, stderr) => {
-//     if (error) {
-//       console.error(`Error: ${error}`);
-//       return res.status(500).send("Error");
-//     }
-//     console.log(`Output: ${stdout}`);
-//     console.error(`Error Output: ${stderr}`);
-//     res.status(200).send("Command started successfully");
-//   });
-// });
 //build virtual robot code
 app.post("/virtualrobot/build", async (req, res) => {
   //const virtualRobotDir = req.query.virtualDir || "java_virtual_robot/java-robot-library";
@@ -307,7 +292,7 @@ app.post("/virtualrobot/build", async (req, res) => {
   socketIO.emit(`Writing algorithm to file ${algorithm_name}...\n`);
 
   generateVirtualRobotAlgorithmFile(
-    `${virtualRobotDir}/src/main/java/robots`,
+    `${virtualRobotDir}/src/main/java/Robots`,
     algorithm_name,
     req.body?.algorithm_body
   );
@@ -330,6 +315,12 @@ app.post("/virtualrobot/build", async (req, res) => {
   bash_run.stderr.on("data", function (data) {
     socketIO.emit("build", data.toString());
   });
+});
+
+app.get("/updateJar", (req, res) => {
+  console.log(req.query);
+  const file = `java_virtual_robot/robot-library-java/recent_builds/java-robot-1.0.2.jar`;
+  res.download(file);
 });
 
 httpServer.listen(port, () => {
