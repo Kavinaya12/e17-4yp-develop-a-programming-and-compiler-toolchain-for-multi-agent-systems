@@ -15,7 +15,7 @@ export default function Playground() {
   const initialXml = `<xml xmlns="https://developers.google.com/blockly/xml">
   <variables>
     <variable id="s]bRmbZ++\`1c?{z!/d_:">ROBOT_STATE</variable>
-    <variable>state</variable>
+    <variable id="v_QM1_R__slsCS_HcDc_">state</variable>
     <variable id="x$leYs{fIiSO1QApRb*c">interrupt</variable>
     <variable id="C}k8;%~r]6mMiJiCA2b%">msg</variable>
     <variable>d</variable>
@@ -255,7 +255,6 @@ export default function Playground() {
             <Block type="variables_init"></Block>
             <Block type="variables_get"></Block>
             <Block type="variables_set"></Block>
-            
           </Category>
 
           <Category name="String">
@@ -308,7 +307,6 @@ export default function Playground() {
             <Block type="obs_color" />
           </Category>
         </Category>
-
       </BlocklyComponent>
     </div>
   );
