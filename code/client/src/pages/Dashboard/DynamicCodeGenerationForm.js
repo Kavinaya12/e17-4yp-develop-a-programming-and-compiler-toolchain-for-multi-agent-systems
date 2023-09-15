@@ -17,7 +17,7 @@ import { CopyBlock, dracula, googlecode } from "react-code-blocks";
 import axios from "axios";
 import GetArenaDetails from "../Mqtt/GetArenaDetails";
 
-function DynamicCodeGenerationForm() {
+function DynamicCodeGenerationForm({ onArenaSelected }) {
   // antd related variables
   const { Option } = Select;
 
@@ -26,6 +26,7 @@ function DynamicCodeGenerationForm() {
   const [distanceSensor, setDistanceSensor] = useState(false);
 
   const [connectionStatus, setConnectionStatus] = useState("Connecting");
+  const [selectedArenaJsonData, setSelectedArenaJsonData] = useState({})
   const [arenaDetails, setArenaDetails] = useState([]);
   const [selectedArena, setSelectedArena] = useState(
     arenaDetails[0]?.fileName ?? ""
@@ -57,20 +58,32 @@ function DynamicCodeGenerationForm() {
   };
   const handleIncomingMessage = (payload) => {
     console.log("Received message:", typeof payload.message);
-    try {
-      const parsedArenaDetails = JSON.parse(payload.message);
-
-      if (Array.isArray(parsedArenaDetails)) {
-        setArenaDetails(parsedArenaDetails);
-      } else {
-        console.error(
-          "Invalid JSON format in payload.message:",
-          payload.message
-        );
+    
+    if(payload.topic=="v1/arena/arenaJson"){
+      try{
+        const parsedArenaJSON = JSON.parse(payload.message);
+        setSelectedArenaJsonData(parsedArenaJSON[0])
+      } catch (error) {
+        console.error("Error parsing JSON:", error);
       }
-    } catch (error) {
-      console.error("Error parsing JSON:", error);
+      
+    }else{
+      try {
+        const parsedArenaDetails = JSON.parse(payload.message);
+  
+        if (Array.isArray(parsedArenaDetails)) {
+          setArenaDetails(parsedArenaDetails);
+        } else {
+          console.error(
+            "Invalid JSON format in payload.message:",
+            payload.message
+          );
+        }
+      } catch (error) {
+        console.error("Error parsing JSON:", error);
+      }
     }
+    
   };
   const changeStatus = (status) => {
     setConnectionStatus(status);
@@ -84,6 +97,9 @@ function DynamicCodeGenerationForm() {
   useEffect(() => {
     console.log(arenaDetails);
   }, [arenaDetails]);
+  useEffect(() => {
+    onArenaSelected(selectedArenaJsonData);
+  }, [selectedArenaJsonData]);
 
   // store features object after assigning related values
   const onFinish = (values) => {
