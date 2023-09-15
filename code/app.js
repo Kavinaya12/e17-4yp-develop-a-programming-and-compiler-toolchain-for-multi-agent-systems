@@ -319,7 +319,8 @@ app.post("/virtualrobot/build", async (req, res) => {
 
 app.get("/updateJar", (req, res) => {
   console.log(req.query);
-  const file = `java_virtual_robot/robot-library-java/recent_builds/java-robot-1.0.2.jar`;
+  // const file = `java_virtual_robot/robot-library-java/recent_builds/java-robot-1.0.2.jar`;
+  const file = `java_virtual_robot/robot-library-java/src/main/java/swarm/App.java`;
   res.download(file);
 });
 
