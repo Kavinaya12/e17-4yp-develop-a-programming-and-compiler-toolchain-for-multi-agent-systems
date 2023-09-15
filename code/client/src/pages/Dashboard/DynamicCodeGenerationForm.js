@@ -409,17 +409,17 @@ function DynamicCodeGenerationForm({ onArenaSelected }) {
                 <div className="d-flex">
                   <h6>ARENA</h6>
 
-                  <div style={{ marginLeft: "5px", marginTop: "-4px" }}>
+                  {/* <div style={{ marginLeft: "5px", marginTop: "-4px" }}>
                     <Tooltip title={copyState}>
                       <CopyOutlined onClick={() => handleCopy()} />
                     </Tooltip>
-                  </div>
+                  </div> */}
                 </div>
                 <Form.Item
                   name="ARENA"
                   rules={[
                     {
-                      required: true,
+                      required: false,
                       message: "Please select an arena!",
                     },
                   ]}
