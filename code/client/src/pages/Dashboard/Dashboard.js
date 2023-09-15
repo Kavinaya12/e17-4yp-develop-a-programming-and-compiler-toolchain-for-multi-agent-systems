@@ -9,6 +9,7 @@ import { useSelector, useDispatch } from "react-redux";
 import DynamicCodeGenerationForm from "./DynamicCodeGenerationForm";
 import Mqtt from "../Mqtt/Mqtt";
 import Playground from "../Playground/Playground";
+import Arena from "../../components/arena/Arena";
 import {
   CodeSandboxOutlined,
   FireOutlined,
@@ -37,6 +38,15 @@ function Dashboard() {
     yCoordinate: '',
     heading: '',
   });
+
+  // to select points to add new robots
+  const [selectedPoint, setSelectedPoint] = useState(null);
+  const [selectedArenaJsonData, setSelectedArenaJsonData] = useState({})
+
+  const handlePointSelected = (coordinate) => {
+    setSelectedPoint(coordinate);
+    
+  };
 
   // State for multiple robots
   const [vrobots, setVrobots] = useState([]);
@@ -152,6 +162,10 @@ function Dashboard() {
     }
   };
 */
+
+  const handleArenaSelected = (value) => {
+    setSelectedArenaJsonData(value)
+  }
   
 
   const handleRobotId = (value) => {
@@ -166,6 +180,12 @@ function Dashboard() {
   // Function to add a new robot
   const handleAddVrobot = () => {
     // Validate robot information, you can add more validation as needed
+    // first update the new coordinate values
+    if(selectedPoint!=null){ // to handle if user click add button without selecting coordinates
+      vrobotInfo.xCoordinate = selectedPoint.x
+      vrobotInfo.yCoordinate = selectedPoint.y
+    }
+    
     if (
         vrobotInfo.vRobotId &&
         vrobotInfo.xCoordinate &&
@@ -239,19 +259,10 @@ function Dashboard() {
       {step === 0 && <Playground />}
 
       {/* Dynamic code generation step */}
-      {step === 1 && <DynamicCodeGenerationForm />}
-
-      {/* Build area */}
-      {step === 2 && (
+      {step === 1 && (
         <>
-          <div className="mt-4">
-            <div className="terminal p-4" id="terminalDiv">
-              <span className="response-msg text-light">{msgs}</span>
-            </div>
-          </div>
-
-          
-            {selectedLanguage === 'java' && (
+          <DynamicCodeGenerationForm onArenaSelected={handleArenaSelected}/>
+          {selectedLanguage === 'java' && (
                 <Row className='mt-3'>
                   {/* Render Robot Information Input Fields */}
     
@@ -263,29 +274,29 @@ function Dashboard() {
                   />
                   </Col>
                   <Col xxl='6' xl='6' lg='6' md='6' sm='12' xs='12'>
-                  <h6>X Coordinate</h6>
-                  <Input
-                      value={vrobotInfo.xCoordinate}
-                      onChange={(e) => handlevRobotInfoChange('xCoordinate', e.target.value)}
-                  />
-                  </Col>
-                  <Col xxl='6' xl='6' lg='6' md='6' sm='12' xs='12'>
-                  <h6>Y Coordinate</h6>
-                  <Input
-                      value={vrobotInfo.yCoordinate}
-                      onChange={(e) => handlevRobotInfoChange('yCoordinate', e.target.value)}
-                  />
-                  </Col>
-                  <Col xxl='6' xl='6' lg='6' md='6' sm='12' xs='12'>
                   <h6>Heading</h6>
                   <Input
                       value={vrobotInfo.heading}
                       onChange={(e) => handlevRobotInfoChange('heading', e.target.value)}
                   />
                   </Col>
-    
                 </Row>  
             )}
+
+            {selectedLanguage === 'java' && (
+                <Row className='mt-3'>
+                    <Col span={24} className='text-center'>
+                    <Arena onPointSelected={handlePointSelected} selectedArena={selectedArenaJsonData}/>
+                    {selectedPoint && (
+                    <div>
+                      <b>Selected Coordinate: X = {selectedPoint.x}, Y = {selectedPoint.y}</b>
+                    </div>
+                    )}
+                    </Col>
+                </Row>
+            )}
+
+
 
             {selectedLanguage === 'java' && (
                 <Row className='mt-3'>
@@ -309,6 +320,21 @@ function Dashboard() {
                     </Col>
                 </Row>
             )}
+
+        </>
+      )}
+
+      {/* Build area */}
+      {step === 2 && (
+        <>
+          <div className="mt-4">
+            <div className="terminal p-4" id="terminalDiv">
+              <span className="response-msg text-light">{msgs}</span>
+            </div>
+          </div>
+
+          
+            
             {selectedLanguage === 'java' && (
                 <Row className='mt-3'>
                     <Col span={24} className='text-center'>

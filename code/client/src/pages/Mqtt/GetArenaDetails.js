@@ -24,6 +24,8 @@ const GetArenaDetails = (
     const getArenapublishTopic = "v1/arena/get";
     const subTopic = "v1/arena/details";
     const publishSelectedArenaTopic = "v1/arena/set";
+    const sendSpecificArenaTopic = "v1/arena/getArenaJson";
+    const getSpecificArenaJsonTopic = "v1/arena/arenaJson";
     const qos = 2;
     const payload = "ehkkk";
 
@@ -43,6 +45,22 @@ const GetArenaDetails = (
             }
           }
         );
+        client.publish(
+          sendSpecificArenaTopic,
+          payloadString,
+          { qos },
+          (error) => {
+            if (error) {
+              console.log("Publish error: ", error);
+            }
+          }
+        );
+        client.subscribe(getSpecificArenaJsonTopic, { qos }, (error) => {
+          if (error) {
+            console.log("Subscribe to topics error", error);
+            return;
+          }
+        });
       } else {
         client.publish(
           getArenapublishTopic,
