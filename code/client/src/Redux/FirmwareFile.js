@@ -22,6 +22,9 @@ export const firmwareFileSlice = createSlice({
     setSelectedLanguage: (state, action) => {
       state.selectedLanguage = action.payload;
     },
+    setSelectedLanguage: (state, action) => {
+      state.selectedLanguage = action.payload;
+    },
     setDynamicCode: (state, action) => {
       state.dynamicCodeObject = action.payload;
     },
@@ -39,6 +42,9 @@ export const firmwareFileSlice = createSlice({
     },
     setGeneratedCode: (state, action) => {
       state.generatedCode = action.payload;
+    },
+    setGeneratedCode: (state, action) => {
+      state.generatedCode = action.payload
     },
     setGeneratedXmlCode: (state, action) => {
       state.generatedXmlCode = action.payload;
