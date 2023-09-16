@@ -53,6 +53,7 @@ const generateAlgorithmFile = (dir, algorithm_name, fileString) => {
   } catch (error) {}
 };
 const generateVirtualRobotAlgorithmFile = (dir, algorithm_name, fileString) => {
+  console.log(algorithm_name);
   console.log(dir);
   try {
     fs.writeFileSync(`${dir}/${algorithm_name}.java`, fileString);
@@ -290,7 +291,7 @@ app.post("/virtualrobot/build", async (req, res) => {
   // generate algorithm
   const algorithm_name = req.body?.algorithm_name;
   socketIO.emit(`Writing algorithm to file ${algorithm_name}...\n`);
-
+  //console.log(algorithm_name);
   generateVirtualRobotAlgorithmFile(
     `${virtualRobotDir}/src/main/java/Robots`,
     algorithm_name,
