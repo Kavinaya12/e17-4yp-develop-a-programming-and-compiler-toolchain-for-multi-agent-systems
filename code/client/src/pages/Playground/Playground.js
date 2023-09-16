@@ -15,11 +15,33 @@ export default function Playground() {
   const initialXml = `<xml xmlns="https://developers.google.com/blockly/xml">
   <variables>
     <variable id="s]bRmbZ++\`1c?{z!/d_:">ROBOT_STATE</variable>
-    <variable>state</variable>
+    <variable id="runState">runState</variable>
+    <variable id="state">state</variable>
     <variable id="x$leYs{fIiSO1QApRb*c">interrupt</variable>
-    <variable id="C}k8;%~r]6mMiJiCA2b%">msg</variable>
+    <variable id="msg">msg</variable>
     <variable>d</variable>
     <variable>isTaskFound</variable>
+    <variable id="rand">rand</variable>
+    <variable id="responseThresholdRed">responseThresholdRed</variable>
+    <variable id="responseThresholdBlue">responseThresholdBlue</variable>
+    <variable id="responseThresholdBlueNext">responseThresholdBlueNext</variable>
+    <variable id="responseThresholdRedNext">responseThresholdRedNext</variable>
+    <variable id="estimatedTaskDemandForRed">estimatedTaskDemandForRed</variable>
+    <variable id="estimatedTaskDemandForBlue">estimatedTaskDemandForBlue</variable>
+    <variable id="estimatedTaskSupplyForRed">estimatedTaskSupplyForRed</variable>
+    <variable id="estimatedTaskSupplyForBlue">estimatedTaskSupplyForBlue</variable>
+    <variable id="taskSelectionProbabilityRed">taskSelectionProbabilityRed</variable>
+    <variable id="taskSelectionProbabilityBlue">taskSelectionProbabilityBlue</variable>
+    <variable id="robotId">robotId</variable>
+    <variable id="selectedTask">selectedTask</variable>
+    <variable id="fixedQueueLength">fixedQueueLength</variable>
+    <variable id="scalingFactor">scalingFactor</variable>
+    <variable id="taskDemandQueue">taskDemandQueue</variable>
+    <variable id="taskSupplyQueue">taskSupplyQueue</variable>
+    <variable id="taskDemandsFloatArray">taskDemandsFloatArray</variable>
+    <variable id="detectedColor">detectedColor</variable>
+    <variable id="taskSuppliesFloatArray">taskSuppliesFloatArray</variable>
+    <variable id="outputs">outputs</variable>
   </variables>
   <block type="procedures_defnoreturn" id="zfserX5aCGAE:_V]Uq8|" x="316" y="31">
     <field name="NAME">algorithm_setup</field>
@@ -104,10 +126,29 @@ export default function Playground() {
   </block>
   <block type="algorithm" id="^p}^aaT[%+\`,i9VU(A)Y" x="127" y="255">
     <field name="algorithm_name">dynamic_task_allocation</field>
-    <field name="virtualRobot_name">VRobot</field>
+    <field name="superClass_name">Define Super Class Name Here</field>
+    <field name="virtualRobot_name">Define Child Class Name Here</field>
     <field name="robot_state_label" id="s]bRmbZ++\`1c?{z!/d_:">ROBOT_STATE</field>
     <field name="robot_state_value">1</field>
     <field name="isTaskFound">isTaskFound</field>
+    <field name="responseThresholdRed_label" id="responseThresholdRed">responseThresholdRed</field>
+    <field name="responseThresholdBlue_label" id="responseThresholdBlue">responseThresholdBlue</field>
+    <field name="responseThresholdRedNext_label" id="responseThresholdRedNext">responseThresholdRedNext</field>
+    <field name="responseThresholdBlueNext_label" id="responseThresholdBlueNext">responseThresholdBlueNext</field>
+    <field name="estimatedTaskDemandForRed_label" id="estimatedTaskDemandForRed">estimatedTaskDemandForRed</field>
+    <field name="estimatedTaskDemandForBlue_label" id="estimatedTaskDemandForBlue">estimatedTaskDemandForBlue</field>
+    <field name="estimatedTaskSupplyForRed_label" id="estimatedTaskSupplyForRed">estimatedTaskSupplyForRed</field>
+    <field name="estimatedTaskSupplyForBlue_label" id="estimatedTaskSupplyForBlue">estimatedTaskSupplyForBlue</field>
+    <field name="taskSelectionProbabilityRed_label" id="taskSelectionProbabilityRed">taskSelectionProbabilityRed</field>
+    <field name="taskSelectionProbabilityBlue_label" id="taskSelectionProbabilityBlue">taskSelectionProbabilityBlue</field>
+    <field name="robotId_label" id="robotId">robotId</field>
+    <field name="selectedTask_label" id="selectedTask">selectedTask</field>
+    <field name="fixedQueueLength_label" id="fixedQueueLength">fixedQueueLength</field>
+    <field name="fixedQueueLength_value">5</field>
+    <field name="scalingFactor_label" id="scalingFactor">scalingFactor</field>
+    <field name="scalingFactor_value">0.015</field>
+    <field name="taskDemandQueue_label" id="taskDemandQueue">taskDemandQueue</field>
+    <field name="taskSupplyQueue_label" id="taskSupplyQueue">taskSupplyQueue</field>
     
     <statement name="algo_body">
       <block type="controls_if" id="=4kTK+MPC(%=/uZS6_A}">
@@ -217,12 +258,18 @@ export default function Playground() {
             <Block type="move_back" />
             <Block type="read_distance" />
             <Block type="read_color" />
+            <Block type="show_selected_task" />
           </Category>
           <Category name="Pair">
             <Block type="collision_avoidance" />
           </Category>
           <Category name="Cluster">
             <Block type="observe_environment" />
+            <Block type="observe" />
+            <Block type="evaluate_task_demand" />
+            <Block type="evaluate_task_supply" />
+            <Block type="select_task" />
+            <Block type="add_supply" />
           </Category>
         </Category>
 
@@ -239,6 +286,7 @@ export default function Playground() {
           <Category name="Algorithm">
             <Block type="algorithm" />
             <Block type="algorithm_interrupt" />
+            
           </Category>
           <Category name="Control Flow">
             <Block type="controls_if" />
@@ -255,6 +303,9 @@ export default function Playground() {
             <Block type="variables_init"></Block>
             <Block type="variables_get"></Block>
             <Block type="variables_set"></Block>
+            <Block type="set_variable_with_type"></Block>
+            <Block type="init_object"></Block>
+            <Block type="init_variable_with_object"></Block>
             
           </Category>
 
@@ -287,7 +338,9 @@ export default function Playground() {
             <Block type="math_constrain"></Block>
             <Block type="math_random_float"></Block>
           </Category>
-          <Category name="Functions" custom="PROCEDURE"></Category>
+          <Category name="Functions" custom="PROCEDURE">
+            
+          </Category>
 
           <Category name="ESP">
             <Block type="chip_id"></Block>
@@ -295,7 +348,9 @@ export default function Playground() {
         </Category>
 
         <Category name="I/O">
-          <Category name="Inputs"></Category>
+          <Category name="Inputs">
+            <Block type="color_sensor_reading" />
+          </Category>
 
           <Category name="Motors">
             <Block type="drive_motors" />

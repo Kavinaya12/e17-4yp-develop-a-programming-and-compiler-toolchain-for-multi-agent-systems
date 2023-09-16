@@ -46,20 +46,40 @@ javaGenerator['procedures_defreturn'] = function(block) {
       );
     }
     let code =
-      'public ' +
-      returnType +
-      ' ' +
-      funcName +
-      '(' +
-      args.join(', ') +
-      ') {\n' +
-      'super.'+funcName+'();\n'+
-      xfix1 +
-      loopTrap +
-      branch +
-      xfix2 +
-      returnValue +
-      '}';
+    'public ' +
+    returnType +
+    ' ' +
+    funcName +
+    '(' +
+    args.join(', ') +
+    ')';
+  
+  // Add throws clause for exceptions if funcName is 'runTask'
+  if (funcName === 'runTaskAllocationAlgorithm') {
+    code += ' throws SensorException';
+    code +=
+    ' {\n' +
+    xfix1 +
+    loopTrap +
+    branch +
+    xfix2 +
+    returnValue +
+    '}';
+    
+  }
+  else{
+    code +=
+    ' {\n' +
+    'super.' +
+    funcName +
+    '();\n' +
+    xfix1 +
+    loopTrap +
+    branch +
+    xfix2 +
+    returnValue +
+    '}';
+  }
     code = javaGenerator.scrub_(block, code);
     // Add % so as not to collide with helper functions in definitions list.
     javaGenerator.definitions_['%' + funcName] = code;
@@ -96,20 +116,25 @@ javaGenerator['procedures_callnoreturn'] = function(block) {
 };
 
 javaGenerator['algorithm_interrupt'] = function (block) {
-    var variable_interrupt_variable = javaGenerator.variableDB_.getName(
-      block.getFieldValue("interrupt_variable"),
-      Blockly.Variables.NAME_TYPE
-    );
+    
     var variable_msg_variable = javaGenerator.variableDB_.getName(
       block.getFieldValue("msg_variable"),
+      Blockly.Variables.NAME_TYPE
+    );
+    var variable_msg_varType = javaGenerator.variableDB_.getName(
+      block.getFieldValue("var_type"),
       Blockly.Variables.NAME_TYPE
     );
     var statements_interrupt_body = javaGenerator.statementToCode(
       block,
       "interrupt_body"
     );
-    var code = `public void algorithm_interrupt(robot_interrupt_t ${variable_interrupt_variable}, String ${variable_msg_variable}) {
-      ${statements_interrupt_body}
+    var code = `public void communicationInterrupt(${variable_msg_varType} ${variable_msg_variable}) {
+      String[] parts = msg.split("\\\\s+");
+      int sourceRobotID = Integer.parseInt(parts[1]);
+      if(!(sourceRobotID ==this.robotId)){
+        ${statements_interrupt_body}
+      }
     }\n`;
     return code;
   };
