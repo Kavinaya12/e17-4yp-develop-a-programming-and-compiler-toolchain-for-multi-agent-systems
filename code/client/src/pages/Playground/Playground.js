@@ -363,7 +363,6 @@ export default function Playground() {
             <Block type="obs_color" />
           </Category>
         </Category>
-
       </BlocklyComponent>
     </div>
   );
