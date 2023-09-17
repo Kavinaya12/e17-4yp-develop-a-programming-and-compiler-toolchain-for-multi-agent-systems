@@ -42,6 +42,7 @@ export default function Playground() {
     <variable id="detectedColor">detectedColor</variable>
     <variable id="taskSuppliesFloatArray">taskSuppliesFloatArray</variable>
     <variable id="outputs">outputs</variable>
+    <variable id="defaultMoveSpeed">defaultMoveSpeed</variable>
   </variables>
   <block type="procedures_defnoreturn" id="zfserX5aCGAE:_V]Uq8|" x="316" y="31">
     <field name="NAME">algorithm_setup</field>
@@ -254,10 +255,10 @@ export default function Playground() {
           <Category name="Atomic">
             <Block type="move_random" />
             <Block type="assign_task" />
-            <Block type="random_turn" />
             <Block type="move_back" />
-            <Block type="read_distance" />
-            <Block type="read_color" />
+            <Block type="move_forward" />
+            <Block type="move_turn" />
+           
             <Block type="show_selected_task" />
           </Category>
           <Category name="Pair">
@@ -286,7 +287,7 @@ export default function Playground() {
           <Category name="Algorithm">
             <Block type="algorithm" />
             <Block type="algorithm_interrupt" />
-            
+            <Block type="simple_algorithm" />
           </Category>
           <Category name="Control Flow">
             <Block type="controls_if" />
@@ -360,7 +361,7 @@ export default function Playground() {
           <Category name="Outputs">
             <Block type="serial_print" />
             <Block type="neo_color_wave" />
-            <Block type="obs_color" />
+            
           </Category>
         </Category>
       </BlocklyComponent>
