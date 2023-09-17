@@ -6,6 +6,9 @@ var bodyParser = require("body-parser");
 const app = express();
 const httpServer = require("http").createServer(app);
 var cors = require("cors");
+
+var currentAlgorithmName = "MyTestRobot";
+
 const socketIO = require("socket.io")(httpServer, {
   cors: {
     origin: "*",
@@ -289,6 +292,9 @@ app.post("/virtualrobot/build", async (req, res) => {
 
   // generate algorithm
   const algorithm_name = req.body?.algorithm_name;
+
+  currentAlgorithmName = algorithm_name;
+
   socketIO.emit(`Writing algorithm to file ${algorithm_name}...\n`);
 
   generateVirtualRobotAlgorithmFile(
@@ -317,11 +323,32 @@ app.post("/virtualrobot/build", async (req, res) => {
   });
 });
 
-app.get("/updateJar", (req, res) => {
+app.get("/updateAppJava", (req, res) => {
   console.log(req.query);
   // const file = `java_virtual_robot/robot-library-java/recent_builds/java-robot-1.0.2.jar`;
   const file = `java_virtual_robot/robot-library-java/src/main/java/swarm/App.java`;
   res.download(file);
+});
+
+const path = require("path");
+
+const rootDirectory = __dirname;
+app.use(express.static(__dirname));
+
+app.get("/updateAlgorithm", (req, res) => {
+  console.log(req.query);
+  // Define the file path
+  const filePath = `java_virtual_robot/robot-library-java/src/main/java/Robots/${currentAlgorithmName}.java`;
+  console.log(filePath, currentAlgorithmName);
+
+  // Set the response headers to specify the file name
+  res.setHeader(
+    "Content-Disposition",
+    `attachment; filename="${currentAlgorithmName}.java"`
+  );
+
+  // Send the file as a response
+  res.sendFile(filePath, { root: rootDirectory });
 });
 
 httpServer.listen(port, () => {
