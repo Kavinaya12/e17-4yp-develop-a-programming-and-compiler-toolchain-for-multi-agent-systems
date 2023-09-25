@@ -6,6 +6,9 @@ var bodyParser = require("body-parser");
 const app = express();
 const httpServer = require("http").createServer(app);
 var cors = require("cors");
+
+var currentAlgorithmName = "MyTestRobot";
+
 const socketIO = require("socket.io")(httpServer, {
   cors: {
     origin: "*",
@@ -53,6 +56,7 @@ const generateAlgorithmFile = (dir, algorithm_name, fileString) => {
   } catch (error) {}
 };
 const generateVirtualRobotAlgorithmFile = (dir, algorithm_name, fileString) => {
+  console.log(algorithm_name);
   console.log(dir);
   try {
     fs.writeFileSync(`${dir}/${algorithm_name}.java`, fileString);
@@ -83,7 +87,7 @@ rob_id = ${robotId}
   } catch (error) {}
 };
 
-const generateMainAppForVirtualRobot = (dir, robotArr) => {
+const generateMainAppForVirtualRobot = (dir,algorithm_name, robotArr) => {
   console.log(robotArr);
 
   // Start building the dynamic portion of the code based on robotArr
@@ -94,7 +98,7 @@ const generateMainAppForVirtualRobot = (dir, robotArr) => {
 
     // Build code for creating MyTestRobot objects
     dynamicCode += `
-    MyTestRobot robot${vRobotId} = new MyTestRobot(${vRobotId}, ${xCoordinate}, ${yCoordinate}, ${heading});
+    Robot robot${vRobotId} = new ${algorithm_name}(${vRobotId}, ${xCoordinate}, ${yCoordinate}, ${heading});
     new Thread(robot${vRobotId}).start();
     `;
   }
@@ -138,45 +142,9 @@ const generateMainAppForVirtualRobot = (dir, robotArr) => {
               MQTTSettings.channel = props.getProperty("channel", "v1");
               reader.close();
               
-              // Start a single robot
-              //Robot robot = new MyTestRobot(15, 0, 0, 90);
-
-              //new Thread(robot).start();
-
               // Start dynamic code section
               ${dynamicCode}
               // End dynamic code section
-  
-  
-              // Start a single robot
-  //            Robot robot = new DynamicTaskAllocationRobot(0, 0, 0, 90);
-  //            new Thread(robot).start();
-  //
-  //            Robot robot2 = new DynamicTaskAllocationRobot(1,0,20,90);
-  //            new Thread(robot2).start();
-  
-  //            Robot robot3 = new DynamicTaskAllocationRobot(2,0,-61,90);
-  //            new Thread(robot3).start();
-  
-              // Start a swarm of robots
-              /* 
-              int[] robotList = { 0, 1, 2, 3, 4 };
-  
-              int startX = 0;
-              int startY = 0;
-              int startHeading = 90;
-  
-              Robot[] vr = new VirtualRobot[robotList.length];
-  
-              for (int i = 0; i < robotList.length; i++) {
-  
-                  startX = startX + 10 * i;
-                  startY = startY + 11 * i;
-                  startHeading = startHeading + 10 * i;
-                  vr[i] = new DynamicTaskAllocationRobot(robotList[i], startX, startY, startHeading);
-                  new Thread(vr[i]).start();
-              }*/
-  
   
           } catch (FileNotFoundException ex) {
               // file does not exist
@@ -289,8 +257,11 @@ app.post("/virtualrobot/build", async (req, res) => {
 
   // generate algorithm
   const algorithm_name = req.body?.algorithm_name;
-  socketIO.emit(`Writing algorithm to file ${algorithm_name}...\n`);
 
+  currentAlgorithmName = algorithm_name;
+
+  socketIO.emit(`Writing algorithm to file ${algorithm_name}...\n`);
+  //console.log(algorithm_name);
   generateVirtualRobotAlgorithmFile(
     `${virtualRobotDir}/src/main/java/Robots`,
     algorithm_name,
@@ -298,7 +269,7 @@ app.post("/virtualrobot/build", async (req, res) => {
   );
   socketIO.emit("File written successfully...\n\n");
 
-  generateMainAppForVirtualRobot(virtualRobotDir, req.body?.robot_array);
+  generateMainAppForVirtualRobot(virtualRobotDir,algorithm_name, req.body?.robot_array);
 
   const mavenCommand = `cd ${virtualRobotDir} && mvn -f pom.xml clean install && cp ./target/java-robot-1.0.2.jar ./recent_builds`;
 
@@ -317,11 +288,34 @@ app.post("/virtualrobot/build", async (req, res) => {
   });
 });
 
-app.get("/updateJar", (req, res) => {
+app.get("/updateAppJava", (req, res) => {
   console.log(req.query);
   // const file = `java_virtual_robot/robot-library-java/recent_builds/java-robot-1.0.2.jar`;
   const file = `java_virtual_robot/robot-library-java/src/main/java/swarm/App.java`;
+  
   res.download(file);
+  
+});
+
+const path = require("path");
+
+const rootDirectory = __dirname;
+app.use(express.static(__dirname));
+
+app.get("/updateAlgorithm", (req, res) => {
+  console.log(req.query);
+  // Define the file path
+  const filePath = `java_virtual_robot/robot-library-java/src/main/java/Robots/${currentAlgorithmName}.java`;
+  console.log(filePath, currentAlgorithmName);
+
+  // Set the response headers to specify the file name
+  res.setHeader(
+    "Content-Disposition",
+    `attachment; filename="${currentAlgorithmName}.java"`
+  );
+
+  // Send the file as a response
+  res.sendFile(filePath, { root: rootDirectory });
 });
 
 httpServer.listen(port, () => {

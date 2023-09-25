@@ -67,7 +67,7 @@ Blockly.Blocks["move_random"] = {
   .appendField(new Blockly.FieldNumber(0), "right")
   this.setPreviousStatement(true, null);
   this.setNextStatement(true, null);
-  this.setColour(230);
+  this.setColour(160);
   this.setTooltip("Performs random movement with the given parameters");
   this.setHelpUrl("");
   },
@@ -89,13 +89,41 @@ javaGenerator["move_random"] = function (block) {
   return code;
   };
 
+//using-VR
+Blockly.Blocks['show_selected_task'] = {
+  init: function() {
+    this.appendDummyInput()
+        .appendField("Show Selected Task");
+    this.appendDummyInput()
+        .appendField(new Blockly.FieldDropdown([["Red", "r"], ["Blue", "b"], ["SelectedTask","selectedTask"]]), "selectedTask");
+    this.setInputsInline(true);
+    this.setPreviousStatement(true, null);
+    this.setNextStatement(true, null);
+    this.setColour(160);
+    this.setTooltip("Show the selected task (either 'r' for Red or 'b' for Blue)");
+    this.setHelpUrl("");
+  }
+};
+javaGenerator['show_selected_task'] = function(block) {
+  javaGenerator.definitions_[`import#atomic_behaviors`] = `import swarm.behaviours.atomicBehaviours.AtomicBehaviours;`;
+  var dropdown_selectedtask = block.getFieldValue('selectedTask');
+  if(dropdown_selectedtask=="selectedTask"){
+    var code = `atomicBehaviours.showSelectedTask(${dropdown_selectedtask},this.neoPixel,this.simpleComm,this.getId());\n`;
+  }
+  else{
+    var code = `atomicBehaviours.showSelectedTask("${dropdown_selectedtask}",this.neoPixel,this.simpleComm,this.getId());\n`;
+  }
+  
+  return code;
+};
+
 //using
 Blockly.Blocks["assign_task"] = {
   init: function () {
     this.appendDummyInput().appendField("Assign Task");
     this.setPreviousStatement(true, null);
     this.setNextStatement(true, null);
-    this.setColour(230);
+    this.setColour(160);
     this.setTooltip("");
     this.setHelpUrl("");
   },
@@ -122,7 +150,7 @@ Blockly.Blocks["random_turn"] = {
       .appendField(new Blockly.FieldNumber(0), "delay_ms");
     this.setPreviousStatement(true, null);
     this.setNextStatement(true, null);
-    this.setColour(230);
+    this.setColour(160);
     this.setTooltip("Performs a random turn with the given angle and delay");
     this.setHelpUrl("");
   },
@@ -136,31 +164,78 @@ cppGenerator["random_turn"] = function (block) {
   return code;
 };
 
-//not using
+//using -VR simple behaviour
 Blockly.Blocks["move_back"] = {
   init: function () {
     this.appendDummyInput()
-      .appendField("Move Backward")
-      .appendField("Left")
-      .appendField(new Blockly.FieldNumber(0), "left")
-      .appendField("Right")
-      .appendField(new Blockly.FieldNumber(0), "right")
-      .appendField("Delay (ms)")
-      .appendField(new Blockly.FieldNumber(0), "delay_ms");
+      .appendField("Move Back")
+      .appendField("Default Move Speed")
+      .appendField(new Blockly.FieldNumber(0), "defaultMoveSpeed")
+      .appendField("Duration (ms)")
+      .appendField(new Blockly.FieldNumber(0), "duration_ms");
     this.setPreviousStatement(true, null);
     this.setNextStatement(true, null);
-    this.setColour(230);
-    this.setTooltip("Moves backward with the given motor values and delay");
+    this.setColour(160);
+    this.setTooltip("Moves backward with the given speed and duration");
     this.setHelpUrl("");
   },
 };
-cppGenerator["move_back"] = function (block) {
-  
-  var left = block.getFieldValue("left");
-  var right = block.getFieldValue("right");
-  var delay_ms = block.getFieldValue("delay_ms");
+javaGenerator["move_back"] = function (block) {
+  var defaultMoveSpeed = block.getFieldValue("defaultMoveSpeed");
+  var duration_ms = block.getFieldValue("duration_ms");
 
-  var code = `move_back(${left}, ${right}, ${delay_ms});`;
+  var code = `AtomicBehaviours.moveBack(motion, ${defaultMoveSpeed}, ${duration_ms});`;
+  return code;
+};
+
+//using -VR simple behaviour
+Blockly.Blocks["move_forward"] = {
+  init: function () {
+    this.appendDummyInput()
+      .appendField("Move Forward")
+      .appendField("Default Move Speed")
+      .appendField(new Blockly.FieldNumber(100), "defaultMoveSpeed")
+      .appendField("Duration (ms)")
+      .appendField(new Blockly.FieldNumber(2000), "duration_ms");
+    this.setPreviousStatement(true, null);
+    this.setNextStatement(true, null);
+    this.setColour(160);
+    this.setTooltip("Moves forward with the given speed and duration");
+    this.setHelpUrl("");
+  },
+};
+javaGenerator["move_forward"] = function (block) {
+  var defaultMoveSpeed = block.getFieldValue("defaultMoveSpeed");
+  var duration_ms = block.getFieldValue("duration_ms");
+
+  var code = `AtomicBehaviours.moveForward(motion, ${defaultMoveSpeed}, ${duration_ms});`;
+  return code;
+};
+
+//using -VR simple behaviour
+Blockly.Blocks["move_turn"] = {
+  init: function () {
+    this.appendDummyInput()
+      .appendField("Move Turn")
+      .appendField("Default Move Speed")
+      .appendField(new Blockly.FieldNumber(90), "defaultMoveSpeed")
+      .appendField("Duration (ms)")
+      .appendField(new Blockly.FieldNumber(1000), "duration_ms")
+      .appendField("Sign (1 or -1)")
+      .appendField(new Blockly.FieldNumber(1), "sign");
+    this.setPreviousStatement(true, null);
+    this.setNextStatement(true, null);
+    this.setColour(160);
+    this.setTooltip("Moves turn with the given speed,sign and duration");
+    this.setHelpUrl("");
+  },
+};
+javaGenerator["move_turn"] = function (block) {
+  var defaultMoveSpeed = block.getFieldValue("defaultMoveSpeed");
+  var duration_ms = block.getFieldValue("duration_ms");
+  var sign = block.getFieldValue("sign");
+
+  var code = `AtomicBehaviours.turn(motion, ${defaultMoveSpeed}, ${sign}, ${duration_ms});`;
   return code;
 };
 
@@ -169,7 +244,7 @@ Blockly.Blocks["read_distance"] = {
   init: function () {
     this.appendDummyInput().appendField("Read Distance");
     this.setOutput(true, "Number");
-    this.setColour(230);
+    this.setColour(160);
     this.setTooltip("Reads the distance and returns the value");
     this.setHelpUrl("");
   },
@@ -244,7 +319,7 @@ Blockly.Blocks["observe_environment"] = {
       .appendField("Blue Threshold2")
       .appendField(new Blockly.FieldNumber(130), "blueThreshold_value2");
     this.setOutput(true, "Boolean");
-    this.setColour(230);
+    this.setColour(370);
     this.setTooltip("");
     this.setHelpUrl("");
   },
@@ -266,23 +341,119 @@ javaGenerator["observe_environment"] = function (block) {
   return [code, cppGenerator.ORDER_ATOMIC];
 };
 
-/*
-Blockly.Blocks["obs_color_variable"] = {
+//using -VR
+Blockly.Blocks["observe"] = {
   init: function () {
     this.appendDummyInput()
-      .appendField(new Blockly.FieldVariable("obsColor"), "VAR");
-    this.setOutput(true, null);
-    this.setColour(230);
-    this.setTooltip("");
+    .appendField("Observe")
+    .appendField("Detected Color")
+    .appendField(new Blockly.FieldVariable("detectedColor"), "detectedColor");
+    
+  this.setPreviousStatement(true, null);
+  this.setNextStatement(true, null);
+  this.setColour(370);
+  this.setTooltip("Observes and performs actions based on detected color");
+  this.setHelpUrl("");
+},
+};
+javaGenerator["observe"] = function (block) {
+  javaGenerator.definitions_[`import#cluster_behaviours`] = `import swarm.behaviours.clusterBehaviours.ClusterBehaviours;`;
+  var detectedColor = block.getFieldValue("detectedColor");
+  
+  var code = `clusterBehaviours.observe(${detectedColor}, this.taskDemandQueue, this.taskSupplyQueue, fixedQueueLength, robotId, this.robotMqttClient);\n`;
+  return code;
+  };
+
+  //using
+  Blockly.Blocks["evaluate_task_demand"] = {
+    init: function () {
+      this.appendDummyInput()
+        .appendField("Evaluate Task Demand")
+        
+      this.setOutput(true, "Array");
+      this.setColour(370);
+      this.setTooltip("Evaluate task demand and return an array");
+      this.setHelpUrl("");
+    },
+  };
+  javaGenerator["evaluate_task_demand"] = function (block) {
+    
+    var code = `clusterBehaviours.evaluateTaskDemand(this.taskDemandQueue, fixedQueueLength, robotId);
+  this.estimatedTaskDemandForRed = taskDemandsFloatArray[0];
+  this.estimatedTaskDemandForBlue = taskDemandsFloatArray[1];\n
+`;
+    return [code, cppGenerator.ORDER_ATOMIC];
+    };
+
+//using
+Blockly.Blocks["evaluate_task_supply"] = {
+  init: function () {
+    this.appendDummyInput()
+      .appendField("Evaluate Task Supply")
+      
+    this.setOutput(true, "Array");
+    this.setColour(370);
+    this.setTooltip("Evaluate task demand and return an array");
     this.setHelpUrl("");
   },
 };
-// Generate the code for the obs_color_variable block
-cppGenerator["obs_color_variable"] = function (block) {
-  var variableName = block.getFieldValue("VAR");
-  return [variableName, cppGenerator.ORDER_ATOMIC];
-};*/
+javaGenerator["evaluate_task_supply"] = function (block) {
+  
+  var code = `clusterBehaviours.evaluateTaskSupply(this.taskSupplyQueue, fixedQueueLength, robotId);
+this.estimatedTaskSupplyForRed = taskSuppliesFloatArray[0];
+this.estimatedTaskSupplyForBlue = taskSuppliesFloatArray[1];\n
+`;
+  return [code, cppGenerator.ORDER_ATOMIC];
+  };
+  
+//using
+  Blockly.Blocks["select_task"] = {
+    init: function () {
+      this.appendDummyInput()
+        .appendField("Select Task");
+      this.setOutput(true, "Array");
+      this.setColour(370);
+      this.setTooltip("Evaluate task demand and return an array");
+      this.setHelpUrl("");
+    },
+  };
+  javaGenerator["select_task"] = function (block) {
+    var taskSupplyQueue = block.getFieldValue("taskSupplyQueue");
+    var fixedQueueLength = block.getFieldValue("fixedQueueLength");
+    var robotId = block.getFieldValue("robotId");
+    
+    var code = `clusterBehaviours.selectTask(this.responseThresholdRed,this.responseThresholdBlue,scalingFactor,this.estimatedTaskDemandForRed,this.estimatedTaskSupplyForRed,this.estimatedTaskDemandForBlue,this.estimatedTaskSupplyForBlue,n,robotId);
+selectedTask = (String) outputs.get(0);
+this.responseThresholdRedNext = (float) outputs.get(1);
+this.responseThresholdBlueNext = (float) outputs.get(2);
+this.taskSelectionProbabilityRed = (float) outputs.get(3);
+this.taskSelectionProbabilityBlue = (float) outputs.get(4);\n
+this.responseThresholdRed = this.responseThresholdRedNext;
+this.responseThresholdBlue = this.responseThresholdBlueNext;\n
+  `;
+    return [code, cppGenerator.ORDER_ATOMIC];
+    };
 
+//using
+Blockly.Blocks["add_supply"] = {
+  init: function () {
+    this.appendDummyInput()
+    .appendField("Add Supply")
+    
+  this.setPreviousStatement(true, null);
+  this.setNextStatement(true, null);
+  this.setColour(370);
+  this.setTooltip("Add supply");
+  this.setHelpUrl("");
+},
+};
+javaGenerator["add_supply"] = function (block) {
+  
+  var code = `clusterBehaviours.addSupply(parts[0],this.taskSupplyQueue,fixedQueueLength);\n`;
+  return code;
+  };
+
+// not using
 Blockly.Blocks["obs_color"] = {
   init: function () {
     this.appendDummyInput()
@@ -304,6 +475,33 @@ cppGenerator["obs_color"] = function (block) {
   var code = `obsColor.${colorProperty}`;
   return [code, cppGenerator.ORDER_ATOMIC];
 };
+
+//using -VR
+Blockly.Blocks['color_sensor_reading'] = {
+  init: function() {
+    this.appendDummyInput()
+        .appendField("Get color sensor reading and assign to")
+        .appendField(new Blockly.FieldVariable("detectedColor"), "var_name");
+    this.setPreviousStatement(true, null);
+    this.setNextStatement(true, null);
+    this.setColour(230);
+    this.setTooltip("Get the color sensor reading and assign it to a variable.");
+    this.setHelpUrl("");
+  }
+};
+javaGenerator["color_sensor_reading"] = function (block) {
+  javaGenerator.definitions_[`import#RGBColorType`] = `import swarm.robot.types.RGBColorType;`;
+  
+  var variable_var_name = javaGenerator.variableDB_.getName(
+    block.getFieldValue('var_name'),
+    Blockly.Variables.NAME_TYPE
+  );
+  
+  var code = "RGBColorType " +variable_var_name + ' = colorSensor.getColor();\n'; 
+  return code;
+  
+};
+
 
 
 Blockly.Blocks["drive_motors"] = {
@@ -348,26 +546,131 @@ javaGenerator["motors_stop"] = function (block) {
   return code;
 };
 
+// Main dynamic task allocation algorithm
 Blockly.Blocks["algorithm"] = {
   init: function () {
     this.appendDummyInput().appendField(
-      new Blockly.FieldTextInput("Algorithm"),
+      new Blockly.FieldTextInput("DynamicTaskAllocationRobot"),
       "algorithm_name"
     );
-    this.appendDummyInput().appendField(
-      new Blockly.FieldTextInput("Virtual_Robot_Name"),
-      "virtualRobot_name"
+    this.appendDummyInput()
+    .appendField("Super Class:")
+    .appendField(
+      new Blockly.FieldDropdown([
+        ["DynamicTaskAllocationRobot", "DynamicTaskAllocationRobot"],
+        ["ObstacleAvoidanceRobot", "ObstacleAvoidanceRobot"],
+        ["RandomBehaviour", "RandomBehaviour"],
+        ["VirtualRobot","VirtualRobot"],
+      ]),
+      "superClass_name"
     );
     this.appendDummyInput()
+    .appendField("Child Class:")
+    .appendField(
+      new Blockly.FieldDropdown([
+        ["DynamicTaskAllocationRobot", "DynamicTaskAllocationRobot"],
+        ["ObstacleAvoidanceRobot", "ObstacleAvoidanceRobot"],
+        ["RandomBehaviour", "RandomBehaviour"],
+        ["VirtualRobot","VirtualRobot"],
+      ]),
+      "virtualRobot_name"
+    );;
+    
+      // Add object for Behaviours
+      this.appendDummyInput("dummyInput1")
+      .appendField("Object for cluster behaviours:")
+      .appendField(new Blockly.FieldTextInput("clusterBehaviours"), "objectCluster")
+      .setAlign(Blockly.ALIGN_LEFT);
+      this.appendDummyInput("dummyInput2")
+      .appendField("Object for atomic behaviours:")
+      .appendField(new Blockly.FieldTextInput("atomicBehaviours"), "objectAtomic")
+      .setAlign(Blockly.ALIGN_LEFT); 
+
+      // Add queues for demand and supply queues
+      this.appendDummyInput()
       .appendField(
-        new Blockly.FieldVariable("ROBOT_STATE"),
-        "robot_state_label"
+        new Blockly.FieldVariable("taskDemandQueue"),
+        "taskDemandQueue_label"
+      );
+      this.appendDummyInput()
+      .appendField(
+        new Blockly.FieldVariable("taskSupplyQueue"),
+        "taskSupplyQueue_label"
+      );
+
+      this.appendDummyInput()
+      .appendField(
+        new Blockly.FieldVariable("fixedQueueLength"),
+        "fixedQueueLength_label"
       )
-      .appendField(new Blockly.FieldNumber(0, 0, 10), "robot_state_value");
-    this.appendDummyInput()
+      .appendField(new Blockly.FieldNumber(0, 0, 100), "fixedQueueLength_value");
+      
+      this.appendDummyInput()
       .appendField(
-        new Blockly.FieldVariable("isTaskFound"),
-        "isTaskFound"
+        new Blockly.FieldVariable("scalingFactor"),
+        "scalingFactor_label"
+      )
+      .appendField(new Blockly.FieldNumber(0.015, 0, 1, 0.001), "scalingFactor_value");
+      
+      this.appendDummyInput()
+      .appendField(
+        new Blockly.FieldVariable("responseThresholdRed"),
+        "responseThresholdRed_label"
+      );
+      this.appendDummyInput()
+      .appendField(
+        new Blockly.FieldVariable("responseThresholdBlue"),
+        "responseThresholdBlue_label"
+      );
+      this.appendDummyInput()
+      .appendField(
+        new Blockly.FieldVariable("responseThresholdRedNext"),
+        "responseThresholdRedNext_label"
+      );
+      this.appendDummyInput()
+      .appendField(
+        new Blockly.FieldVariable("responseThresholdBlueNext"),
+        "responseThresholdBlueNext_label"
+      );
+      this.appendDummyInput()
+      .appendField(
+        new Blockly.FieldVariable("estimatedTaskDemandForRed"),
+        "estimatedTaskDemandForRed_label"
+      );
+      this.appendDummyInput()
+      .appendField(
+        new Blockly.FieldVariable("estimatedTaskDemandForBlue"),
+        "estimatedTaskDemandForBlue_label"
+      );
+      this.appendDummyInput()
+      .appendField(
+        new Blockly.FieldVariable("estimatedTaskSupplyForRed"),
+        "estimatedTaskSupplyForRed_label"
+      );
+      this.appendDummyInput()
+      .appendField(
+        new Blockly.FieldVariable("estimatedTaskSupplyForBlue"),
+        "estimatedTaskSupplyForBlue_label"
+      );
+      this.appendDummyInput()
+      .appendField(
+        new Blockly.FieldVariable("taskSelectionProbabilityRed"),
+        "taskSelectionProbabilityRed_label"
+      );
+      this.appendDummyInput()
+      .appendField(
+        new Blockly.FieldVariable("taskSelectionProbabilityBlue"),
+        "taskSelectionProbabilityBlue_label"
+      );
+      this.appendDummyInput()
+      .appendField(
+        new Blockly.FieldVariable("robotId"),
+        "robotId_label"
+      );
+      this.appendDummyInput()
+      .appendField(
+        new Blockly.FieldVariable("selectedTask"),
+        "selectedTask_label"
       );
     /*this.appendDummyInput()
       .appendField(
@@ -406,18 +709,6 @@ cppGenerator["algorithm"] = function (block) {
   );
   cppGenerator.algorithm_ = variable_name;
 
-  var variable_robot_state_label = cppGenerator.nameDB_.getName(
-    block.getFieldValue("robot_state_label"),
-    NameType.VARIABLE
-  );
-  console.log(variable_robot_state_label);
-  var number_robot_state_value = block.getFieldValue("robot_state_value");
-/*
-  var variable_obsColor = cppGenerator.nameDB_.getName(
-    block.getFieldValue("obsColor"),
-    NameType.VARIABLE
-  );
-*/
 
   
   var variable_isTaskFound = cppGenerator.nameDB_.getName(
@@ -439,10 +730,7 @@ cppGenerator["algorithm"] = function (block) {
   // var statements_reset = cppGenerator.statementToCode(block, "reset");
   // TODO: Assemble JavaScript into code variable.
   var code = `
-    int ${variable_robot_state_label} = ${number_robot_state_value};
-    
-    bool ${variable_isTaskFound};
-
+  
     void algorithm_loop() {
       \t${body}
     }
@@ -451,12 +739,11 @@ cppGenerator["algorithm"] = function (block) {
   return code;
 };
 javaGenerator["algorithm"] = function (block) {
-  //console.log(cppGenerator.nameDB_, NameType.VARIABLE);
-  //javaGenerator.definitions_[`import#algorithm`] = `import algorithm.Algorithm;`;
-  //javaGenerator.definitions_[`import#mqtt`] = `import mqtt.Mqtt;`;
-  //javaGenerator.definitions_[`package#robots_samples`] = `package Robots.samples;`;
+  
   javaGenerator.definitions_[`package#robots_samples`] = `package Robots;`;
-  javaGenerator.definitions_[`import#virtualRobot`] = `import swarm.robot.VirtualRobot;`;
+  javaGenerator.definitions_[`import#javaUtil`] = `import java.util.*;`;
+  javaGenerator.definitions_[`import#SensorException`] = `import swarm.robot.exception.SensorException;`;
+
   var variable_name = javaGenerator.nameDB_.getName(
     block.getFieldValue("algorithm_name"),
     NameType.VARIABLE
@@ -468,30 +755,86 @@ javaGenerator["algorithm"] = function (block) {
     NameType.VARIABLE
   );
 
-  var variable_robot_state_label = javaGenerator.nameDB_.getName(
-    block.getFieldValue("robot_state_label"),
+  var superClassName = javaGenerator.nameDB_.getName(
+    block.getFieldValue("superClass_name"),
     NameType.VARIABLE
   );
-  //console.log(variable_robot_state_label);
-  var number_robot_state_value = block.getFieldValue("robot_state_value");
-/*
-  var variable_obsColor = cppGenerator.nameDB_.getName(
-    block.getFieldValue("obsColor"),
-    NameType.VARIABLE
-  );
-*/
 
   
-  var variable_isTaskFound = javaGenerator.nameDB_.getName(
-    block.getFieldValue("isTaskFound"),
+  var variable_responseThresholdRed_label = javaGenerator.nameDB_.getName(
+    block.getFieldValue("responseThresholdRed_label"),
     NameType.VARIABLE
   );
-
-  /*var variable_collisionThreshold = cppGenerator.nameDB_.getName(
-    block.getFieldValue("collisionThreshold"),
+  var variable_responseThresholdBlue_label = javaGenerator.nameDB_.getName(
+    block.getFieldValue("responseThresholdBlue_label"),
     NameType.VARIABLE
   );
-  var number_collisionThreshold_value = block.getFieldValue("collisionThreshold_value");*/
+  var variable_responseThresholdRedNext_label = javaGenerator.nameDB_.getName(
+    block.getFieldValue("responseThresholdRedNext_label"),
+    NameType.VARIABLE
+  );
+  var variable_responseThresholdBlueNext_label = javaGenerator.nameDB_.getName(
+    block.getFieldValue("responseThresholdBlueNext_label"),
+    NameType.VARIABLE
+  );
+  var variable_estimatedTaskDemandForRed_label = javaGenerator.nameDB_.getName(
+    block.getFieldValue("estimatedTaskDemandForRed_label"),
+    NameType.VARIABLE
+  );
+  var variable_estimatedTaskDemandForBlue_label = javaGenerator.nameDB_.getName(
+    block.getFieldValue("estimatedTaskDemandForBlue_label"),
+    NameType.VARIABLE
+  );
+  var variable_estimatedTaskSupplyForRed_label = javaGenerator.nameDB_.getName(
+    block.getFieldValue("estimatedTaskSupplyForRed_label"),
+    NameType.VARIABLE
+  );
+  var variable_estimatedTaskSupplyForBlue_label = javaGenerator.nameDB_.getName(
+    block.getFieldValue("estimatedTaskSupplyForBlue_label"),
+    NameType.VARIABLE
+  );
+  var variable_taskSelectionProbabilityRed_label = javaGenerator.nameDB_.getName(
+    block.getFieldValue("taskSelectionProbabilityRed_label"),
+    NameType.VARIABLE
+  );
+  var variable_taskSelectionProbabilityBlue_label = javaGenerator.nameDB_.getName(
+    block.getFieldValue("taskSelectionProbabilityBlue_label"),
+    NameType.VARIABLE
+  );
+  var variable_robotId_label = javaGenerator.nameDB_.getName(
+    block.getFieldValue("robotId_label"),
+    NameType.VARIABLE
+  );
+  var variable_selectedTask_label = javaGenerator.nameDB_.getName(
+    block.getFieldValue("selectedTask_label"),
+    NameType.VARIABLE
+  );
+  var variable_objectCluster = javaGenerator.nameDB_.getName(
+    block.getFieldValue("objectCluster"),
+    NameType.VARIABLE
+  )
+  var variable_objectAtomic = javaGenerator.nameDB_.getName(
+    block.getFieldValue("objectAtomic"),
+    NameType.VARIABLE
+  )
+  var variable_demandQueue = javaGenerator.nameDB_.getName(
+    block.getFieldValue("taskDemandQueue_label"),
+    NameType.VARIABLE
+  )
+  var variable_supplyQueue = javaGenerator.nameDB_.getName(
+    block.getFieldValue("taskSupplyQueue_label"),
+    NameType.VARIABLE
+  )
+  var variable_fixedQueueLength_label = javaGenerator.nameDB_.getName(
+    block.getFieldValue("fixedQueueLength_label"),
+    NameType.VARIABLE
+  );
+  var number_fixedQueueLength_value = block.getFieldValue("fixedQueueLength_value");
+  var variable_scalingFactor_label = javaGenerator.nameDB_.getName(
+    block.getFieldValue("scalingFactor_label"),
+    NameType.VARIABLE
+  );
+  var number_scalingFactor_value = block.getFieldValue("scalingFactor_value");
 
   var body = javaGenerator.statementToCode(block, "algo_body");
   // var statements_loop = cppGenerator.statementToCode(block, "loop");
@@ -502,50 +845,136 @@ javaGenerator["algorithm"] = function (block) {
   // TODO: Assemble JavaScript into code variable.
   
   var code =`
-  public class ${virtualRobot_name} extends VirtualRobot {
+  public class ${virtualRobot_name} extends ${superClassName} {
 
-    //private static int ${variable_robot_state_label} = ${number_robot_state_value};
-    //private static boolean ${variable_isTaskFound};
+    ClusterBehaviours ${variable_objectCluster} = new ClusterBehaviours();
+    AtomicBehaviours ${variable_objectAtomic} = new AtomicBehaviours();
+    Queue<String> ${variable_demandQueue} = new LinkedList<>();
+    Queue<String> ${variable_supplyQueue} = new LinkedList<>();
+    static int ${variable_fixedQueueLength_label} = ${number_fixedQueueLength_value};
+    static float ${variable_scalingFactor_label} = ${number_scalingFactor_value}f;
+    static int n = 10;
+    robotState runState = robotState.RUN;
 
-    public ${virtualRobot_name}(int id, double x, double y, double heading) {
+    float responseThresholdRed;
+    float responseThresholdBlue;
+    float ${variable_responseThresholdRedNext_label};
+    float ${variable_responseThresholdBlueNext_label};
+    float ${variable_estimatedTaskDemandForRed_label};
+    float ${variable_estimatedTaskDemandForBlue_label};
+    float ${variable_estimatedTaskSupplyForRed_label};
+    float ${variable_estimatedTaskSupplyForBlue_label};
+    float ${variable_taskSelectionProbabilityRed_label};
+    float ${variable_taskSelectionProbabilityBlue_label};
+
+    int ${variable_robotId_label};
+    String ${variable_selectedTask_label};
+
+    public ${virtualRobot_name}(int id, double x, double y, double heading, long time) {
       super(id, x, y, heading);
+      ${variable_robotId_label} = id;
   }
 
     // Algorithm loop
     public void loop() throws Exception {
-      \tsuper.loop();\n${body}
+      \tsuper.loop();\n
+      action2Future = executor.submit(() -> {\n
+        try {\n
+          runTaskAllocationAlgorithm();\n
+        } catch (SensorException e) {\n
+          throw new RuntimeException(e);\n
+        }\n
+      });\n
     }
 
   `
   
   return code;
 };
-/*
-var code =`
-  public class VRobot extends VirtualRobot {
 
-    private static int ${variable_robot_state_label} = ${number_robot_state_value};
-    private static boolean ${variable_isTaskFound};
+//simple algorithm block
+Blockly.Blocks["simple_algorithm"] = {
+  init: function () {
+    this.appendDummyInput().appendField(
+      new Blockly.FieldTextInput("RandomBehaviour"),
+      "algorithm_name"
+    );
+    this.appendDummyInput().appendField(
+      new Blockly.FieldTextInput("Super_Class_Name"),
+      "superClass_name"
+    );
+    this.appendDummyInput().appendField(
+      new Blockly.FieldTextInput("Virtual_Robot_Name"),
+      "virtualRobot_name"
+    );
+    this.appendDummyInput()
+      .appendField(
+        new Blockly.FieldVariable("defaultMoveSpeed"),
+        "defaultMoveSpeed_label"
+      )
+      .appendField(new Blockly.FieldNumber(0, 0, 1000), "defaultMoveSpeed_value");
+    
+    this.appendStatementInput("algo_body")
+      .setCheck(null)
+      .appendField("algorithm_loop");
+    
+    this.setColour(230);
+    this.setTooltip("");
+    this.setHelpUrl("");
+  },
+};
 
-    public static void main(String[] args) {
-        // ALGO_DYNAMIC_TASK_ALLOCATION condition
-        if (ALGO_${Blockly.cpp.algorithm_}()) {
-            while (true) {
-                algorithm_loop();
-            }
-        }
+javaGenerator["simple_algorithm"] = function (block) {
+  
+  javaGenerator.definitions_[`package#robots_samples`] = `package Robots;`;
+  javaGenerator.definitions_[`import#virtualRobot`] = `import swarm.robot.VirtualRobot;`;
+  javaGenerator.definitions_[`import#atomic_behaviours`] = `import swarm.behaviours.atomicBehaviours.AtomicBehaviours;`;
+
+  var variable_name = javaGenerator.nameDB_.getName(
+    block.getFieldValue("algorithm_name"),
+    NameType.VARIABLE
+  );
+  javaGenerator.algorithm_ = variable_name;
+
+  var virtualRobot_name = javaGenerator.nameDB_.getName(
+    block.getFieldValue("virtualRobot_name"),
+    NameType.VARIABLE
+  );
+
+  var superClassName = javaGenerator.nameDB_.getName(
+    block.getFieldValue("superClass_name"),
+    NameType.VARIABLE
+  );
+
+  var variable_defaultMoveSpeed_label = javaGenerator.nameDB_.getName(
+    block.getFieldValue("defaultMoveSpeed_label"),
+    NameType.VARIABLE
+  );
+  var number_defaultMoveSpeed_value = block.getFieldValue("defaultMoveSpeed_value");
+
+  var body = javaGenerator.statementToCode(block, "algo_body");
+  
+  var code =`
+  public class ${virtualRobot_name} extends ${superClassName} {
+
+    private int ${variable_defaultMoveSpeed_label} = ${number_defaultMoveSpeed_value};
+    robotState runState = robotState.RUN;
+
+    public ${virtualRobot_name}(int id, double x, double y, double heading) {
+      super(id, x, y, heading);
     }
 
     // Algorithm loop
-    public static void algorithm_loop() {
+    public void loop() throws Exception {
+      \tsuper.loop();\n
       \t${body}
     }
 
   `
-  console.log(code);
+  
   return code;
-};*/
- 
+};
+
 Blockly.Blocks["variable"] = {
   init: function () {
     this.appendDummyInput()
@@ -701,6 +1130,8 @@ Blockly.Blocks["variables_init"] = {
           ["int", "int"],
           ["float", "float"],
           ["double", "double"],
+          ["int[]","int[]"],
+          ["float[]", "float[]"]
         ]),
         "var_type"
       );
@@ -742,6 +1173,176 @@ cppGenerator["variables_init"] = function (block) {
   return code;
 };
 
+javaGenerator['variables_init'] = function(block) {
+  var variable_var_name = javaGenerator.nameDB_.getName(
+    block.getFieldValue('var_name'),
+    NameType.VARIABLE
+  );
+  var dropdown_var_type = block.getFieldValue('var_type');
+  var initialValue;
+  switch (dropdown_var_type) {
+    case 'int':
+      initialValue = '0';
+      break;
+    case 'double':
+      initialValue = '0.0';
+      break;
+    case 'float':
+      initialValue = '0.0f';
+      break;
+    case 'string':
+      initialValue = '""';
+      break;
+    case 'int[]':
+      initialValue = '[]';
+      break;
+    case 'float[]':
+      initialValue = '[]';
+      break;
+    default:
+      initialValue = 'null';
+      break;
+  }
+  var code = dropdown_var_type + ' ' + variable_var_name + ' = ' + initialValue + ';';
+  return code + '\n';
+};
+
+Blockly.Blocks['set_variable_with_type'] = {
+  init: function() {
+    // Define a dynamic dropdown for variable type.
+    var dropdown = new Blockly.FieldDropdown([
+      ["int", "int"],
+      ["float", "float"],
+      ["double", "double"],
+      ["String", "String"],
+      ["int[]","int[]"],
+      ["float[]", "float[]"],
+      ["String[]","String[]"],
+      ["List<Object>","List<Object>"]
+      // Add more types as needed
+    ]);
+
+    this.appendDummyInput()
+        .appendField("Create variable")
+        .appendField(new Blockly.FieldVariable('item'), 'var_name')
+        .appendField("of type")
+        .appendField(dropdown, 'var_type'); // Include the dropdown here
+    this.appendValueInput('value')
+        .setCheck(null)
+        .appendField('and initialize to');
+    this.setInputsInline(true);
+    this.setPreviousStatement(true, null);
+    this.setNextStatement(true, null);
+    this.setColour(230);
+    this.setTooltip('Create a variable with a specified type and initial value.');
+  }
+};
+
+javaGenerator['set_variable_with_type'] = function(block) {
+  var varName = block.getFieldValue('var_name');
+  var varType = block.getFieldValue('var_type'); // Get the selected type
+  var initialValue = javaGenerator.valueToCode(block, 'value', javaGenerator.ORDER_NONE) || '0';
+  var code = varType + ' ' + varName + ' = ' + initialValue + ';\n';
+  return code;
+};
+
+
+
+Blockly.Blocks["init_instance_variable"] = {
+  init: function () {
+    this.appendDummyInput()
+      .appendField("Initialize instance variable")
+      .appendField(new Blockly.FieldTextInput("responseThresholdRed"), "var_name")
+      .appendField("with value");
+    this.appendValueInput("value")
+      .setCheck(["Number", "Variable"])
+      .appendField("value");
+    this.setInputsInline(true);
+    this.setPreviousStatement(true, null);
+    this.setNextStatement(true, null);
+    this.setColour(330);
+    this.setTooltip("");
+    this.setHelpUrl("");
+  },
+};
+javaGenerator["init_instance_variable"] = function (block) {
+  var variable_name = block.getFieldValue("var_name");
+  var value = javaGenerator.valueToCode(
+    block,
+    "value",
+    javaGenerator.ORDER_ATOMIC
+  );
+
+  var code = "this." + variable_name + " = " + value + ";\n";
+  return code;
+};
+
+// Initialize Variable with object block
+Blockly.Blocks["init_variable_with_object"] = {
+  init: function () {
+    this.appendValueInput("OBJECT")
+      .setCheck(null)
+      .appendField("Initialize")
+      .appendField(new Blockly.FieldVariable(""), "var_name")
+      .appendField("with object");
+    this.setPreviousStatement(true, null);
+    this.setNextStatement(true, null);
+    this.setColour(330);
+    this.setTooltip("");
+    this.setHelpUrl("");
+  },
+};
+
+// Java code generator for Initialize Variable with object block
+javaGenerator["init_variable_with_object"] = function (block) {
+  var variable_var_name = javaGenerator.variableDB_.getName(
+    block.getFieldValue("var_name"),
+    Blockly.Variables.NAME_TYPE
+  );
+  var object_name = javaGenerator.valueToCode(
+    block,
+    "OBJECT",
+    javaGenerator.ORDER_ATOMIC
+  );
+  var code = "this."+variable_var_name + " = " + "rand.nextFloat();\n";
+  return code;
+};
+
+
+// Initialize Object block
+Blockly.Blocks["init_object"] = {
+  init: function () {
+    this.appendDummyInput()
+      .appendField("Initialize object")
+      .appendField(new Blockly.FieldVariable("obj"), "object_instance")
+      .appendField("as new")
+      .appendField(
+        new Blockly.FieldTextInput("ObjectClass"),
+        "object_class"
+      )
+      .appendField("();");
+    this.setPreviousStatement(true, null);
+    this.setNextStatement(true, null);
+    this.setColour(330);
+    this.setTooltip("");
+    this.setHelpUrl("");
+  },
+};
+
+// Java code generator for Initialize Object block
+javaGenerator["init_object"] = function (block) {
+  var object_instance = javaGenerator.variableDB_.getName(
+    block.getFieldValue("object_instance"),
+    Blockly.Variables.NAME_TYPE
+  );
+  var object_class = block.getFieldValue("object_class");
+  var code = object_class +" "+ object_instance + " = new " + object_class + "();\n";
+  return code;
+};
+
+
+
+
 Blockly.Blocks["neo_color_wave"] = {
   init: function () {
     this.appendDummyInput()
@@ -782,32 +1383,65 @@ cppGenerator["neo_color_wave"] = function (block) {
 };
 
 javaGenerator["neo_color_wave"] = function (block) {
-  javaGenerator.definitions_[
-    `import#neo_color_wave`
-  ] = `import modules.neopixel.NeoPixel;`;
   var dropdown_color_input = block.getFieldValue("color_input");
   var code = `
-    pixelColorWave(${dropdown_color_input});
+  neoPixel.changeColor(${dropdown_color_input});
   `;
   return code;
 };
-
 Blockly.Blocks["algorithm_interrupt"] = {
   init: function () {
-    this.appendDummyInput().appendField("algorithm_interrupt");
+    var dropdown = new Blockly.FieldDropdown([
+      ["int", "int"],
+      ["float", "float"],
+      ["double", "double"],
+      ["String", "String"],
+      ["int[]","int[]"],
+      ["float[]", "float[]"],
+      ["String[]","String[]"],
+      ["List<Object>","List<Object>"]
+      // Add more types as needed
+    ]);
     this.appendDummyInput()
-      .setAlign(Blockly.ALIGN_RIGHT)
-      .appendField("robot_interrupt_t")
-      .appendField(new Blockly.FieldVariable("robot_interrupt"), "interrupt_variable")
-      .appendField(",")
-      .appendField("char *")
-      .appendField(new Blockly.FieldVariable("msg"), "msg_variable");
+        .appendField("message")
+        .appendField(new Blockly.FieldVariable('msg'), 'msg_variable')
+        .appendField("of type")
+        .appendField(dropdown, 'var_type'); // Include the dropdown here
+    this.appendDummyInput().appendField("algorithm_interrupt");
+    
     this.appendStatementInput("interrupt_body").setCheck(null);
     this.setColour(290);
     this.setTooltip("");
     this.setHelpUrl("");
   },
 };
+Blockly.Blocks["algorithm_interrupt"] = {
+  init: function () {
+    var dropdown = new Blockly.FieldDropdown([
+      ["int", "int"],
+      ["float", "float"],
+      ["double", "double"],
+      ["String","String"],
+      ["int[]","int[]"],
+      ["float[]", "float[]"],
+      ["String[]","String[]"],
+      ["List<Object>","List<Object>"]
+      // Add more types as needed
+    ]);
+    this.appendDummyInput().appendField("communicationInterrupt");
+    this.appendDummyInput()
+      .setAlign(Blockly.ALIGN_RIGHT)
+      .appendField("message")
+      .appendField(new Blockly.FieldVariable('msg'), 'msg_variable')
+      .appendField("of type")
+      .appendField(dropdown, 'var_type'); // Include the dropdown here
+    this.appendStatementInput("interrupt_body").setCheck(null);
+    this.setColour(290);
+    this.setTooltip("");
+    this.setHelpUrl("");
+  },
+};
+
 
 Blockly.Blocks["check_mqtt_messages"] = {
   init: function () {
