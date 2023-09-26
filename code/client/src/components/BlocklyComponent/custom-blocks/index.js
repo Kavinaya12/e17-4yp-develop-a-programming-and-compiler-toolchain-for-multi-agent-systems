@@ -870,7 +870,7 @@ javaGenerator["algorithm"] = function (block) {
     int ${variable_robotId_label};
     String ${variable_selectedTask_label};
 
-    public ${virtualRobot_name}(int id, double x, double y, double heading, long time) {
+    public ${virtualRobot_name}(int id, double x, double y, double heading) {
       super(id, x, y, heading);
       ${variable_robotId_label} = id;
   }
@@ -899,14 +899,28 @@ Blockly.Blocks["simple_algorithm"] = {
       new Blockly.FieldTextInput("RandomBehaviour"),
       "algorithm_name"
     );
-    this.appendDummyInput().appendField(
-      new Blockly.FieldTextInput("Super_Class_Name"),
+    this.appendDummyInput()
+    .appendField("Super Class:")
+    .appendField(
+      new Blockly.FieldDropdown([
+        ["DynamicTaskAllocationRobot", "DynamicTaskAllocationRobot"],
+        ["ObstacleAvoidanceRobot", "ObstacleAvoidanceRobot"],
+        ["RandomBehaviour", "RandomBehaviour"],
+        ["VirtualRobot","VirtualRobot"],
+      ]),
       "superClass_name"
     );
-    this.appendDummyInput().appendField(
-      new Blockly.FieldTextInput("Virtual_Robot_Name"),
+    this.appendDummyInput()
+    .appendField("Child Class:")
+    .appendField(
+      new Blockly.FieldDropdown([
+        ["DynamicTaskAllocationRobot", "DynamicTaskAllocationRobot"],
+        ["ObstacleAvoidanceRobot", "ObstacleAvoidanceRobot"],
+        ["RandomBehaviour", "RandomBehaviour"],
+        ["VirtualRobot","VirtualRobot"],
+      ]),
       "virtualRobot_name"
-    );
+    );;
     this.appendDummyInput()
       .appendField(
         new Blockly.FieldVariable("defaultMoveSpeed"),
