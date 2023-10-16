@@ -10,6 +10,9 @@ const initialState = {
   generatedJavaCode: null,
   generatedXmlCode: null,
   generatedCode: null,
+  isInbuiltAlgorithm: false,
+  selectedArenaData: null,
+  generatedVrobotPositions: null,
 };
 
 export const firmwareFileSlice = createSlice({
@@ -43,14 +46,21 @@ export const firmwareFileSlice = createSlice({
     setGeneratedCode: (state, action) => {
       state.generatedCode = action.payload;
     },
-    setGeneratedCode: (state, action) => {
-      state.generatedCode = action.payload
-    },
     setGeneratedXmlCode: (state, action) => {
       state.generatedXmlCode = action.payload;
     },
     changeSelectedLanguage: (state, action) => {
       state.selectedLanguage = action.payload;
+    },
+    setIsInbuiltAlgorithm: (state, action) => {
+      console.log(action.payload);
+      state.isInbuiltAlgorithm = action.payload;
+    },
+    setSelectedArenaData: (state, action) => {
+      state.selectedArenaData = action.payload;
+    },
+    setGeneratedVrobotPositions: (state, action) => {
+      state.generatedVrobotPositions = action.payload;
     },
   },
 });
@@ -68,6 +78,13 @@ export const {
   changeSelectedLanguage,
   setGeneratedCode,
   setSelectedLanguage,
+  isInbuiltAlgorithm,
+  setIsInbuiltAlgorithm,
+  selectedArenaData,
+  setSelectedArenaData,
+  setGeneratedVrobotPositions,
+  generatedVrobotPositions,
+  algorithmName,
 } = firmwareFileSlice.actions;
 
 export default firmwareFileSlice.reducer;

@@ -10,8 +10,11 @@ import BlocklyComponent, {
 import * as libraryBlocks from "blockly/blocks";
 import { useSelector } from "react-redux";
 
-export default function Playground() {
+function Playground() {
   const { generatedXmlCode } = useSelector((state) => state.firmware);
+
+  // const [inbuiltAlgorithm, setInbuiltAlgorithm] = useState(false);
+
   const initialXml = `<xml xmlns="https://developers.google.com/blockly/xml">
   <variables>
     <variable id="s]bRmbZ++\`1c?{z!/d_:">ROBOT_STATE</variable>
@@ -226,6 +229,7 @@ export default function Playground() {
   return (
     <div className="mt-5 mb-5">
       {/* <BlocklyPlayground /> */}
+
       <BlocklyComponent
         readOnly={false}
         trashcan={true}
@@ -258,7 +262,7 @@ export default function Playground() {
             <Block type="move_back" />
             <Block type="move_forward" />
             <Block type="move_turn" />
-           
+
             <Block type="show_selected_task" />
           </Category>
           <Category name="Pair">
@@ -307,7 +311,6 @@ export default function Playground() {
             <Block type="set_variable_with_type"></Block>
             <Block type="init_object"></Block>
             <Block type="init_variable_with_object"></Block>
-            
           </Category>
 
           <Category name="String">
@@ -339,9 +342,7 @@ export default function Playground() {
             <Block type="math_constrain"></Block>
             <Block type="math_random_float"></Block>
           </Category>
-          <Category name="Functions" custom="PROCEDURE">
-            
-          </Category>
+          <Category name="Functions" custom="PROCEDURE"></Category>
 
           <Category name="ESP">
             <Block type="chip_id"></Block>
@@ -361,10 +362,17 @@ export default function Playground() {
           <Category name="Outputs">
             <Block type="serial_print" />
             <Block type="neo_color_wave" />
-            
           </Category>
         </Category>
+
+        {/* <Category name="InBuilt Algorithms">
+          {Array.from({ length: 2 }).map((_, index) => {
+            return <Block type={`algorithm_${index}`}></Block>;
+          })}
+        </Category> */}
       </BlocklyComponent>
     </div>
   );
 }
+
+export default Playground;

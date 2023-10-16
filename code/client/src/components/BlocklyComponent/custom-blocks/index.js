@@ -2,6 +2,8 @@ import Blockly from "blockly";
 import { Names } from "blockly/core";
 import cppGenerator from "../generator/cpp";
 import javaGenerator from "../java_generator/java";
+import generateBlocksForInBuiltAlgorithms from "./inbuilt_algorithm_blocks";
+
 const NameType = Names.NameType;
 
 Blockly.Blocks["delay"] = {
@@ -59,61 +61,73 @@ javaGenerator["serial_print"] = function (block) {
 //using
 Blockly.Blocks["move_random"] = {
   init: function () {
-  this.appendDummyInput()
-  .appendField("Random Movement")
-  .appendField("Left")
-  .appendField(new Blockly.FieldNumber(0), "left")
-  .appendField("Right")
-  .appendField(new Blockly.FieldNumber(0), "right")
-  this.setPreviousStatement(true, null);
-  this.setNextStatement(true, null);
-  this.setColour(160);
-  this.setTooltip("Performs random movement with the given parameters");
-  this.setHelpUrl("");
+    this.appendDummyInput()
+      .appendField("Random Movement")
+      .appendField("Left")
+      .appendField(new Blockly.FieldNumber(0), "left")
+      .appendField("Right")
+      .appendField(new Blockly.FieldNumber(0), "right");
+    this.setPreviousStatement(true, null);
+    this.setNextStatement(true, null);
+    this.setColour(160);
+    this.setTooltip("Performs random movement with the given parameters");
+    this.setHelpUrl("");
   },
 };
 cppGenerator["move_random"] = function (block) {
-  cppGenerator.definitions_[`include#atomic_behaviors`] = `#include "atomic_behaviours/atomic_behaviours.h"`;
+  cppGenerator.definitions_[
+    `include#atomic_behaviors`
+  ] = `#include "atomic_behaviours/atomic_behaviours.h"`;
   var left = block.getFieldValue("left");
   var right = block.getFieldValue("right");
-  
+
   var code = `move_random(${left}, ${right});\n`;
   return code;
-  };
+};
 javaGenerator["move_random"] = function (block) {
-  javaGenerator.definitions_[`import#atomic_behaviours`] = `import atomic_behaviours.AtomicBehaviours;`;
+  javaGenerator.definitions_[
+    `import#atomic_behaviours`
+  ] = `import atomic_behaviours.AtomicBehaviours;`;
   var left = block.getFieldValue("left");
   var right = block.getFieldValue("right");
-  
+
   var code = `move_random(${left}, ${right});\n`;
   return code;
-  };
+};
 
 //using-VR
-Blockly.Blocks['show_selected_task'] = {
-  init: function() {
-    this.appendDummyInput()
-        .appendField("Show Selected Task");
-    this.appendDummyInput()
-        .appendField(new Blockly.FieldDropdown([["Red", "r"], ["Blue", "b"], ["SelectedTask","selectedTask"]]), "selectedTask");
+Blockly.Blocks["show_selected_task"] = {
+  init: function () {
+    this.appendDummyInput().appendField("Show Selected Task");
+    this.appendDummyInput().appendField(
+      new Blockly.FieldDropdown([
+        ["Red", "r"],
+        ["Blue", "b"],
+        ["SelectedTask", "selectedTask"],
+      ]),
+      "selectedTask"
+    );
     this.setInputsInline(true);
     this.setPreviousStatement(true, null);
     this.setNextStatement(true, null);
     this.setColour(160);
-    this.setTooltip("Show the selected task (either 'r' for Red or 'b' for Blue)");
+    this.setTooltip(
+      "Show the selected task (either 'r' for Red or 'b' for Blue)"
+    );
     this.setHelpUrl("");
-  }
+  },
 };
-javaGenerator['show_selected_task'] = function(block) {
-  javaGenerator.definitions_[`import#atomic_behaviors`] = `import swarm.behaviours.atomicBehaviours.AtomicBehaviours;`;
-  var dropdown_selectedtask = block.getFieldValue('selectedTask');
-  if(dropdown_selectedtask=="selectedTask"){
+javaGenerator["show_selected_task"] = function (block) {
+  javaGenerator.definitions_[
+    `import#atomic_behaviors`
+  ] = `import swarm.behaviours.atomicBehaviours.AtomicBehaviours;`;
+  var dropdown_selectedtask = block.getFieldValue("selectedTask");
+  if (dropdown_selectedtask == "selectedTask") {
     var code = `atomicBehaviours.showSelectedTask(${dropdown_selectedtask},this.neoPixel,this.simpleComm,this.getId());\n`;
-  }
-  else{
+  } else {
     var code = `atomicBehaviours.showSelectedTask("${dropdown_selectedtask}",this.neoPixel,this.simpleComm,this.getId());\n`;
   }
-  
+
   return code;
 };
 
@@ -129,12 +143,10 @@ Blockly.Blocks["assign_task"] = {
   },
 };
 cppGenerator["assign_task"] = function (block) {
-  
   var code = `assign_task();`;
   return code;
 };
 javaGenerator["assign_task"] = function (block) {
-  
   var code = `assign_task();`;
   return code;
 };
@@ -156,7 +168,6 @@ Blockly.Blocks["random_turn"] = {
   },
 };
 cppGenerator["random_turn"] = function (block) {
-  
   var angle = block.getFieldValue("angle");
   var delay_ms = block.getFieldValue("delay_ms");
 
@@ -269,11 +280,9 @@ Blockly.Blocks["read_color"] = {
   },
 };
 cppGenerator["read_color"] = function (block) {
- 
   var code = `read_color(&obsColor);`;
   return code;
 };
-
 
 /*    PAIR BLOCKS   */
 
@@ -281,9 +290,9 @@ cppGenerator["read_color"] = function (block) {
 Blockly.Blocks["collision_avoidance"] = {
   init: function () {
     this.appendDummyInput()
-    .appendField("Collision Avoidance")
-    .appendField("Collision Threshold")
-    .appendField(new Blockly.FieldNumber(20), "collisionThreshold_value");
+      .appendField("Collision Avoidance")
+      .appendField("Collision Threshold")
+      .appendField(new Blockly.FieldNumber(20), "collisionThreshold_value");
     this.setPreviousStatement(true, null);
     this.setNextStatement(true, null);
     this.setColour(230);
@@ -293,19 +302,26 @@ Blockly.Blocks["collision_avoidance"] = {
 };
 cppGenerator["collision_avoidance"] = function (block) {
   //var body = cppGenerator.statementToCode(block, "collision_avoidance_body");
-  cppGenerator.definitions_[`include#pair_bahaviors`] = `#include "pair_behaviours/pair_behaviours.h"`;
-  var number_collisionThreshold_value = block.getFieldValue("collisionThreshold_value");
+  cppGenerator.definitions_[
+    `include#pair_bahaviors`
+  ] = `#include "pair_behaviours/pair_behaviours.h"`;
+  var number_collisionThreshold_value = block.getFieldValue(
+    "collisionThreshold_value"
+  );
   var code = `collision_avoidance(${number_collisionThreshold_value});\n`;
   return code;
 };
 javaGenerator["collision_avoidance"] = function (block) {
   //var body = cppGenerator.statementToCode(block, "collision_avoidance_body");
-  javaGenerator.definitions_[`import#pair_bahaviors`] = `import pair_behaviours.PairBehaviours;`;
-  var number_collisionThreshold_value = block.getFieldValue("collisionThreshold_value");
+  javaGenerator.definitions_[
+    `import#pair_bahaviors`
+  ] = `import pair_behaviours.PairBehaviours;`;
+  var number_collisionThreshold_value = block.getFieldValue(
+    "collisionThreshold_value"
+  );
   var code = `collision_avoidance(${number_collisionThreshold_value});\n`;
   return code;
 };
-
 
 /*     CLUSTER BLOCKS    */
 
@@ -326,7 +342,9 @@ Blockly.Blocks["observe_environment"] = {
 };
 cppGenerator["observe_environment"] = function (block) {
   //var body = cppGenerator.statementToCode(block, "collision_avoidance_body");
-  cppGenerator.definitions_[`include#cluster_bahaviors`] = `#include "cluster_behaviours/cluster_behaviours.h"`;
+  cppGenerator.definitions_[
+    `include#cluster_bahaviors`
+  ] = `#include "cluster_behaviours/cluster_behaviours.h"`;
   var number_blueThreshold_value1 = block.getFieldValue("blueThreshold_value1");
   var number_blueThreshold_value2 = block.getFieldValue("blueThreshold_value2");
   var code = `observe_environment(${number_blueThreshold_value1},${number_blueThreshold_value2})`;
@@ -334,7 +352,9 @@ cppGenerator["observe_environment"] = function (block) {
 };
 javaGenerator["observe_environment"] = function (block) {
   //var body = cppGenerator.statementToCode(block, "collision_avoidance_body");
-  javaGenerator.definitions_[`import#cluster_bahaviors`] = `import cluster_behaviours.ClusterBehaviours;`;
+  javaGenerator.definitions_[
+    `import#cluster_bahaviors`
+  ] = `import cluster_behaviours.ClusterBehaviours;`;
   var number_blueThreshold_value1 = block.getFieldValue("blueThreshold_value1");
   var number_blueThreshold_value2 = block.getFieldValue("blueThreshold_value2");
   var code = `observe_environment(${number_blueThreshold_value1},${number_blueThreshold_value2})`;
@@ -345,52 +365,51 @@ javaGenerator["observe_environment"] = function (block) {
 Blockly.Blocks["observe"] = {
   init: function () {
     this.appendDummyInput()
-    .appendField("Observe")
-    .appendField("Detected Color")
-    .appendField(new Blockly.FieldVariable("detectedColor"), "detectedColor");
-    
-  this.setPreviousStatement(true, null);
-  this.setNextStatement(true, null);
-  this.setColour(370);
-  this.setTooltip("Observes and performs actions based on detected color");
-  this.setHelpUrl("");
-},
+      .appendField("Observe")
+      .appendField("Detected Color")
+      .appendField(new Blockly.FieldVariable("detectedColor"), "detectedColor");
+
+    this.setPreviousStatement(true, null);
+    this.setNextStatement(true, null);
+    this.setColour(370);
+    this.setTooltip("Observes and performs actions based on detected color");
+    this.setHelpUrl("");
+  },
 };
 javaGenerator["observe"] = function (block) {
-  javaGenerator.definitions_[`import#cluster_behaviours`] = `import swarm.behaviours.clusterBehaviours.ClusterBehaviours;`;
+  javaGenerator.definitions_[
+    `import#cluster_behaviours`
+  ] = `import swarm.behaviours.clusterBehaviours.ClusterBehaviours;`;
   var detectedColor = block.getFieldValue("detectedColor");
-  
+
   var code = `clusterBehaviours.observe(${detectedColor}, this.taskDemandQueue, this.taskSupplyQueue, fixedQueueLength, robotId, this.robotMqttClient);\n`;
   return code;
-  };
+};
 
-  //using
-  Blockly.Blocks["evaluate_task_demand"] = {
-    init: function () {
-      this.appendDummyInput()
-        .appendField("Evaluate Task Demand")
-        
-      this.setOutput(true, "Array");
-      this.setColour(370);
-      this.setTooltip("Evaluate task demand and return an array");
-      this.setHelpUrl("");
-    },
-  };
-  javaGenerator["evaluate_task_demand"] = function (block) {
-    
-    var code = `clusterBehaviours.evaluateTaskDemand(this.taskDemandQueue, fixedQueueLength, robotId);
+//using
+Blockly.Blocks["evaluate_task_demand"] = {
+  init: function () {
+    this.appendDummyInput().appendField("Evaluate Task Demand");
+
+    this.setOutput(true, "Array");
+    this.setColour(370);
+    this.setTooltip("Evaluate task demand and return an array");
+    this.setHelpUrl("");
+  },
+};
+javaGenerator["evaluate_task_demand"] = function (block) {
+  var code = `clusterBehaviours.evaluateTaskDemand(this.taskDemandQueue, fixedQueueLength, robotId);
   this.estimatedTaskDemandForRed = taskDemandsFloatArray[0];
   this.estimatedTaskDemandForBlue = taskDemandsFloatArray[1];\n
 `;
-    return [code, cppGenerator.ORDER_ATOMIC];
-    };
+  return [code, cppGenerator.ORDER_ATOMIC];
+};
 
 //using
 Blockly.Blocks["evaluate_task_supply"] = {
   init: function () {
-    this.appendDummyInput()
-      .appendField("Evaluate Task Supply")
-      
+    this.appendDummyInput().appendField("Evaluate Task Supply");
+
     this.setOutput(true, "Array");
     this.setColour(370);
     this.setTooltip("Evaluate task demand and return an array");
@@ -398,31 +417,29 @@ Blockly.Blocks["evaluate_task_supply"] = {
   },
 };
 javaGenerator["evaluate_task_supply"] = function (block) {
-  
   var code = `clusterBehaviours.evaluateTaskSupply(this.taskSupplyQueue, fixedQueueLength, robotId);
 this.estimatedTaskSupplyForRed = taskSuppliesFloatArray[0];
 this.estimatedTaskSupplyForBlue = taskSuppliesFloatArray[1];\n
 `;
   return [code, cppGenerator.ORDER_ATOMIC];
-  };
-  
+};
+
 //using
-  Blockly.Blocks["select_task"] = {
-    init: function () {
-      this.appendDummyInput()
-        .appendField("Select Task");
-      this.setOutput(true, "Array");
-      this.setColour(370);
-      this.setTooltip("Evaluate task demand and return an array");
-      this.setHelpUrl("");
-    },
-  };
-  javaGenerator["select_task"] = function (block) {
-    var taskSupplyQueue = block.getFieldValue("taskSupplyQueue");
-    var fixedQueueLength = block.getFieldValue("fixedQueueLength");
-    var robotId = block.getFieldValue("robotId");
-    
-    var code = `clusterBehaviours.selectTask(this.responseThresholdRed,this.responseThresholdBlue,scalingFactor,this.estimatedTaskDemandForRed,this.estimatedTaskSupplyForRed,this.estimatedTaskDemandForBlue,this.estimatedTaskSupplyForBlue,n,robotId);
+Blockly.Blocks["select_task"] = {
+  init: function () {
+    this.appendDummyInput().appendField("Select Task");
+    this.setOutput(true, "Array");
+    this.setColour(370);
+    this.setTooltip("Evaluate task demand and return an array");
+    this.setHelpUrl("");
+  },
+};
+javaGenerator["select_task"] = function (block) {
+  var taskSupplyQueue = block.getFieldValue("taskSupplyQueue");
+  var fixedQueueLength = block.getFieldValue("fixedQueueLength");
+  var robotId = block.getFieldValue("robotId");
+
+  var code = `clusterBehaviours.selectTask(this.responseThresholdRed,this.responseThresholdBlue,scalingFactor,this.estimatedTaskDemandForRed,this.estimatedTaskSupplyForRed,this.estimatedTaskDemandForBlue,this.estimatedTaskSupplyForBlue,n,robotId);
 selectedTask = (String) outputs.get(0);
 this.responseThresholdRedNext = (float) outputs.get(1);
 this.responseThresholdBlueNext = (float) outputs.get(2);
@@ -431,38 +448,39 @@ this.taskSelectionProbabilityBlue = (float) outputs.get(4);\n
 this.responseThresholdRed = this.responseThresholdRedNext;
 this.responseThresholdBlue = this.responseThresholdBlueNext;\n
   `;
-    return [code, cppGenerator.ORDER_ATOMIC];
-    };
+  return [code, cppGenerator.ORDER_ATOMIC];
+};
 
 //using
 Blockly.Blocks["add_supply"] = {
   init: function () {
-    this.appendDummyInput()
-    .appendField("Add Supply")
-    
-  this.setPreviousStatement(true, null);
-  this.setNextStatement(true, null);
-  this.setColour(370);
-  this.setTooltip("Add supply");
-  this.setHelpUrl("");
-},
+    this.appendDummyInput().appendField("Add Supply");
+
+    this.setPreviousStatement(true, null);
+    this.setNextStatement(true, null);
+    this.setColour(370);
+    this.setTooltip("Add supply");
+    this.setHelpUrl("");
+  },
 };
 javaGenerator["add_supply"] = function (block) {
-  
   var code = `clusterBehaviours.addSupply(parts[0],this.taskSupplyQueue,fixedQueueLength);\n`;
   return code;
-  };
+};
 
 // not using
 Blockly.Blocks["obs_color"] = {
   init: function () {
     this.appendDummyInput()
       .appendField("obsColor")
-      .appendField(new Blockly.FieldDropdown([
-        ["R", "R"],
-        ["G", "G"],
-        ["B", "B"]
-      ]), "color_property");
+      .appendField(
+        new Blockly.FieldDropdown([
+          ["R", "R"],
+          ["G", "G"],
+          ["B", "B"],
+        ]),
+        "color_property"
+      );
     this.setOutput(true, null);
     this.setColour(230);
     this.setTooltip("");
@@ -477,32 +495,34 @@ cppGenerator["obs_color"] = function (block) {
 };
 
 //using -VR
-Blockly.Blocks['color_sensor_reading'] = {
-  init: function() {
+Blockly.Blocks["color_sensor_reading"] = {
+  init: function () {
     this.appendDummyInput()
-        .appendField("Get color sensor reading and assign to")
-        .appendField(new Blockly.FieldVariable("detectedColor"), "var_name");
+      .appendField("Get color sensor reading and assign to")
+      .appendField(new Blockly.FieldVariable("detectedColor"), "var_name");
     this.setPreviousStatement(true, null);
     this.setNextStatement(true, null);
     this.setColour(230);
-    this.setTooltip("Get the color sensor reading and assign it to a variable.");
+    this.setTooltip(
+      "Get the color sensor reading and assign it to a variable."
+    );
     this.setHelpUrl("");
-  }
+  },
 };
 javaGenerator["color_sensor_reading"] = function (block) {
-  javaGenerator.definitions_[`import#RGBColorType`] = `import swarm.robot.types.RGBColorType;`;
-  
+  javaGenerator.definitions_[
+    `import#RGBColorType`
+  ] = `import swarm.robot.types.RGBColorType;`;
+
   var variable_var_name = javaGenerator.variableDB_.getName(
-    block.getFieldValue('var_name'),
+    block.getFieldValue("var_name"),
     Blockly.Variables.NAME_TYPE
   );
-  
-  var code = "RGBColorType " +variable_var_name + ' = colorSensor.getColor();\n'; 
+
+  var code =
+    "RGBColorType " + variable_var_name + " = colorSensor.getColor();\n";
   return code;
-  
 };
-
-
 
 Blockly.Blocks["drive_motors"] = {
   init: function () {
@@ -524,8 +544,7 @@ Blockly.Blocks["drive_motors"] = {
 
 Blockly.Blocks["motors_stop"] = {
   init: function () {
-    this.appendDummyInput()
-      .appendField("Stop Motors");
+    this.appendDummyInput().appendField("Stop Motors");
     this.setPreviousStatement(true, null);
     this.setNextStatement(true, null);
     this.setColour(230);
@@ -541,7 +560,9 @@ cppGenerator["motors_stop"] = function (block) {
   return code;
 };
 javaGenerator["motors_stop"] = function (block) {
-  javaGenerator.definitions_[`import#motors_stop`] = `import modules.motors.Motors;`;
+  javaGenerator.definitions_[
+    `import#motors_stop`
+  ] = `import modules.motors.Motors;`;
   var code = `motors.stop();`;
   return code;
 };
@@ -554,131 +575,129 @@ Blockly.Blocks["algorithm"] = {
       "algorithm_name"
     );
     this.appendDummyInput()
-    .appendField("Super Class:")
-    .appendField(
-      new Blockly.FieldDropdown([
-        ["DynamicTaskAllocationRobot", "DynamicTaskAllocationRobot"],
-        ["ObstacleAvoidanceRobot", "ObstacleAvoidanceRobot"],
-        ["RandomBehaviour", "RandomBehaviour"],
-        ["VirtualRobot","VirtualRobot"],
-      ]),
-      "superClass_name"
-    );
+      .appendField("Super Class:")
+      .appendField(
+        new Blockly.FieldDropdown([
+          ["DynamicTaskAllocationRobot", "DynamicTaskAllocationRobot"],
+          ["ObstacleAvoidanceRobot", "ObstacleAvoidanceRobot"],
+          ["RandomBehaviour", "RandomBehaviour"],
+          ["VirtualRobot", "VirtualRobot"],
+        ]),
+        "superClass_name"
+      );
     this.appendDummyInput()
-    .appendField("Child Class:")
-    .appendField(
-      new Blockly.FieldDropdown([
-        ["DynamicTaskAllocationRobot", "DynamicTaskAllocationRobot"],
-        ["ObstacleAvoidanceRobot", "ObstacleAvoidanceRobot"],
-        ["RandomBehaviour", "RandomBehaviour"],
-        ["VirtualRobot","VirtualRobot"],
-      ]),
-      "virtualRobot_name"
-    );;
-    
-      // Add object for Behaviours
-      this.appendDummyInput("dummyInput1")
+      .appendField("Child Class:")
+      .appendField(
+        new Blockly.FieldDropdown([
+          ["DynamicTaskAllocationRobot", "DynamicTaskAllocationRobot"],
+          ["ObstacleAvoidanceRobot", "ObstacleAvoidanceRobot"],
+          ["RandomBehaviour", "RandomBehaviour"],
+          ["VirtualRobot", "VirtualRobot"],
+        ]),
+        "virtualRobot_name"
+      );
+
+    // Add object for Behaviours
+    this.appendDummyInput("dummyInput1")
       .appendField("Object for cluster behaviours:")
-      .appendField(new Blockly.FieldTextInput("clusterBehaviours"), "objectCluster")
+      .appendField(
+        new Blockly.FieldTextInput("clusterBehaviours"),
+        "objectCluster"
+      )
       .setAlign(Blockly.ALIGN_LEFT);
-      this.appendDummyInput("dummyInput2")
+    this.appendDummyInput("dummyInput2")
       .appendField("Object for atomic behaviours:")
-      .appendField(new Blockly.FieldTextInput("atomicBehaviours"), "objectAtomic")
-      .setAlign(Blockly.ALIGN_LEFT); 
-
-      // Add queues for demand and supply queues
-      this.appendDummyInput()
       .appendField(
-        new Blockly.FieldVariable("taskDemandQueue"),
-        "taskDemandQueue_label"
-      );
-      this.appendDummyInput()
-      .appendField(
-        new Blockly.FieldVariable("taskSupplyQueue"),
-        "taskSupplyQueue_label"
-      );
+        new Blockly.FieldTextInput("atomicBehaviours"),
+        "objectAtomic"
+      )
+      .setAlign(Blockly.ALIGN_LEFT);
 
-      this.appendDummyInput()
+    // Add queues for demand and supply queues
+    this.appendDummyInput().appendField(
+      new Blockly.FieldVariable("taskDemandQueue"),
+      "taskDemandQueue_label"
+    );
+    this.appendDummyInput().appendField(
+      new Blockly.FieldVariable("taskSupplyQueue"),
+      "taskSupplyQueue_label"
+    );
+
+    this.appendDummyInput()
       .appendField(
         new Blockly.FieldVariable("fixedQueueLength"),
         "fixedQueueLength_label"
       )
-      .appendField(new Blockly.FieldNumber(0, 0, 100), "fixedQueueLength_value");
-      
-      this.appendDummyInput()
+      .appendField(
+        new Blockly.FieldNumber(0, 0, 100),
+        "fixedQueueLength_value"
+      );
+
+    this.appendDummyInput()
       .appendField(
         new Blockly.FieldVariable("scalingFactor"),
         "scalingFactor_label"
       )
-      .appendField(new Blockly.FieldNumber(0.015, 0, 1, 0.001), "scalingFactor_value");
-      
-      this.appendDummyInput()
       .appendField(
-        new Blockly.FieldVariable("responseThresholdRed"),
-        "responseThresholdRed_label"
+        new Blockly.FieldNumber(0.015, 0, 1, 0.001),
+        "scalingFactor_value"
       );
-      this.appendDummyInput()
-      .appendField(
-        new Blockly.FieldVariable("responseThresholdBlue"),
-        "responseThresholdBlue_label"
-      );
-      this.appendDummyInput()
-      .appendField(
-        new Blockly.FieldVariable("responseThresholdRedNext"),
-        "responseThresholdRedNext_label"
-      );
-      this.appendDummyInput()
-      .appendField(
-        new Blockly.FieldVariable("responseThresholdBlueNext"),
-        "responseThresholdBlueNext_label"
-      );
-      this.appendDummyInput()
-      .appendField(
-        new Blockly.FieldVariable("estimatedTaskDemandForRed"),
-        "estimatedTaskDemandForRed_label"
-      );
-      this.appendDummyInput()
-      .appendField(
-        new Blockly.FieldVariable("estimatedTaskDemandForBlue"),
-        "estimatedTaskDemandForBlue_label"
-      );
-      this.appendDummyInput()
-      .appendField(
-        new Blockly.FieldVariable("estimatedTaskSupplyForRed"),
-        "estimatedTaskSupplyForRed_label"
-      );
-      this.appendDummyInput()
-      .appendField(
-        new Blockly.FieldVariable("estimatedTaskSupplyForBlue"),
-        "estimatedTaskSupplyForBlue_label"
-      );
-      this.appendDummyInput()
-      .appendField(
-        new Blockly.FieldVariable("taskSelectionProbabilityRed"),
-        "taskSelectionProbabilityRed_label"
-      );
-      this.appendDummyInput()
-      .appendField(
-        new Blockly.FieldVariable("taskSelectionProbabilityBlue"),
-        "taskSelectionProbabilityBlue_label"
-      );
-      this.appendDummyInput()
-      .appendField(
-        new Blockly.FieldVariable("robotId"),
-        "robotId_label"
-      );
-      this.appendDummyInput()
-      .appendField(
-        new Blockly.FieldVariable("selectedTask"),
-        "selectedTask_label"
-      );
+
+    this.appendDummyInput().appendField(
+      new Blockly.FieldVariable("responseThresholdRed"),
+      "responseThresholdRed_label"
+    );
+    this.appendDummyInput().appendField(
+      new Blockly.FieldVariable("responseThresholdBlue"),
+      "responseThresholdBlue_label"
+    );
+    this.appendDummyInput().appendField(
+      new Blockly.FieldVariable("responseThresholdRedNext"),
+      "responseThresholdRedNext_label"
+    );
+    this.appendDummyInput().appendField(
+      new Blockly.FieldVariable("responseThresholdBlueNext"),
+      "responseThresholdBlueNext_label"
+    );
+    this.appendDummyInput().appendField(
+      new Blockly.FieldVariable("estimatedTaskDemandForRed"),
+      "estimatedTaskDemandForRed_label"
+    );
+    this.appendDummyInput().appendField(
+      new Blockly.FieldVariable("estimatedTaskDemandForBlue"),
+      "estimatedTaskDemandForBlue_label"
+    );
+    this.appendDummyInput().appendField(
+      new Blockly.FieldVariable("estimatedTaskSupplyForRed"),
+      "estimatedTaskSupplyForRed_label"
+    );
+    this.appendDummyInput().appendField(
+      new Blockly.FieldVariable("estimatedTaskSupplyForBlue"),
+      "estimatedTaskSupplyForBlue_label"
+    );
+    this.appendDummyInput().appendField(
+      new Blockly.FieldVariable("taskSelectionProbabilityRed"),
+      "taskSelectionProbabilityRed_label"
+    );
+    this.appendDummyInput().appendField(
+      new Blockly.FieldVariable("taskSelectionProbabilityBlue"),
+      "taskSelectionProbabilityBlue_label"
+    );
+    this.appendDummyInput().appendField(
+      new Blockly.FieldVariable("robotId"),
+      "robotId_label"
+    );
+    this.appendDummyInput().appendField(
+      new Blockly.FieldVariable("selectedTask"),
+      "selectedTask_label"
+    );
     /*this.appendDummyInput()
       .appendField(
         new Blockly.FieldVariable("Collision_Threshold"),
         "collisionThreshold"
       )
       .appendField(new Blockly.FieldNumber(0, 0, 255), "collisionThreshold_value");*/
-      //.appendField(new Blockly.FieldVariable("obsColor"), "VAR");
+    //.appendField(new Blockly.FieldVariable("obsColor"), "VAR");
     /*this.appendDummyInput()
       .appendField(
         new Blockly.FieldVariable("obsColor"),
@@ -708,9 +727,8 @@ cppGenerator["algorithm"] = function (block) {
     NameType.VARIABLE
   );
   cppGenerator.algorithm_ = variable_name;
+  javaGenerator.inbuilt_algorithm = false;
 
-
-  
   var variable_isTaskFound = cppGenerator.nameDB_.getName(
     block.getFieldValue("isTaskFound"),
     NameType.VARIABLE
@@ -739,16 +757,18 @@ cppGenerator["algorithm"] = function (block) {
   return code;
 };
 javaGenerator["algorithm"] = function (block) {
-  
   javaGenerator.definitions_[`package#robots_samples`] = `package Robots;`;
   javaGenerator.definitions_[`import#javaUtil`] = `import java.util.*;`;
-  javaGenerator.definitions_[`import#SensorException`] = `import swarm.robot.exception.SensorException;`;
+  javaGenerator.definitions_[
+    `import#SensorException`
+  ] = `import swarm.robot.exception.SensorException;`;
 
   var variable_name = javaGenerator.nameDB_.getName(
     block.getFieldValue("algorithm_name"),
     NameType.VARIABLE
   );
   javaGenerator.algorithm_ = variable_name;
+  javaGenerator.inbuilt_algorithm = false;
 
   var virtualRobot_name = javaGenerator.nameDB_.getName(
     block.getFieldValue("virtualRobot_name"),
@@ -760,7 +780,6 @@ javaGenerator["algorithm"] = function (block) {
     NameType.VARIABLE
   );
 
-  
   var variable_responseThresholdRed_label = javaGenerator.nameDB_.getName(
     block.getFieldValue("responseThresholdRed_label"),
     NameType.VARIABLE
@@ -793,14 +812,16 @@ javaGenerator["algorithm"] = function (block) {
     block.getFieldValue("estimatedTaskSupplyForBlue_label"),
     NameType.VARIABLE
   );
-  var variable_taskSelectionProbabilityRed_label = javaGenerator.nameDB_.getName(
-    block.getFieldValue("taskSelectionProbabilityRed_label"),
-    NameType.VARIABLE
-  );
-  var variable_taskSelectionProbabilityBlue_label = javaGenerator.nameDB_.getName(
-    block.getFieldValue("taskSelectionProbabilityBlue_label"),
-    NameType.VARIABLE
-  );
+  var variable_taskSelectionProbabilityRed_label =
+    javaGenerator.nameDB_.getName(
+      block.getFieldValue("taskSelectionProbabilityRed_label"),
+      NameType.VARIABLE
+    );
+  var variable_taskSelectionProbabilityBlue_label =
+    javaGenerator.nameDB_.getName(
+      block.getFieldValue("taskSelectionProbabilityBlue_label"),
+      NameType.VARIABLE
+    );
   var variable_robotId_label = javaGenerator.nameDB_.getName(
     block.getFieldValue("robotId_label"),
     NameType.VARIABLE
@@ -812,24 +833,26 @@ javaGenerator["algorithm"] = function (block) {
   var variable_objectCluster = javaGenerator.nameDB_.getName(
     block.getFieldValue("objectCluster"),
     NameType.VARIABLE
-  )
+  );
   var variable_objectAtomic = javaGenerator.nameDB_.getName(
     block.getFieldValue("objectAtomic"),
     NameType.VARIABLE
-  )
+  );
   var variable_demandQueue = javaGenerator.nameDB_.getName(
     block.getFieldValue("taskDemandQueue_label"),
     NameType.VARIABLE
-  )
+  );
   var variable_supplyQueue = javaGenerator.nameDB_.getName(
     block.getFieldValue("taskSupplyQueue_label"),
     NameType.VARIABLE
-  )
+  );
   var variable_fixedQueueLength_label = javaGenerator.nameDB_.getName(
     block.getFieldValue("fixedQueueLength_label"),
     NameType.VARIABLE
   );
-  var number_fixedQueueLength_value = block.getFieldValue("fixedQueueLength_value");
+  var number_fixedQueueLength_value = block.getFieldValue(
+    "fixedQueueLength_value"
+  );
   var variable_scalingFactor_label = javaGenerator.nameDB_.getName(
     block.getFieldValue("scalingFactor_label"),
     NameType.VARIABLE
@@ -843,8 +866,8 @@ javaGenerator["algorithm"] = function (block) {
   // var statements_stop = cppGenerator.statementToCode(block, "stop");
   // var statements_reset = cppGenerator.statementToCode(block, "reset");
   // TODO: Assemble JavaScript into code variable.
-  
-  var code =`
+
+  var code = `
   public class ${virtualRobot_name} extends ${superClassName} {
 
     ClusterBehaviours ${variable_objectCluster} = new ClusterBehaviours();
@@ -887,8 +910,8 @@ javaGenerator["algorithm"] = function (block) {
       });\n
     }
 
-  `
-  
+  `;
+
   return code;
 };
 
@@ -900,38 +923,41 @@ Blockly.Blocks["simple_algorithm"] = {
       "algorithm_name"
     );
     this.appendDummyInput()
-    .appendField("Super Class:")
-    .appendField(
-      new Blockly.FieldDropdown([
-        ["DynamicTaskAllocationRobot", "DynamicTaskAllocationRobot"],
-        ["ObstacleAvoidanceRobot", "ObstacleAvoidanceRobot"],
-        ["RandomBehaviour", "RandomBehaviour"],
-        ["VirtualRobot","VirtualRobot"],
-      ]),
-      "superClass_name"
-    );
+      .appendField("Super Class:")
+      .appendField(
+        new Blockly.FieldDropdown([
+          ["DynamicTaskAllocationRobot", "DynamicTaskAllocationRobot"],
+          ["ObstacleAvoidanceRobot", "ObstacleAvoidanceRobot"],
+          ["RandomBehaviour", "RandomBehaviour"],
+          ["VirtualRobot", "VirtualRobot"],
+        ]),
+        "superClass_name"
+      );
     this.appendDummyInput()
-    .appendField("Child Class:")
-    .appendField(
-      new Blockly.FieldDropdown([
-        ["DynamicTaskAllocationRobot", "DynamicTaskAllocationRobot"],
-        ["ObstacleAvoidanceRobot", "ObstacleAvoidanceRobot"],
-        ["RandomBehaviour", "RandomBehaviour"],
-        ["VirtualRobot","VirtualRobot"],
-      ]),
-      "virtualRobot_name"
-    );;
+      .appendField("Child Class:")
+      .appendField(
+        new Blockly.FieldDropdown([
+          ["DynamicTaskAllocationRobot", "DynamicTaskAllocationRobot"],
+          ["ObstacleAvoidanceRobot", "ObstacleAvoidanceRobot"],
+          ["RandomBehaviour", "RandomBehaviour"],
+          ["VirtualRobot", "VirtualRobot"],
+        ]),
+        "virtualRobot_name"
+      );
     this.appendDummyInput()
       .appendField(
         new Blockly.FieldVariable("defaultMoveSpeed"),
         "defaultMoveSpeed_label"
       )
-      .appendField(new Blockly.FieldNumber(0, 0, 1000), "defaultMoveSpeed_value");
-    
+      .appendField(
+        new Blockly.FieldNumber(0, 0, 1000),
+        "defaultMoveSpeed_value"
+      );
+
     this.appendStatementInput("algo_body")
       .setCheck(null)
       .appendField("algorithm_loop");
-    
+
     this.setColour(230);
     this.setTooltip("");
     this.setHelpUrl("");
@@ -939,16 +965,20 @@ Blockly.Blocks["simple_algorithm"] = {
 };
 
 javaGenerator["simple_algorithm"] = function (block) {
-  
   javaGenerator.definitions_[`package#robots_samples`] = `package Robots;`;
-  javaGenerator.definitions_[`import#virtualRobot`] = `import swarm.robot.VirtualRobot;`;
-  javaGenerator.definitions_[`import#atomic_behaviours`] = `import swarm.behaviours.atomicBehaviours.AtomicBehaviours;`;
+  javaGenerator.definitions_[
+    `import#virtualRobot`
+  ] = `import swarm.robot.VirtualRobot;`;
+  javaGenerator.definitions_[
+    `import#atomic_behaviours`
+  ] = `import swarm.behaviours.atomicBehaviours.AtomicBehaviours;`;
 
   var variable_name = javaGenerator.nameDB_.getName(
     block.getFieldValue("algorithm_name"),
     NameType.VARIABLE
   );
   javaGenerator.algorithm_ = variable_name;
+  javaGenerator.inbuilt_algorithm = false;
 
   var virtualRobot_name = javaGenerator.nameDB_.getName(
     block.getFieldValue("virtualRobot_name"),
@@ -964,11 +994,13 @@ javaGenerator["simple_algorithm"] = function (block) {
     block.getFieldValue("defaultMoveSpeed_label"),
     NameType.VARIABLE
   );
-  var number_defaultMoveSpeed_value = block.getFieldValue("defaultMoveSpeed_value");
+  var number_defaultMoveSpeed_value = block.getFieldValue(
+    "defaultMoveSpeed_value"
+  );
 
   var body = javaGenerator.statementToCode(block, "algo_body");
-  
-  var code =`
+
+  var code = `
   public class ${virtualRobot_name} extends ${superClassName} {
 
     private int ${variable_defaultMoveSpeed_label} = ${number_defaultMoveSpeed_value};
@@ -984,8 +1016,8 @@ javaGenerator["simple_algorithm"] = function (block) {
       \t${body}
     }
 
-  `
-  
+  `;
+
   return code;
 };
 
@@ -1144,8 +1176,8 @@ Blockly.Blocks["variables_init"] = {
           ["int", "int"],
           ["float", "float"],
           ["double", "double"],
-          ["int[]","int[]"],
-          ["float[]", "float[]"]
+          ["int[]", "int[]"],
+          ["float[]", "float[]"],
         ]),
         "var_type"
       );
@@ -1187,86 +1219,91 @@ cppGenerator["variables_init"] = function (block) {
   return code;
 };
 
-javaGenerator['variables_init'] = function(block) {
+javaGenerator["variables_init"] = function (block) {
   var variable_var_name = javaGenerator.nameDB_.getName(
-    block.getFieldValue('var_name'),
+    block.getFieldValue("var_name"),
     NameType.VARIABLE
   );
-  var dropdown_var_type = block.getFieldValue('var_type');
+  var dropdown_var_type = block.getFieldValue("var_type");
   var initialValue;
   switch (dropdown_var_type) {
-    case 'int':
-      initialValue = '0';
+    case "int":
+      initialValue = "0";
       break;
-    case 'double':
-      initialValue = '0.0';
+    case "double":
+      initialValue = "0.0";
       break;
-    case 'float':
-      initialValue = '0.0f';
+    case "float":
+      initialValue = "0.0f";
       break;
-    case 'string':
+    case "string":
       initialValue = '""';
       break;
-    case 'int[]':
-      initialValue = '[]';
+    case "int[]":
+      initialValue = "[]";
       break;
-    case 'float[]':
-      initialValue = '[]';
+    case "float[]":
+      initialValue = "[]";
       break;
     default:
-      initialValue = 'null';
+      initialValue = "null";
       break;
   }
-  var code = dropdown_var_type + ' ' + variable_var_name + ' = ' + initialValue + ';';
-  return code + '\n';
+  var code =
+    dropdown_var_type + " " + variable_var_name + " = " + initialValue + ";";
+  return code + "\n";
 };
 
-Blockly.Blocks['set_variable_with_type'] = {
-  init: function() {
+Blockly.Blocks["set_variable_with_type"] = {
+  init: function () {
     // Define a dynamic dropdown for variable type.
     var dropdown = new Blockly.FieldDropdown([
       ["int", "int"],
       ["float", "float"],
       ["double", "double"],
       ["String", "String"],
-      ["int[]","int[]"],
+      ["int[]", "int[]"],
       ["float[]", "float[]"],
-      ["String[]","String[]"],
-      ["List<Object>","List<Object>"]
+      ["String[]", "String[]"],
+      ["List<Object>", "List<Object>"],
       // Add more types as needed
     ]);
 
     this.appendDummyInput()
-        .appendField("Create variable")
-        .appendField(new Blockly.FieldVariable('item'), 'var_name')
-        .appendField("of type")
-        .appendField(dropdown, 'var_type'); // Include the dropdown here
-    this.appendValueInput('value')
-        .setCheck(null)
-        .appendField('and initialize to');
+      .appendField("Create variable")
+      .appendField(new Blockly.FieldVariable("item"), "var_name")
+      .appendField("of type")
+      .appendField(dropdown, "var_type"); // Include the dropdown here
+    this.appendValueInput("value")
+      .setCheck(null)
+      .appendField("and initialize to");
     this.setInputsInline(true);
     this.setPreviousStatement(true, null);
     this.setNextStatement(true, null);
     this.setColour(230);
-    this.setTooltip('Create a variable with a specified type and initial value.');
-  }
+    this.setTooltip(
+      "Create a variable with a specified type and initial value."
+    );
+  },
 };
 
-javaGenerator['set_variable_with_type'] = function(block) {
-  var varName = block.getFieldValue('var_name');
-  var varType = block.getFieldValue('var_type'); // Get the selected type
-  var initialValue = javaGenerator.valueToCode(block, 'value', javaGenerator.ORDER_NONE) || '0';
-  var code = varType + ' ' + varName + ' = ' + initialValue + ';\n';
+javaGenerator["set_variable_with_type"] = function (block) {
+  var varName = block.getFieldValue("var_name");
+  var varType = block.getFieldValue("var_type"); // Get the selected type
+  var initialValue =
+    javaGenerator.valueToCode(block, "value", javaGenerator.ORDER_NONE) || "0";
+  var code = varType + " " + varName + " = " + initialValue + ";\n";
   return code;
 };
-
-
 
 Blockly.Blocks["init_instance_variable"] = {
   init: function () {
     this.appendDummyInput()
       .appendField("Initialize instance variable")
-      .appendField(new Blockly.FieldTextInput("responseThresholdRed"), "var_name")
+      .appendField(
+        new Blockly.FieldTextInput("responseThresholdRed"),
+        "var_name"
+      )
       .appendField("with value");
     this.appendValueInput("value")
       .setCheck(["Number", "Variable"])
@@ -1318,10 +1355,9 @@ javaGenerator["init_variable_with_object"] = function (block) {
     "OBJECT",
     javaGenerator.ORDER_ATOMIC
   );
-  var code = "this."+variable_var_name + " = " + "rand.nextFloat();\n";
+  var code = "this." + variable_var_name + " = " + "rand.nextFloat();\n";
   return code;
 };
-
 
 // Initialize Object block
 Blockly.Blocks["init_object"] = {
@@ -1330,10 +1366,7 @@ Blockly.Blocks["init_object"] = {
       .appendField("Initialize object")
       .appendField(new Blockly.FieldVariable("obj"), "object_instance")
       .appendField("as new")
-      .appendField(
-        new Blockly.FieldTextInput("ObjectClass"),
-        "object_class"
-      )
+      .appendField(new Blockly.FieldTextInput("ObjectClass"), "object_class")
       .appendField("();");
     this.setPreviousStatement(true, null);
     this.setNextStatement(true, null);
@@ -1350,12 +1383,10 @@ javaGenerator["init_object"] = function (block) {
     Blockly.Variables.NAME_TYPE
   );
   var object_class = block.getFieldValue("object_class");
-  var code = object_class +" "+ object_instance + " = new " + object_class + "();\n";
+  var code =
+    object_class + " " + object_instance + " = new " + object_class + "();\n";
   return code;
 };
-
-
-
 
 Blockly.Blocks["neo_color_wave"] = {
   init: function () {
@@ -1410,19 +1441,19 @@ Blockly.Blocks["algorithm_interrupt"] = {
       ["float", "float"],
       ["double", "double"],
       ["String", "String"],
-      ["int[]","int[]"],
+      ["int[]", "int[]"],
       ["float[]", "float[]"],
-      ["String[]","String[]"],
-      ["List<Object>","List<Object>"]
+      ["String[]", "String[]"],
+      ["List<Object>", "List<Object>"],
       // Add more types as needed
     ]);
     this.appendDummyInput()
-        .appendField("message")
-        .appendField(new Blockly.FieldVariable('msg'), 'msg_variable')
-        .appendField("of type")
-        .appendField(dropdown, 'var_type'); // Include the dropdown here
+      .appendField("message")
+      .appendField(new Blockly.FieldVariable("msg"), "msg_variable")
+      .appendField("of type")
+      .appendField(dropdown, "var_type"); // Include the dropdown here
     this.appendDummyInput().appendField("algorithm_interrupt");
-    
+
     this.appendStatementInput("interrupt_body").setCheck(null);
     this.setColour(290);
     this.setTooltip("");
@@ -1435,27 +1466,26 @@ Blockly.Blocks["algorithm_interrupt"] = {
       ["int", "int"],
       ["float", "float"],
       ["double", "double"],
-      ["String","String"],
-      ["int[]","int[]"],
+      ["String", "String"],
+      ["int[]", "int[]"],
       ["float[]", "float[]"],
-      ["String[]","String[]"],
-      ["List<Object>","List<Object>"]
+      ["String[]", "String[]"],
+      ["List<Object>", "List<Object>"],
       // Add more types as needed
     ]);
     this.appendDummyInput().appendField("communicationInterrupt");
     this.appendDummyInput()
       .setAlign(Blockly.ALIGN_RIGHT)
       .appendField("message")
-      .appendField(new Blockly.FieldVariable('msg'), 'msg_variable')
+      .appendField(new Blockly.FieldVariable("msg"), "msg_variable")
       .appendField("of type")
-      .appendField(dropdown, 'var_type'); // Include the dropdown here
+      .appendField(dropdown, "var_type"); // Include the dropdown here
     this.appendStatementInput("interrupt_body").setCheck(null);
     this.setColour(290);
     this.setTooltip("");
     this.setHelpUrl("");
   },
 };
-
 
 Blockly.Blocks["check_mqtt_messages"] = {
   init: function () {
@@ -1471,59 +1501,56 @@ Blockly.Blocks["check_mqtt_messages"] = {
   },
 };
 
-Blockly.Blocks['publish'] = {
-  init: function() {
-    this.appendDummyInput()
-        .appendField("Publish");
-    this.appendStatementInput("Topic")
-        .setCheck(null);
+Blockly.Blocks["publish"] = {
+  init: function () {
+    this.appendDummyInput().appendField("Publish");
+    this.appendStatementInput("Topic").setCheck(null);
     this.setColour(65);
- this.setTooltip("");
- this.setHelpUrl("");
-  }
+    this.setTooltip("");
+    this.setHelpUrl("");
+  },
 };
 
-Blockly.Blocks['subscribe'] = {
-  init: function() {
-    this.appendDummyInput()
-        .appendField("Subscribe");
-    this.appendStatementInput("Topic")
-        .setCheck(null);
+Blockly.Blocks["subscribe"] = {
+  init: function () {
+    this.appendDummyInput().appendField("Subscribe");
+    this.appendStatementInput("Topic").setCheck(null);
     this.setColour(65);
- this.setTooltip("");
- this.setHelpUrl("");
-  }
+    this.setTooltip("");
+    this.setHelpUrl("");
+  },
 };
 
-Blockly.Blocks['publish_with_content'] = {
-  init: function() {
-    this.appendDummyInput()
-        .appendField("Publish To Topic");
-    this.appendValueInput("Topic")
-        .setCheck(null)
-        .setAlign(Blockly.ALIGN_RIGHT);
-    this.appendDummyInput()
-        .appendField("With Content");
-    this.appendValueInput("Message")
-        .setCheck(null);
+Blockly.Blocks["publish_with_content"] = {
+  init: function () {
+    this.appendDummyInput().appendField("Publish To Topic");
+    this.appendValueInput("Topic").setCheck(null).setAlign(Blockly.ALIGN_RIGHT);
+    this.appendDummyInput().appendField("With Content");
+    this.appendValueInput("Message").setCheck(null);
     this.setInputsInline(true);
     this.setColour(65);
- this.setTooltip("");
- this.setHelpUrl("");
-  }
+    this.setTooltip("");
+    this.setHelpUrl("");
+  },
 };
 
-Blockly.Blocks['chip_id'] = {
-  init: function() {
-    this.appendDummyInput()
-        .appendField("Chip ID");
+Blockly.Blocks["chip_id"] = {
+  init: function () {
+    this.appendDummyInput().appendField("Chip ID");
     this.setOutput(true, null);
     this.setColour(260);
- this.setTooltip("");
- this.setHelpUrl("");
-  }
+    this.setTooltip("");
+    this.setHelpUrl("");
+  },
 };
 
 cppGenerator["chip_id"] = function () {
   return "(int)(ESP.getEfuseMac() & 0xffffffff)";
 };
+
+// inbuilt algorithms ---------------
+
+const generatedAlgoBlocks = generateBlocksForInBuiltAlgorithms();
+for (const blockName in generatedAlgoBlocks) {
+  Blockly.Blocks[blockName] = generatedAlgoBlocks[blockName];
+}

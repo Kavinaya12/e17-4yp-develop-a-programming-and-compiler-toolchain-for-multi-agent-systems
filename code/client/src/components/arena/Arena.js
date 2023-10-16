@@ -1,9 +1,9 @@
 // Arena.js
-import React, { useState, useEffect } from 'react';
-import arenaData1 from './arena_default.json'; // Import the JSON data
-import arenaData2 from './arena_twoTasks.json'; // Import the JSON data
+import React, { useState, useEffect } from "react";
+import arenaData1 from "./arena_default.json"; // Import the JSON data
+import arenaData2 from "./arena_twoTasks.json"; // Import the JSON data
 
-const Arena = ({ onPointSelected, selectedArena }) => {
+const Arena = ({ onPointSelected, selectedArena, robotPositions = [] }) => {
   const [selectedPoint, setSelectedPoint] = useState(null);
   const [cursorX, setCursorX] = useState(null);
   const [cursorY, setCursorY] = useState(null);
@@ -12,28 +12,43 @@ const Arena = ({ onPointSelected, selectedArena }) => {
   const [isArenaSelected, setIsArenaSelected] = useState(false);
 
   const handleCanvasClick = (event) => {
-    if(isArenaSelected){
-      const canvas = document.getElementById('arena-canvas');
+    if (isArenaSelected) {
+      const canvas = document.getElementById("arena-canvas");
       const rect = canvas.getBoundingClientRect();
-      const x = (((event.clientX - rect.left) / canvas.width) * (selectedArena.arena.xMax - selectedArena.arena.xMin) + selectedArena.arena.xMin).toFixed(2);
-      const y = (selectedArena.arena.yMax - ((event.clientY - rect.top) / canvas.height) * (selectedArena.arena.yMax - selectedArena.arena.yMin)).toFixed(2);
+      const x = (
+        ((event.clientX - rect.left) / canvas.width) *
+          (selectedArena.arena.xMax - selectedArena.arena.xMin) +
+        selectedArena.arena.xMin
+      ).toFixed(2);
+      const y = (
+        selectedArena.arena.yMax -
+        ((event.clientY - rect.top) / canvas.height) *
+          (selectedArena.arena.yMax - selectedArena.arena.yMin)
+      ).toFixed(2);
       setSelectedPoint({ x, y });
       onPointSelected({ x, y });
     }
-    
   };
 
   const handleCanvasMouseMove = (event) => {
-    if(isArenaSelected){
-      const canvas = document.getElementById('arena-canvas');
+    if (isArenaSelected) {
+      const canvas = document.getElementById("arena-canvas");
       const rect = canvas.getBoundingClientRect();
-      const x = (((event.clientX - rect.left) / canvas.width) * (selectedArena.arena.xMax - selectedArena.arena.xMin) + selectedArena.arena.xMin).toFixed(2);
-      const y = (selectedArena.arena.yMax - ((event.clientY - rect.top) / canvas.height) * (selectedArena.arena.yMax - selectedArena.arena.yMin)).toFixed(2);
+      const x = (
+        ((event.clientX - rect.left) / canvas.width) *
+          (selectedArena.arena.xMax - selectedArena.arena.xMin) +
+        selectedArena.arena.xMin
+      ).toFixed(2);
+      const y = (
+        selectedArena.arena.yMax -
+        ((event.clientY - rect.top) / canvas.height) *
+          (selectedArena.arena.yMax - selectedArena.arena.yMin)
+      ).toFixed(2);
       setCursorX(x);
       setCursorY(y);
       setIsInsideCanvas(true);
       setIsHovered(true);
-    } 
+    }
   };
 
   const handleCanvasMouseLeave = () => {
@@ -42,20 +57,21 @@ const Arena = ({ onPointSelected, selectedArena }) => {
   };
 
   useEffect(() => {
-    const data = Object.keys(selectedArena).length === 0 ? arenaData1 : selectedArena;
-    if(Object.keys(selectedArena).length){
-      setIsArenaSelected(true)
+    const data =
+      Object.keys(selectedArena)?.length === 0 ? arenaData1 : selectedArena;
+    if (Object.keys(selectedArena).length) {
+      setIsArenaSelected(true);
     }
     if (data) {
       // Use HTML5 Canvas to draw the arena, walls, and cylinders
-      const canvas = document.getElementById('arena-canvas');
-      const ctx = canvas.getContext('2d');
+      const canvas = document.getElementById("arena-canvas");
+      const ctx = canvas.getContext("2d");
 
       // Clear the canvas
       ctx.clearRect(0, 0, canvas.width, canvas.height);
 
       // Set the background fill color of the arena
-      ctx.fillStyle = '#ECECEC';
+      ctx.fillStyle = "#ECECEC";
       ctx.fillRect(0, 0, canvas.width, canvas.height);
 
       // Draw the arena boundaries
@@ -63,35 +79,67 @@ const Arena = ({ onPointSelected, selectedArena }) => {
 
       // Draw a grid-like view to see the coordinates
       const gridSize = 10;
-      ctx.strokeStyle = '#DDDDDD';
+      ctx.strokeStyle = "#DDDDDD";
       ctx.lineWidth = 1;
 
-      for (let x = data.arena.xMin + gridSize; x < data.arena.xMax; x += gridSize) {
+      for (
+        let x = data.arena.xMin + gridSize;
+        x < data.arena.xMax;
+        x += gridSize
+      ) {
         ctx.beginPath();
-        ctx.moveTo(((x - data.arena.xMin) / (data.arena.xMax - data.arena.xMin)) * canvas.width, 0);
-        ctx.lineTo(((x - data.arena.xMin) / (data.arena.xMax - data.arena.xMin)) * canvas.width, canvas.height);
+        ctx.moveTo(
+          ((x - data.arena.xMin) / (data.arena.xMax - data.arena.xMin)) *
+            canvas.width,
+          0
+        );
+        ctx.lineTo(
+          ((x - data.arena.xMin) / (data.arena.xMax - data.arena.xMin)) *
+            canvas.width,
+          canvas.height
+        );
         ctx.stroke();
       }
 
-      for (let y = data.arena.yMin + gridSize; y < data.arena.yMax; y += gridSize) {
+      for (
+        let y = data.arena.yMin + gridSize;
+        y < data.arena.yMax;
+        y += gridSize
+      ) {
         ctx.beginPath();
-        ctx.moveTo(0, ((data.arena.yMax - y) / (data.arena.yMax - data.arena.yMin)) * canvas.height);
-        ctx.lineTo(canvas.width, ((data.arena.yMax - y) / (data.arena.yMax - data.arena.yMin)) * canvas.height);
+        ctx.moveTo(
+          0,
+          ((data.arena.yMax - y) / (data.arena.yMax - data.arena.yMin)) *
+            canvas.height
+        );
+        ctx.lineTo(
+          canvas.width,
+          ((data.arena.yMax - y) / (data.arena.yMax - data.arena.yMin)) *
+            canvas.height
+        );
         ctx.stroke();
       }
 
       // Draw walls
       data.obstacles
-        .filter((obstacle) => obstacle.type === 'wall')
+        .filter((obstacle) => obstacle.type === "wall")
         .forEach((wall) => {
           ctx.beginPath();
           ctx.moveTo(
-            ((wall.parameters.x - data.arena.xMin) / (data.arena.xMax - data.arena.xMin)) * canvas.width,
-            ((data.arena.yMax - wall.parameters.y) / (data.arena.yMax - data.arena.yMin)) * canvas.height
+            ((wall.parameters.x - data.arena.xMin) /
+              (data.arena.xMax - data.arena.xMin)) *
+              canvas.width,
+            ((data.arena.yMax - wall.parameters.y) /
+              (data.arena.yMax - data.arena.yMin)) *
+              canvas.height
           );
           ctx.lineTo(
-            (((wall.parameters.x + wall.parameters.width - data.arena.xMin) / (data.arena.xMax - data.arena.xMin)) * canvas.width),
-            ((data.arena.yMax - wall.parameters.y) / (data.arena.yMax - data.arena.yMin)) * canvas.height
+            ((wall.parameters.x + wall.parameters.width - data.arena.xMin) /
+              (data.arena.xMax - data.arena.xMin)) *
+              canvas.width,
+            ((data.arena.yMax - wall.parameters.y) /
+              (data.arena.yMax - data.arena.yMin)) *
+              canvas.height
           );
           ctx.strokeStyle = wall.parameters.color;
           ctx.lineWidth = 2;
@@ -100,21 +148,48 @@ const Arena = ({ onPointSelected, selectedArena }) => {
 
       // Draw cylinders
       data.obstacles
-        .filter((obstacle) => obstacle.type === 'cylinder')
+        .filter((obstacle) => obstacle.type === "cylinder")
         .forEach((cylinder) => {
           ctx.beginPath();
           ctx.arc(
-            ((cylinder.parameters.x - data.arena.xMin) / (data.arena.xMax - data.arena.xMin)) * canvas.width,
-            ((data.arena.yMax - cylinder.parameters.y) / (data.arena.yMax - data.arena.yMin)) * canvas.height,
-            (cylinder.parameters.radius / (data.arena.xMax - data.arena.xMin)) * canvas.width,
+            ((cylinder.parameters.x - data.arena.xMin) /
+              (data.arena.xMax - data.arena.xMin)) *
+              canvas.width,
+            ((data.arena.yMax - cylinder.parameters.y) /
+              (data.arena.yMax - data.arena.yMin)) *
+              canvas.height,
+            (cylinder.parameters.radius / (data.arena.xMax - data.arena.xMin)) *
+              canvas.width,
             0,
             2 * Math.PI
           );
           ctx.fillStyle = cylinder.parameters.color;
           ctx.fill();
         });
+
+      if (robotPositions && robotPositions.length > 0) {
+        const robotRadius = 10;
+
+        robotPositions.forEach((robot) => {
+          ctx.beginPath();
+          ctx.arc(
+            ((robot.xCoordinate - data?.arena?.xMin) /
+              (data?.arena?.xMax - data?.arena?.xMin)) *
+              canvas.width,
+            ((data?.arena?.yMax - robot.yCoordinate) /
+              (data?.arena?.yMax - data?.arena?.yMin)) *
+              canvas.height,
+            robotRadius,
+            0,
+            2 * Math.PI
+          );
+          ctx.fillStyle = "black";
+          ctx.fill();
+        });
+      }
     }
-  }, [selectedArena]);
+    console.log(robotPositions, "robotPositions");
+  }, [selectedArena, robotPositions]);
 
   return (
     <div className="arena">
@@ -126,8 +201,8 @@ const Arena = ({ onPointSelected, selectedArena }) => {
         onMouseMove={handleCanvasMouseMove}
         onMouseLeave={handleCanvasMouseLeave}
         style={{
-          cursor: isHovered ? 'pointer' : 'default',
-          border: isHovered ? '2px solid #333' : 'none',
+          cursor: isHovered ? "pointer" : "default",
+          border: isHovered ? "2px solid #333" : "none",
         }}
       ></canvas>
       {isInsideCanvas && (
