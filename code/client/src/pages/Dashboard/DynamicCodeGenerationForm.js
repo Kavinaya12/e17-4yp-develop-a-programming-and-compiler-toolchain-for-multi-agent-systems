@@ -1,10 +1,13 @@
 import React, { useState, useEffect } from "react";
 import { Button, Checkbox, Form, Select, message, Tooltip, Input } from "antd";
 import { Row, Col } from "reactstrap";
-import { setDynamicCode, setFormResult } from "../../Redux/FirmwareFile";
 import {
+  setDynamicCode,
+  setFormResult,
+  setGeneratedVrobotPositions,
   change as changeFirmwareFile,
   selectedLanguage,
+  setSelectedArenaData,
 } from "../../Redux/FirmwareFile";
 import { increase, decrease } from "../../Redux/CodeGenSteps";
 import { useDispatch, useSelector } from "react-redux";
@@ -16,6 +19,8 @@ import {
 import { CopyBlock, dracula, googlecode } from "react-code-blocks";
 import axios from "axios";
 import GetArenaDetails from "../Mqtt/GetArenaDetails";
+import { generateRobotPositions } from "../../components/arena/GenerateRobotPositions";
+import { algorithms } from "../../InBuiltAlgorithms/InBuiltAlgorithms";
 
 function DynamicCodeGenerationForm({ onArenaSelected }) {
   // antd related variables
@@ -26,7 +31,7 @@ function DynamicCodeGenerationForm({ onArenaSelected }) {
   const [distanceSensor, setDistanceSensor] = useState(false);
 
   const [connectionStatus, setConnectionStatus] = useState("Connecting");
-  const [selectedArenaJsonData, setSelectedArenaJsonData] = useState({})
+  const [selectedArenaJsonData, setSelectedArenaJsonData] = useState({});
   const [arenaDetails, setArenaDetails] = useState([]);
   const [selectedArena, setSelectedArena] = useState(
     arenaDetails[0]?.fileName ?? ""
@@ -40,14 +45,28 @@ function DynamicCodeGenerationForm({ onArenaSelected }) {
     generatedJavaCode,
     generatedCode,
     selectedLanguage,
+    isInbuiltAlgorithm,
+    selectedArenaData,
   } = useSelector((state) => state.firmware);
   const dispatch = useDispatch();
 
   const [copyState, setCopyState] = useState("Copy");
+  const [robotCount, setRobotCount] = useState(0);
 
   // code blocks related variables
   const showLineNumbers = true;
   const codeBlock = true;
+
+  const handleRobotCount = (value) => {
+    setRobotCount(value);
+  };
+
+  const assignPositions = () => {
+    console.log(selectedArenaData);
+    const vrobotPositions = generateRobotPositions(selectedArenaData, 5);
+    dispatch(setGeneratedVrobotPositions(vrobotPositions));
+    console.log(vrobotPositions);
+  };
 
   const handleCopy = () => {
     setCopyState("Copied");
@@ -58,19 +77,18 @@ function DynamicCodeGenerationForm({ onArenaSelected }) {
   };
   const handleIncomingMessage = (payload) => {
     console.log("Received message:", typeof payload.message);
-    
-    if(payload.topic=="v1/arena/arenaJson"){
-      try{
+
+    if (payload.topic == "v1/arena/arenaJson") {
+      try {
         const parsedArenaJSON = JSON.parse(payload.message);
-        setSelectedArenaJsonData(parsedArenaJSON[0])
+        setSelectedArenaJsonData(parsedArenaJSON[0]);
       } catch (error) {
         console.error("Error parsing JSON:", error);
       }
-      
-    }else{
+    } else {
       try {
         const parsedArenaDetails = JSON.parse(payload.message);
-  
+
         if (Array.isArray(parsedArenaDetails)) {
           setArenaDetails(parsedArenaDetails);
         } else {
@@ -83,7 +101,6 @@ function DynamicCodeGenerationForm({ onArenaSelected }) {
         console.error("Error parsing JSON:", error);
       }
     }
-    
   };
   const changeStatus = (status) => {
     setConnectionStatus(status);
@@ -99,6 +116,7 @@ function DynamicCodeGenerationForm({ onArenaSelected }) {
   }, [arenaDetails]);
   useEffect(() => {
     onArenaSelected(selectedArenaJsonData);
+    dispatch(setSelectedArenaData(selectedArenaJsonData));
   }, [selectedArenaJsonData]);
 
   // store features object after assigning related values
@@ -250,6 +268,7 @@ function DynamicCodeGenerationForm({ onArenaSelected }) {
   const setArena = () => {
     // Call the changeArena function with the selectedArena value
     GetArenaDetails(changeStatus, handleIncomingMessage, selectedArena);
+    dispatch(setSelectedArenaData(selectedArenaJsonData));
   };
 
   // firmware files
@@ -272,18 +291,25 @@ function DynamicCodeGenerationForm({ onArenaSelected }) {
                 {generatedCppCode}
             </span>
         </div> */}
-      <div className="code-block mt-3">
-        <CopyBlock
-          text={generatedCode}
-          language={"cpp"}
-          theme={googlecode}
-          customStyle={{
-            height: "300px",
-            overflow: "scroll",
-          }}
-          {...{ showLineNumbers, codeBlock }}
-        />
-      </div>
+      {
+        <div className="code-block mt-3">
+          <CopyBlock
+            text={
+              isInbuiltAlgorithm
+                ? algorithms.find((algo) => algo.className === algorithmName)
+                    .code
+                : generatedCode
+            }
+            language={"cpp"}
+            theme={googlecode}
+            customStyle={{
+              height: "300px",
+              overflow: "scroll",
+            }}
+            {...{ showLineNumbers, codeBlock }}
+          />
+        </div>
+      }
 
       <div className="mt-3">
         {/* dynamic code generation form */}
@@ -363,8 +389,8 @@ function DynamicCodeGenerationForm({ onArenaSelected }) {
                     size="large"
                     filterOption={(input, option) =>
                       (option?.label ?? "")
-                        .toLowerCase()
-                        .includes(input.toLowerCase())
+                        ?.toLowerCase()
+                        .includes(input?.toLowerCase())
                     }
                     options={files}
                   />
@@ -419,7 +445,7 @@ function DynamicCodeGenerationForm({ onArenaSelected }) {
                   name="ARENA"
                   rules={[
                     {
-                      required: false,
+                      required: isInbuiltAlgorithm,
                       message: "Please select an arena!",
                     },
                   ]}
@@ -449,9 +475,48 @@ function DynamicCodeGenerationForm({ onArenaSelected }) {
                   type="primary"
                   // htmlType="submit"
                   onClick={() => setArena()}
+                  disabled={!selectedArena}
                 >
                   <div className="d-flex">
                     <div>Change arena</div>
+                  </div>
+                </Button>
+              </Col>
+            )}
+
+            {selectedLanguage !== "cpp" && isInbuiltAlgorithm && (
+              <Col xxl="6" xl="6" lg="6" md="6" sm="12" xs="12">
+                <div className="d-flex">
+                  <h6>ROBOT COUNT</h6>
+                </div>
+                <Form.Item
+                  name="ROBOT_COUNT"
+                  rules={[
+                    {
+                      required:
+                        selectedLanguage !== "cpp" && isInbuiltAlgorithm,
+                      message: "Please enter the robot count!",
+                    },
+                  ]}
+                >
+                  <Input
+                    placeholder="Enter the robot count"
+                    size="large"
+                    onChange={handleRobotCount}
+                  />
+                </Form.Item>
+                <Button
+                  type="primary"
+                  // htmlType="submit"
+                  onClick={() => assignPositions()}
+                  disabled={
+                    !selectedArena ||
+                    robotCount <= 0 ||
+                    Object.keys(selectedArenaData).length === 0
+                  }
+                >
+                  <div className="d-flex">
+                    <div>Assign Initial Positions</div>
                   </div>
                 </Button>
               </Col>
@@ -767,7 +832,7 @@ function DynamicCodeGenerationForm({ onArenaSelected }) {
                   </div>
                 </Button>
 
-                <Button type="primary" htmlType="submit">
+                <Button type="primary" htmlType={"submit"}>
                   <div className="d-flex">
                     <div>Next</div>
                     <div style={{ marginTop: "-3px", marginRight: "3px" }}>

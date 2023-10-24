@@ -87,7 +87,7 @@ rob_id = ${robotId}
   } catch (error) {}
 };
 
-const generateMainAppForVirtualRobot = (dir,algorithm_name, robotArr) => {
+const generateMainAppForVirtualRobot = (dir, algorithm_name, robotArr) => {
   console.log(robotArr);
 
   // Start building the dynamic portion of the code based on robotArr
@@ -260,6 +260,8 @@ app.post("/virtualrobot/build", async (req, res) => {
 
   currentAlgorithmName = algorithm_name;
 
+  // const isInbuiltAlgorithm = req.body?.isInbuiltAlgorithm;
+  // if (!isInbuiltAlgorithm) {
   socketIO.emit(`Writing algorithm to file ${algorithm_name}...\n`);
   //console.log(algorithm_name);
   generateVirtualRobotAlgorithmFile(
@@ -269,7 +271,11 @@ app.post("/virtualrobot/build", async (req, res) => {
   );
   socketIO.emit("File written successfully...\n\n");
 
-  generateMainAppForVirtualRobot(virtualRobotDir,algorithm_name, req.body?.robot_array);
+  generateMainAppForVirtualRobot(
+    virtualRobotDir,
+    algorithm_name,
+    req.body?.robot_array
+  );
 
   const mavenCommand = `cd ${virtualRobotDir} && mvn -f pom.xml clean install && cp ./target/java-robot-1.0.2.jar ./recent_builds`;
 
@@ -286,15 +292,25 @@ app.post("/virtualrobot/build", async (req, res) => {
   bash_run.stderr.on("data", function (data) {
     socketIO.emit("build", data.toString());
   });
+
+  // Listen for the exit event
+  bash_run.on("exit", function (code) {
+    if (code === 0) {
+      // The command was successful
+      socketIO.emit("success", "Maven build succeeded!");
+    } else {
+      // The command failed
+      socketIO.emit("error", "Maven build failed!");
+    }
+  });
 });
 
 app.get("/updateAppJava", (req, res) => {
   console.log(req.query);
   // const file = `java_virtual_robot/robot-library-java/recent_builds/java-robot-1.0.2.jar`;
   const file = `java_virtual_robot/robot-library-java/src/main/java/swarm/App.java`;
-  
+
   res.download(file);
-  
 });
 
 const path = require("path");
