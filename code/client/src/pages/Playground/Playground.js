@@ -276,6 +276,11 @@ function Playground() {
             <Block type="select_task" />
             <Block type="add_supply" />
           </Category>
+
+          <Category name="Intermediate">
+            <Block type="move_forward_with_obstacle_avoidance" />
+            <Block type="detect_object_with_obstacle_avoidance" />
+          </Category>
         </Category>
 
         <Category name="General">

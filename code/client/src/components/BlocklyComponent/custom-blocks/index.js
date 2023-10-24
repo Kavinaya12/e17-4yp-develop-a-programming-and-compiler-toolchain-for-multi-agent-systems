@@ -3,6 +3,7 @@ import { Names } from "blockly/core";
 import cppGenerator from "../generator/cpp";
 import javaGenerator from "../java_generator/java";
 import generateBlocksForInBuiltAlgorithms from "./inbuilt_algorithm_blocks";
+import intermediateBehaviourBlocks from "./intermediate_behaviour_blocks";
 
 const NameType = Names.NameType;
 
@@ -1553,4 +1554,11 @@ cppGenerator["chip_id"] = function () {
 const generatedAlgoBlocks = generateBlocksForInBuiltAlgorithms();
 for (const blockName in generatedAlgoBlocks) {
   Blockly.Blocks[blockName] = generatedAlgoBlocks[blockName];
+}
+
+// intermediate behaviour blocks
+
+const intermediatenBehavBlocks = intermediateBehaviourBlocks();
+for (const blockName in intermediatenBehavBlocks) {
+  Blockly.Blocks[blockName] = intermediatenBehavBlocks[blockName];
 }

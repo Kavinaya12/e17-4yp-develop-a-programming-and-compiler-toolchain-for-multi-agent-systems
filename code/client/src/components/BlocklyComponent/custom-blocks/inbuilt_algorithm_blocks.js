@@ -13,26 +13,22 @@ export default function generateBlocksForInBuiltAlgorithms() {
         this.setColour(23);
         this.setTooltip(algorithms[i].name);
         this.setHelpUrl("");
-        this.setStyle("backgroundColour", "#FFD700"); // Set the background color to gold
-        this.setStyle("color", "white"); // Set the text color to white
-        this.setStyle("fontSize", "24px"); // Set the font size
-        this.setStyle("borderRadius", "8px"); // Add rounded corners
-        this.setStyle("border", "2px solid #000"); // Add a border
+        this.setStyle("backgroundColour", "#FFD700");
+        this.setStyle("color", "white");
+        this.setStyle("fontSize", "24px");
+        this.setStyle("borderRadius", "8px");
+        this.setStyle("border", "2px solid #000");
 
         this.setInputsInline(false);
         this.setOutput(false);
         this.setTooltip("");
         this.setHelpUrl("");
-        this.setStyle("width", "5000px"); // Add a border
-        this.setStyle("height", "500px"); // Add a border
+        this.setStyle("width", "5000px");
+        this.setStyle("height", "500px");
 
         this.setOnChange(function (changeEvent) {
           if (changeEvent.type === Blockly.Events.SELECTED) {
-            // The block has been selected
             console.log(" block selected");
-            // You can perform any actions you want here.
-            // For example, you can disable and clear other selected blocks.
-            // disableAndClearOtherBlocks(this);
           }
         });
       },
