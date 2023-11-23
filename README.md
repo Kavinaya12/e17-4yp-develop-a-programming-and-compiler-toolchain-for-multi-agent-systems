@@ -1,5 +1,5 @@
 ___
-# Develop a programming and compiler toolchain for multi agent systems
+# Programming and Compiler Toolchain for Swarm Robots
 ___
 
 ## Problem
@@ -15,6 +15,29 @@ We aim to develop an Integrated Development Environment (IDE) that comprises a p
 2. The IDE automatically converts the graphical-level algorithm to a programming language which then facilitates the compilation process for creating binaries that can be executed on the robots supporting various hardware platforms. 
 
 3. As the final characteristic, it supports uploading the binaries to the robots over the air (OTA). OTA programming refers to the ability to update or reprogram hardware devices remotely without physical access. This capability is attained by wireless communication using WiFi, MQTT messaging protocol, and a central server which enables quick deployment of updates to multiple robots simultaneously and gives higher convenience, efficiency, and flexibility.
+
+## Team
+
+* E/17/159, Kavinaya Y., e17159@eng.pdn.ac.lk, [github]()
+* E/17/398, Wijerathne I.D.H.S.D., e17398@eng.pdn.ac.lk, [github]()
+* E/17/352, Tillekeratne L.J.I., e17352@eng.pdn.ac.lk, [github](https://github.com/IsaraTillekeratne)
+  
+## Supervisors
+
+* Dr. Isuru Nawinne, isurunawinne@eng.pdn.ac.lk
+* Prof. Roshan Ragel, roshanr@eng.pdn.ac.lk
+* Dr. Mahanama Wickramasinghe, mahanamaw@eng.pdn.ac.lk
+___
+
+## Links
+
+* [Project Repository](https://github.com/cepdnaclk/e17-4yp-develop-a-programming-and-compiler-toolchain-for-multi-agent-systems)
+* [Project Page](https://cepdnaclk.github.io/e17-4yp-develop-a-programming-and-compiler-toolchain-for-multi-agent-systems/)
+* [Pera Swarm - Github Organization](https://github.com/pera-swarm)
+* [Pera Swarm - Official Website](https://pera-swarm.ce.pdn.ac.lk/)
+* [Department of Computer Engineering](http://www.ce.pdn.ac.lk/)
+* [Faculty of Engineering, University of Peradeniya](https://eng.pdn.ac.lk/) 
+
 
 
 
