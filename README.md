@@ -2,11 +2,9 @@ ___
 # Programming and Compiler Toolchain for Swarm Robots
 ___
 
-## Problem
-
 This research aims to create an Integrated Development Environment (IDE) for swarm robots, compatible with virtual and physical platforms. The IDE's key features include a graphical, block-based interface for high-level algorithm composition, facilitating the programming of complex swarm behaviors. It supports bottom-up design, allowing users to experiment with built-in behaviors and program new ones. Specialized support includes random movement, obstacle avoidance, task allocation, and object finding. The IDE automates the conversion of graphical algorithms to C++ and Java, enabling compilation and execution on both virtual and physical swarm robot platforms which are created in the [PeraSwarm](https://pera-swarm.ce.pdn.ac.lk/) project. The user-friendly IDE streamlines the programming, compilation, and execution of diverse swarm behaviors, validated through multiple experiments.
 
-## Solution
+## Key Features
 
 We aim to develop an Integrated Development Environment (IDE) that comprises a programming and compiling toolchain for swarm robots as a multi-agent system. The IDE is developed with three main characteristics capable of addressing the mentioned complexities in swarm programming. 
 
