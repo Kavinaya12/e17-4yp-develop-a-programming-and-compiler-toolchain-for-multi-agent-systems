@@ -44,7 +44,7 @@ This research aims to create an Integrated Development Environment (IDE) for swa
 
 We conducted the literature review based on two main categories: swarm programming tools-based studies and swarm behavioural algorithms-based studies. 
 
-###### Swarm programming tools-based studies
+#### Swarm programming tools-based studies
 
 * **Swarm-Bench**: It is a benchmarking framework for assessing swarm intelligence algorithms, offering standardized problems and metrics for fair evaluations. It prioritizes benchmarking over algorithm implementation, necessitating additional programming for custom algorithms.
 
@@ -62,7 +62,7 @@ We conducted the literature review based on two main categories: swarm programmi
 
 * **iRobot**: iRobot engages in swarm robotics research, emphasizing coordination among large robot groups using a decentralized, bottom-up approach. This involves individual agents interacting locally based on simple rules, without centralized control. Applied in domains like search and rescue and environmental monitoring, this strategy enhances efficiency and effectiveness in task accomplishment.
 
-### Swarm behavioural algorithms-based studies
+#### Swarm behavioural algorithms-based studies
 
 Some of the swarm behaviours that we encountered during our literature review are listed below. Under each behaviour, several studies were analysed.
 
@@ -76,7 +76,7 @@ Some of the swarm behaviours that we encountered during our literature review ar
 
 * **Dynamic task allocation**: Dynamic task allocation involves the real-time assignment of tasks to individual robots based on changing environmental conditions or task requirements. This behavior allows the swarm to adapt to dynamic situations, redistributing tasks among robots to optimize overall performance and achieve efficient task completion.
 
-### Problems identified
+#### Problems identified
 
 * Complexity in programming swarm robots to achieve a collective behaviour
 * No support for block-based visual programming in the existing tools
