@@ -4,7 +4,7 @@ ___
 
 ## Problem
 
-We have chosen swarm robots as our Multi-Agent system. The system is homogeneous, decentralized, autonomous and follows the principle of locality. Achieving a complex swarm behaviour is a challenging task. Programming swarm robots can be tedious as it requires dealing with low-level complexities of handling and programming each robot and the interactions between the robots such that complex collective behaviours are achieved. Most of the available frameworks for swarm programming focus only on software-level simulations, which do not discuss extending them to real hardware robot platforms, and they are limited only to a few pre-programmed sets of behaviours and do not give developers the ability to change the inbuilt behaviours or use them to integrate and build new behaviours.
+This research aims to create an Integrated Development Environment (IDE) for swarm robots, compatible with virtual and physical platforms. The IDE's key features include a graphical, block-based interface for high-level algorithm composition, facilitating the programming of complex swarm behaviors. It supports bottom-up design, allowing users to experiment with built-in behaviors and program new ones. Specialized support includes random movement, obstacle avoidance, task allocation, and object finding. The IDE automates the conversion of graphical algorithms to C++ and Java, enabling compilation and execution on both virtual and physical swarm robot platforms which are created in the [PeraSwarm](https://pera-swarm.ce.pdn.ac.lk/) project. The user-friendly IDE streamlines the programming, compilation, and execution of diverse swarm behaviors, validated through multiple experiments.
 
 ## Solution
 
