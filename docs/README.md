@@ -86,6 +86,23 @@ Some of the swarm behaviours that we encountered during our literature review ar
 
 ## Methodology
 
+The following sections detail the essential steps and strategies integral to the development process.
+
+#### System architecture
+
+![archi](https://github.com/cepdnaclk/e17-4yp-develop-a-programming-and-compiler-toolchain-for-multi-agent-systems/assets/73964613/4e3bf35c-17ac-4172-9b5e-e8cc78ff97bf)
+
+The above figure shows the main components of the software system architecture. The IDE includes a React Frontend with a NodeJs backend established in a docker container as a HTTP central server. The backend is integrated with two compilers; PlatformIO and Maven. The IDE is compatible with the two Virtual and Physical Swarm Robot platforms, as shown in the diagram. The physical robot runs C++ binaries and is equipped with key components for sensing and communication. It features front-facing distance and color sensors, a Neopixel LED, and four infrared sensors for interactive signaling. Additionally, the robot is enhanced with a WiFi module for improved connectivity. The Peraswarm Virtual robot platform includes a Java virtual robot, Node.js simulator, and a visualizer. The simulator allows for distance and color readings, robot color changes, and arena configuration. 
+
+#### High-level algorithm composition
+
+The primary goal is to simplify high-level algorithm composition for users, especially in swarm behavior research. Emphasizing the educational sector, the system employs a user-friendly interface with a block-based visual programming technique. Integrated with Google Blockly in the React frontend, users intuitively design complex swarm behaviors by dragging and dropping blocks. The design includes diverse block types such as Behavioural blocks, IO blocks for functionalities like sensor readings and actuator activation, and General blocks for programming elements like loops, conditions, and variables. The hierarchical approach categorizes behaviors into atomic, pair, cluster, and global levels, enabling users to smoothly combine low-level behaviors for complex collective swarm behaviors. This ensures consistency between physical and virtual platforms, maintaining uniformity in behavior execution. The below figures shows the block structure and the level-based behaviour structure that we have introduced facillitating the bottom-up design approach.
+
+|                             |                            |
+| ----------------------------------- | ----------------------------------- |
+| ![behave](https://github.com/cepdnaclk/e17-4yp-develop-a-programming-and-compiler-toolchain-for-multi-agent-systems/assets/73964613/8aa1a85b-26f0-4ea4-a538-41131207c9d3)  | ![block](https://github.com/cepdnaclk/e17-4yp-develop-a-programming-and-compiler-toolchain-for-multi-agent-systems/assets/73964613/17a35647-1db2-43df-b852-888e3cd1dc45) |
+
+
 ## Experiment Setup and Implementation
 
 ## Results and Analysis
