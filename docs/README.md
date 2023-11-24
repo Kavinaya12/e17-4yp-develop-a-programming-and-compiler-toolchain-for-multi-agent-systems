@@ -40,11 +40,11 @@ title: Programming and Compiler Toolchain for Swarm Robots
 
 This research aims to create an Integrated Development Environment (IDE) for swarm robots, compatible with virtual and physical platforms. The IDE's key features include a graphical, block-based interface for high-level algorithm composition, facilitating the programming of complex swarm behaviors. It supports bottom-up design, allowing users to experiment with built-in behaviors and program new ones. Specialized support includes random movement, obstacle avoidance, task allocation, and object finding. The IDE automates the conversion of graphical algorithms to C++ and Java, enabling compilation and execution on both virtual and physical swarm robot platforms which are created in the [PeraSwarm](https://pera-swarm.ce.pdn.ac.lk/) project. The user-friendly IDE streamlines the programming, compilation, and execution of diverse swarm behaviors, validated through multiple experiments.
 
-## Related works
+## Related Works
 
 We conducted the literature review based on two main categories: swarm programming tools-based studies and swarm behavioural algorithms-based studies. 
 
-#### Swarm programming tools-based studies
+#### Swarm Programming Tools-based Studies
 
 * **Swarm-Bench**: It is a benchmarking framework for assessing swarm intelligence algorithms, offering standardized problems and metrics for fair evaluations. It prioritizes benchmarking over algorithm implementation, necessitating additional programming for custom algorithms.
 
@@ -62,7 +62,7 @@ We conducted the literature review based on two main categories: swarm programmi
 
 * **iRobot**: iRobot engages in swarm robotics research, emphasizing coordination among large robot groups using a decentralized, bottom-up approach. This involves individual agents interacting locally based on simple rules, without centralized control. Applied in domains like search and rescue and environmental monitoring, this strategy enhances efficiency and effectiveness in task accomplishment.
 
-#### Swarm behavioural algorithms-based studies
+#### Swarm Behavioural Algorithms-based Studies
 
 Some of the swarm behaviours that we encountered during our literature review are listed below. Under each behaviour, several studies were analysed.
 
@@ -88,22 +88,51 @@ Some of the swarm behaviours that we encountered during our literature review ar
 
 The following sections detail the essential steps and strategies integral to the development process.
 
-#### System architecture
+#### System Architecture
 
-![archi](https://github.com/cepdnaclk/e17-4yp-develop-a-programming-and-compiler-toolchain-for-multi-agent-systems/assets/73964613/4e3bf35c-17ac-4172-9b5e-e8cc78ff97bf)
+![archi](https://github.com/cepdnaclk/e17-4yp-develop-a-programming-and-compiler-toolchain-for-multi-agent-systems/assets/73964613/fea86644-1bf9-4e39-828c-38c8deb77ccc)
 
 The above figure shows the main components of the software system architecture. The IDE includes a React Frontend with a NodeJs backend established in a docker container as a HTTP central server. The backend is integrated with two compilers; PlatformIO and Maven. The IDE is compatible with the two Virtual and Physical Swarm Robot platforms, as shown in the diagram. The physical robot runs C++ binaries and is equipped with key components for sensing and communication. It features front-facing distance and color sensors, a Neopixel LED, and four infrared sensors for interactive signaling. Additionally, the robot is enhanced with a WiFi module for improved connectivity. The Peraswarm Virtual robot platform includes a Java virtual robot, Node.js simulator, and a visualizer. The simulator allows for distance and color readings, robot color changes, and arena configuration. 
 
-#### High-level algorithm composition
+#### High-level Algorithm Composition
 
 The primary goal is to simplify high-level algorithm composition for users, especially in swarm behavior research. Emphasizing the educational sector, the system employs a user-friendly interface with a block-based visual programming technique. Integrated with Google Blockly in the React frontend, users intuitively design complex swarm behaviors by dragging and dropping blocks. The design includes diverse block types such as Behavioural blocks, IO blocks for functionalities like sensor readings and actuator activation, and General blocks for programming elements like loops, conditions, and variables. The hierarchical approach categorizes behaviors into atomic, pair, cluster, and global levels, enabling users to smoothly combine low-level behaviors for complex collective swarm behaviors. This ensures consistency between physical and virtual platforms, maintaining uniformity in behavior execution. The below figures shows the block structure and the level-based behaviour structure that we have introduced facillitating the bottom-up design approach.
 
-|                             |                            |
+|     Behaviour Structure                      |    Block Structure                        |
 | ----------------------------------- | ----------------------------------- |
 | ![behave](https://github.com/cepdnaclk/e17-4yp-develop-a-programming-and-compiler-toolchain-for-multi-agent-systems/assets/73964613/8aa1a85b-26f0-4ea4-a538-41131207c9d3)  | ![block](https://github.com/cepdnaclk/e17-4yp-develop-a-programming-and-compiler-toolchain-for-multi-agent-systems/assets/73964613/17a35647-1db2-43df-b852-888e3cd1dc45) |
 
+#### Dynamic Code Generation and Compilation
+
+The IDE transforms graphical-level algorithms from block-based visual programming into C++ and Java code using the Google Blockly library. The backend, utilizing PlatformIO CLI and Maven, supports remote cross-compilation, compiling code, generating binaries for the physical platform, and jar files for the virtual platform. This approach ensures flexibility in deployment strategies across diverse platforms. Additionally, the IDE enables version control for compiled binaries and class files, ensuring the availability of the latest versions for efficient deployment across the robot swarm through HTTP requests.
+
+### Over-the-Air (OTA) Code Upload and Execution
+
+The system employs WiFi modules and a central server to achieve over-the-air downloading of executables to both virtual and physical swarm robots. Using MQTT, the central server signals robots to initiate downloads, ensuring seamless transitions for new code. The central server monitors the process, guaranteeing correct installations. This approach enables efficient updates without physical connections or manual interventions.
+
+#### Enhancement of IDE Capabilities
+
+The IDE is upgraded with features for programming behaviors, visualizing the virtual arena, and generating executables for multiple robots. It includes a repository of pre-developed algorithms, and strengthened MQTT connectivity ensures efficient communication between the IDE and robot platforms, empowering users in creating, testing, and refining swarm behaviors. A series of experiments are conducted to validate the IDE's functionality in various scenarios, from foundational setup to feature enrichment, ensuring its effectiveness and efficiency in creating complex swarm behaviors. Some of the demonstrations of the features of the IDE are given below.
+
+<demoGifs
 
 ## Experiment Setup and Implementation
+
+![experi](https://github.com/cepdnaclk/e17-4yp-develop-a-programming-and-compiler-toolchain-for-multi-agent-systems/assets/73964613/78082ebd-054e-4150-a49c-3795b8fbc46a)
+
+#### Dynamic Task Allocation Behaviour
+
+<demoGifs
+
+Multiple experiments were conducted using the IDE on virtual and physical robot platforms, focusing on dynamic task allocation and object finding. The dynamic task allocation behavior, inspired by previous research, involves assigning robots to tasks based on the colors of objects in the environment. Robots use a decentralized approach, maintaining local task demand and supply queues, estimating global task demand and supply, and updating response threshold values to achieve the desired task distribution. The algorithm demonstrates decentralization, adaptability to changing environmental conditions, and the emergence of specialization among robots over time. The experiments validate the effectiveness of this complex swarm behavior. The flow of the behaviour is demonstrated below.
+
+![dyna](https://github.com/cepdnaclk/e17-4yp-develop-a-programming-and-compiler-toolchain-for-multi-agent-systems/assets/73964613/66ec5b5e-8b67-4a62-a15d-9aa24f410b81)
+
+* The Experimentation Process using the IDE
+
+The dynamic task allocation behavior is programmed using the block-based visual interface, offering different approaches. Users can code the algorithm from scratch, use the built-in behavior option, or utilize the level-based set of blocks designed for this behavior. Behavioural blocks such as random movement with obstacle avoidance, observe environment, evaluate task demand, evaluate task supply, select task and show task were designed to be used in this behaviour. In the experiment, the third approach was chosen. After programming, Java codes were generated and reviewed for execution in the virtual robot platform. The simulation environment was set, robots were placed, and the code was compiled and executed. The successful results validate the IDE's programming, compilation, and execution process.
+
+
 
 ## Results and Analysis
 
