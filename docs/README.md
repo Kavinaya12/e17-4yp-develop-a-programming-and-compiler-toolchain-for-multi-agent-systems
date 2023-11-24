@@ -102,7 +102,6 @@ The primary goal is to simplify high-level algorithm composition for users, espe
 | ----------------------------------- | ----------------------------------- |
 | ![behave](https://github.com/cepdnaclk/e17-4yp-develop-a-programming-and-compiler-toolchain-for-multi-agent-systems/assets/73964613/8aa1a85b-26f0-4ea4-a538-41131207c9d3)  | ![block](https://github.com/cepdnaclk/e17-4yp-develop-a-programming-and-compiler-toolchain-for-multi-agent-systems/assets/73964613/17a35647-1db2-43df-b852-888e3cd1dc45) |
 
-
 #### Dynamic Code Generation and Compilation
 
 The IDE transforms graphical-level algorithms from block-based visual programming into C++ and Java code using the Google Blockly library. The backend, utilizing PlatformIO CLI and Maven, supports remote cross-compilation, compiling code, generating binaries for the physical platform, and jar files for the virtual platform. This approach ensures flexibility in deployment strategies across diverse platforms. Additionally, the IDE enables version control for compiled binaries and class files, ensuring the availability of the latest versions for efficient deployment across the robot swarm through HTTP requests.
@@ -115,7 +114,9 @@ The system employs WiFi modules and a central server to achieve over-the-air dow
 
 The IDE is upgraded with features for programming behaviors, visualizing the virtual arena, and generating executables for multiple robots. It includes a repository of pre-developed algorithms, and strengthened MQTT connectivity ensures efficient communication between the IDE and robot platforms, empowering users in creating, testing, and refining swarm behaviors. A series of experiments are conducted to validate the IDE's functionality in various scenarios, from foundational setup to feature enrichment, ensuring its effectiveness and efficiency in creating complex swarm behaviors. Some of the demonstrations of the features of the IDE are given below.
 
-<demoGifs
+<img src="images/visualInterfaceGif.gif" alt="Feature 1 GIF" width="400"/> 
+<img src="images/arenaFrontendGif.gif" alt="Feature 1 GIF" width="400"/>
+<img src="images/codeAndCompileGif.gif" alt="Feature 1 GIF" width="400"/>
 
 ## Experiment Setup and Implementation
 
@@ -123,17 +124,27 @@ The IDE is upgraded with features for programming behaviors, visualizing the vir
 
 #### Dynamic Task Allocation Behaviour
 
-<demoGifs
+<img src="images/dynamicDemoGif.gif" alt="Feature 1 GIF" width="400"/> 
 
-Multiple experiments were conducted using the IDE on virtual and physical robot platforms, focusing on dynamic task allocation and object finding. The dynamic task allocation behavior, inspired by previous research, involves assigning robots to tasks based on the colors of objects in the environment. Robots use a decentralized approach, maintaining local task demand and supply queues, estimating global task demand and supply, and updating response threshold values to achieve the desired task distribution. The algorithm demonstrates decentralization, adaptability to changing environmental conditions, and the emergence of specialization among robots over time. The experiments validate the effectiveness of this complex swarm behavior. The flow of the behaviour is demonstrated below.
+Multiple experiments were conducted using the IDE on virtual and physical robot platforms, focusing on dynamic task allocation and object finding. The summary of all the behaviours tested are in the above diagram. The dynamic task allocation behavior, inspired by previous research, involves assigning robots to tasks based on the colors of objects in the environment. Robots use a decentralized approach, maintaining local task demand and supply queues, estimating global task demand and supply, and updating response threshold values to achieve the desired task distribution. The algorithm demonstrates decentralization, adaptability to changing environmental conditions, and the emergence of specialization among robots over time. The experiments validate the effectiveness of this complex swarm behavior. The flow of the behaviour is demonstrated below.
 
 ![dyna](https://github.com/cepdnaclk/e17-4yp-develop-a-programming-and-compiler-toolchain-for-multi-agent-systems/assets/73964613/66ec5b5e-8b67-4a62-a15d-9aa24f410b81)
 
-* The Experimentation Process using the IDE
+* **The Experimentation Process using the IDE**
 
 The dynamic task allocation behavior is programmed using the block-based visual interface, offering different approaches. Users can code the algorithm from scratch, use the built-in behavior option, or utilize the level-based set of blocks designed for this behavior. Behavioural blocks such as random movement with obstacle avoidance, observe environment, evaluate task demand, evaluate task supply, select task and show task were designed to be used in this behaviour. In the experiment, the third approach was chosen. After programming, Java codes were generated and reviewed for execution in the virtual robot platform. The simulation environment was set, robots were placed, and the code was compiled and executed. The successful results validate the IDE's programming, compilation, and execution process.
 
+#### Object Finding Behaviour
 
+In the experiment, the virtual robot utilized object detection with obstacle avoidance to find a specific-colored object. The algorithm includes color-based detection, dynamic response to object detection, adjustment for object distance and angle, and visualization of the detection state. Physical robots integrate color and distance sensors for forward path object detection. The algorithm involves distance reading, obstacle detection, color-based decision, correction for non-target color, visualization, and further movement. The robots adaptively respond to detected objects, adjusting their position and color visualization based on the object's characteristics and proximity.
+
+* **Contrasting Object Finding Behaviour in Virtual Robot and Physical Robot**
+
+<img src="images/VirtualObjFindingGif2.gif" alt="Feature 1 GIF" width="400"/> 
+
+< add physical robot video here
+
+The object-finding behaviors of virtual and physical robots share the common goal of discovering objects based on predefined colors. However, their implementations differ significantly. The virtual robot adapts its movement based on simulated sensor inputs, equipped with virtual proximity sensors at multiple angles. In contrast, the physical robot, reliant on front-facing color and distance sensors, can only perceive one direction. The adaptability of the virtual robot is constrained by simulated conditions, while the physical robot encounters real-world challenges, like rotating to identify unobstructed directions.
 
 ## Results and Analysis
 
