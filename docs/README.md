@@ -148,7 +148,44 @@ The object-finding behaviors of virtual and physical robots share the common goa
 
 ## Results and Analysis
 
+* **Qualitative Performance Analysis of the developed IDE**
+
+The qualitative performance analysis of the developed IDE focuses on three main aspects: the usability of the graphical programming interface, flexibility, and re-programmability of swarm behaviors, and compatibility with both physical and virtual robot platforms.
+
+**Usability of the Graphical Programming Interface**: 
+  * The IDE introduces a user-friendly block-based interface, enhancing programming usability.
+  * Its code-less approach is beginner-friendly, making it accessible for users with no prior programming knowledge.
+  * Mitigates the learning curve associated with traditional programming frameworks, promoting quicker adoption and proficiency.
+    
+**Flexibility and Re-programmability of Behaviors**:
+  * The IDE allows flexibility in programming swarm behaviors, offering multiple options.
+  * Users can create new behaviors from scratch, experiment with built-in behaviors, or use provided behavior-specific blocks.
+  * Modular and scalable graphical blocks enable seamless experimentation and re-programming without limitations.
+    
+**Compatibility with Both Physical and Virtual Robot Platforms**:
+  * The IDE surpasses conventional limitations by supporting both physical and virtual swarm robot platforms.
+  * Users can easily execute and observe programmed behaviors in both environments with a few clicks.
+  * Facilitates a smooth transition between simulated environments and real-world implementations, ensuring unified development and testing.
+
+* **Results of the Dynamic Task Allocation Behaviour**
+
+  **Testing of convergence to the desired distribution**: Multiple tests were conducted to evaluate the dynamic task allocation behavior, focusing on the main characteristic of converging to the desired task distribution. The robot arena dimensions were set at 70×70 units², with ten colored objects randomly placed. Two scenarios were tested, varying task proportions (20% red, 80% blue in the first and 60% red, 40% blue in the second). Results, depicted in below Figures, consistently show robots converging to and stabilizing in the intended task distributions, supporting the conclusion that the dynamic task allocation behavior executes as intended. The tests affirm the successful programming, compilation, and execution process of the IDE.
+
+<img src="images/graph1.png" alt="Feature 1 GIF" width="400"/> <img src="images/graph2.png" alt="Feature 1 GIF" width="400"/>
+  
+  **Testing task specialisation of the robots**: The analysis involves monitoring threshold value changes over time, revealing strong specialization in certain robots for specific tasks. A high threshold for task red and a low one for task blue imply strong specialization in task blue. This mirrors the division of labor seen in natural swarms. Results (Figures 8 and 9) in a 90×90 units² arena with ten robots initially assigned to task red and a 40% red, 60% blue proportion show substantial threshold changes in robots 0, 4, and 7. Their final thresholds indicate strong specialization in task blue, aligning with the observed behavior in natural swarms.
+
+<img src="images/graph3.png" alt="Feature 1 GIF" width="400"/> <img src="images/graph4.png" alt="Feature 1 GIF" width="400"/>
+  
+* **Results of the Object Finding Behaviour**
+
+In the virtual robot experiment, eight robots successfully identified and localized a blue object using dynamic navigation, object detection, and obstacle avoidance. Before and after states are presented in the below figure. The physical robot experiment, with five robots designated as blue targets, achieved the collective goal but encountered an issue where robots occasionally formed a chain instead of converging near the target. Addressing this challenge is a priority for refining the algorithm's optimization in future iterations to enhance performance in real-world scenarios.
+
+<img src="images/pic1.png" alt="Feature 1 GIF" width="400"/> <img src="images/graph4.png" alt="Feature 1 GIF" width="400"/>
+  
 ## Conclusion
+
+The study introduces a framework for swarm behavior development, emphasizing a unified environment integrating block-based visual programming and a user-friendly IDE for both virtual and physical platforms. The IDE enhances user experience with features like visual programming, code generation, compilation, and OTA code upload. Experiments with decentralized dynamic task allocation and object-finding behaviors demonstrate swarm convergence and adaptability. Inspired by natural swarms, the decentralized task allocation mimics division of labor, while object-finding algorithms perform successfully in both simulated and real-world settings. Multiple experiments affirm the accuracy and reliability of the IDE's programming, compiling, and execution processes. The developed IDE can be identified as a useful tool for the educational and research sectors in the context of programming complex swarm behaviours.
 
 ## Publications
 [//]: # "Note: Uncomment each once you uploaded the files to the repository"
