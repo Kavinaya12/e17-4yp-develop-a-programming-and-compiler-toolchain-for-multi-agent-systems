@@ -90,7 +90,9 @@ The following sections detail the essential steps and strategies integral to the
 
 #### System Architecture
 
-![archi](https://github.com/cepdnaclk/e17-4yp-develop-a-programming-and-compiler-toolchain-for-multi-agent-systems/assets/73964613/fea86644-1bf9-4e39-828c-38c8deb77ccc)
+<div style="text-align:center;">
+    <img src="https://github.com/cepdnaclk/e17-4yp-develop-a-programming-and-compiler-toolchain-for-multi-agent-systems/assets/73964613/fea86644-1bf9-4e39-828c-38c8deb77ccc" alt="Feature 1 GIF" width="800"/>
+</div>
 
 The above figure shows the main components of the software system architecture. The IDE includes a React Frontend with a NodeJs backend established in a docker container as a HTTP central server. The backend is integrated with two compilers; PlatformIO and Maven. The IDE is compatible with the two Virtual and Physical Swarm Robot platforms, as shown in the diagram. The physical robot runs C++ binaries and is equipped with key components for sensing and communication. It features front-facing distance and color sensors, a Neopixel LED, and four infrared sensors for interactive signaling. Additionally, the robot is enhanced with a WiFi module for improved connectivity. The Peraswarm Virtual robot platform includes a Java virtual robot, Node.js simulator, and a visualizer. The simulator allows for distance and color readings, robot color changes, and arena configuration. 
 
