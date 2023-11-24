@@ -120,15 +120,13 @@ The IDE is upgraded with features for programming behaviors, visualizing the vir
 
 ## Experiment Setup and Implementation
 
-![experi](https://github.com/cepdnaclk/e17-4yp-develop-a-programming-and-compiler-toolchain-for-multi-agent-systems/assets/73964613/78082ebd-054e-4150-a49c-3795b8fbc46a)
-
 #### Dynamic Task Allocation Behaviour
 
 <img src="images/dynamicDemoGif.gif" alt="Feature 1 GIF" width="400"/> 
 
 Multiple experiments were conducted using the IDE on virtual and physical robot platforms, focusing on dynamic task allocation and object finding. The summary of all the behaviours tested are in the above diagram. The dynamic task allocation behavior, inspired by previous research, involves assigning robots to tasks based on the colors of objects in the environment. Robots use a decentralized approach, maintaining local task demand and supply queues, estimating global task demand and supply, and updating response threshold values to achieve the desired task distribution. The algorithm demonstrates decentralization, adaptability to changing environmental conditions, and the emergence of specialization among robots over time. The experiments validate the effectiveness of this complex swarm behavior. The flow of the behaviour is demonstrated below.
 
-![dyna](https://github.com/cepdnaclk/e17-4yp-develop-a-programming-and-compiler-toolchain-for-multi-agent-systems/assets/73964613/66ec5b5e-8b67-4a62-a15d-9aa24f410b81)
+<img src="https://github.com/cepdnaclk/e17-4yp-develop-a-programming-and-compiler-toolchain-for-multi-agent-systems/assets/73964613/66ec5b5e-8b67-4a62-a15d-9aa24f410b81" alt="Feature 1 GIF" width="400"/> <img src="https://github.com/cepdnaclk/e17-4yp-develop-a-programming-and-compiler-toolchain-for-multi-agent-systems/assets/73964613/78082ebd-054e-4150-a49c-3795b8fbc46a" alt="Feature 1 GIF" width="400"/> 
 
 * **The Experimentation Process using the IDE**
 
@@ -142,7 +140,7 @@ In the experiment, the virtual robot utilized object detection with obstacle avo
 
 <img src="images/VirtualObjFindingGif2.gif" alt="Feature 1 GIF" width="400"/> 
 
-< add physical robot video here
+https://github.com/cepdnaclk/e17-4yp-develop-a-programming-and-compiler-toolchain-for-multi-agent-systems/assets/73964613/dfe83613-1a0e-46b0-85f6-2d42d761244d
 
 The object-finding behaviors of virtual and physical robots share the common goal of discovering objects based on predefined colors. However, their implementations differ significantly. The virtual robot adapts its movement based on simulated sensor inputs, equipped with virtual proximity sensors at multiple angles. In contrast, the physical robot, reliant on front-facing color and distance sensors, can only perceive one direction. The adaptability of the virtual robot is constrained by simulated conditions, while the physical robot encounters real-world challenges, like rotating to identify unobstructed directions.
 
@@ -181,21 +179,22 @@ The qualitative performance analysis of the developed IDE focuses on three main 
 
 In the virtual robot experiment, eight robots successfully identified and localized a blue object using dynamic navigation, object detection, and obstacle avoidance. Before and after states are presented in the below figure. The physical robot experiment, with five robots designated as blue targets, achieved the collective goal but encountered an issue where robots occasionally formed a chain instead of converging near the target. Addressing this challenge is a priority for refining the algorithm's optimization in future iterations to enhance performance in real-world scenarios.
 
-<img src="images/pic1.png" alt="Feature 1 GIF" width="400"/> <img src="images/graph4.png" alt="Feature 1 GIF" width="400"/>
+<img src="images/pic1.png" alt="Feature 1 GIF" width="400"/> <img src="images/pic2.png" alt="Feature 1 GIF" width="400"/>
   
 ## Conclusion
+
+https://github.com/cepdnaclk/e17-4yp-develop-a-programming-and-compiler-toolchain-for-multi-agent-systems/assets/73964613/d4b4b439-6091-456e-9b80-459e4db0cc55
 
 The study introduces a framework for swarm behavior development, emphasizing a unified environment integrating block-based visual programming and a user-friendly IDE for both virtual and physical platforms. The IDE enhances user experience with features like visual programming, code generation, compilation, and OTA code upload. Experiments with decentralized dynamic task allocation and object-finding behaviors demonstrate swarm convergence and adaptability. Inspired by natural swarms, the decentralized task allocation mimics division of labor, while object-finding algorithms perform successfully in both simulated and real-world settings. Multiple experiments affirm the accuracy and reliability of the IDE's programming, compiling, and execution processes. The developed IDE can be identified as a useful tool for the educational and research sectors in the context of programming complex swarm behaviours.
 
 ## Publications
 [//]: # "Note: Uncomment each once you uploaded the files to the repository"
 
-<!-- 1. [Semester 7 report](./) -->
-<!-- 2. [Semester 7 slides](./) -->
-<!-- 3. [Semester 8 report](./) -->
-<!-- 4. [Semester 8 slides](./) -->
+1. [Semester 7 report](documentation/FYP Proposal Presentation G07.pptx)
+2. [Semester 7 slides](documentation/group07.pdf)
+3. [Semester 8 report](documentation/G07 FYP End Evaluation Presentation.pdf)
+4. [Semester 8 slides](./)
 <!-- 5. Author 1, Author 2 and Author 3 "Research paper title" (2021). [PDF](./). -->
-
 
 ## Links
 
