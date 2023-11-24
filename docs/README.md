@@ -90,9 +90,7 @@ The following sections detail the essential steps and strategies integral to the
 
 #### System Architecture
 
-<div style="text-align:center;">
-    <img src="https://github.com/cepdnaclk/e17-4yp-develop-a-programming-and-compiler-toolchain-for-multi-agent-systems/assets/73964613/fea86644-1bf9-4e39-828c-38c8deb77ccc" alt="Feature 1 GIF" width="650"/>
-</div>
+<img src="https://github.com/cepdnaclk/e17-4yp-develop-a-programming-and-compiler-toolchain-for-multi-agent-systems/assets/73964613/fea86644-1bf9-4e39-828c-38c8deb77ccc" alt="Feature 1 GIF" width="650"/>
 
 The above figure shows the main components of the software system architecture. The IDE includes a React Frontend with a NodeJs backend established in a docker container as a HTTP central server. The backend is integrated with two compilers; PlatformIO and Maven. The IDE is compatible with the two Virtual and Physical Swarm Robot platforms, as shown in the diagram. The physical robot runs C++ binaries and is equipped with key components for sensing and communication. It features front-facing distance and color sensors, a Neopixel LED, and four infrared sensors for interactive signaling. Additionally, the robot is enhanced with a WiFi module for improved connectivity. The Peraswarm Virtual robot platform includes a Java virtual robot, Node.js simulator, and a visualizer. The simulator allows for distance and color readings, robot color changes, and arena configuration. 
 
@@ -124,9 +122,7 @@ The IDE is upgraded with features for programming behaviors, visualizing the vir
 
 #### Dynamic Task Allocation Behaviour
 
-<div style="text-align:center;">
-    <img src="images/dynamicDemoGif.gif" alt="Feature 1 GIF" width="400"/> 
-</div>
+<img src="images/dynamicDemoGif.gif" alt="Feature 1 GIF" width="400"/> 
 
 Multiple experiments were conducted using the IDE on virtual and physical robot platforms, focusing on dynamic task allocation and object finding. The summary of all the behaviours tested are in the above diagram. The dynamic task allocation behavior, inspired by previous research, involves assigning robots to tasks based on the colors of objects in the environment. Robots use a decentralized approach, maintaining local task demand and supply queues, estimating global task demand and supply, and updating response threshold values to achieve the desired task distribution. The algorithm demonstrates decentralization, adaptability to changing environmental conditions, and the emergence of specialization among robots over time. The experiments validate the effectiveness of this complex swarm behavior. The flow of the behaviour is demonstrated below.
 
