@@ -102,11 +102,12 @@ The primary goal is to simplify high-level algorithm composition for users, espe
 | ----------------------------------- | ----------------------------------- |
 | ![behave](https://github.com/cepdnaclk/e17-4yp-develop-a-programming-and-compiler-toolchain-for-multi-agent-systems/assets/73964613/8aa1a85b-26f0-4ea4-a538-41131207c9d3)  | ![block](https://github.com/cepdnaclk/e17-4yp-develop-a-programming-and-compiler-toolchain-for-multi-agent-systems/assets/73964613/17a35647-1db2-43df-b852-888e3cd1dc45) |
 
+
 #### Dynamic Code Generation and Compilation
 
 The IDE transforms graphical-level algorithms from block-based visual programming into C++ and Java code using the Google Blockly library. The backend, utilizing PlatformIO CLI and Maven, supports remote cross-compilation, compiling code, generating binaries for the physical platform, and jar files for the virtual platform. This approach ensures flexibility in deployment strategies across diverse platforms. Additionally, the IDE enables version control for compiled binaries and class files, ensuring the availability of the latest versions for efficient deployment across the robot swarm through HTTP requests.
 
-### Over-the-Air (OTA) Code Upload and Execution
+#### Over-the-Air (OTA) Code Upload and Execution
 
 The system employs WiFi modules and a central server to achieve over-the-air downloading of executables to both virtual and physical swarm robots. Using MQTT, the central server signals robots to initiate downloads, ensuring seamless transitions for new code. The central server monitors the process, guaranteeing correct installations. This approach enables efficient updates without physical connections or manual interventions.
 
