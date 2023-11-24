@@ -124,7 +124,9 @@ The IDE is upgraded with features for programming behaviors, visualizing the vir
 
 #### Dynamic Task Allocation Behaviour
 
-<img src="images/dynamicDemoGif.gif" alt="Feature 1 GIF" width="400"/> 
+<div style="text-align:center;">
+    <img src="images/dynamicDemoGif.gif" alt="Feature 1 GIF" width="400"/> 
+</div>
 
 Multiple experiments were conducted using the IDE on virtual and physical robot platforms, focusing on dynamic task allocation and object finding. The summary of all the behaviours tested are in the above diagram. The dynamic task allocation behavior, inspired by previous research, involves assigning robots to tasks based on the colors of objects in the environment. Robots use a decentralized approach, maintaining local task demand and supply queues, estimating global task demand and supply, and updating response threshold values to achieve the desired task distribution. The algorithm demonstrates decentralization, adaptability to changing environmental conditions, and the emergence of specialization among robots over time. The experiments validate the effectiveness of this complex swarm behavior. The flow of the behaviour is demonstrated below.
 
