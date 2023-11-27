@@ -193,7 +193,7 @@ The study introduces a framework for swarm behavior development, emphasizing a u
 1. [Semester 7 report](documentation/FYP_Proposal_Presentation_G07.pptx)
 2. [Semester 7 slides](documentation/group07.pdf)
 3. [Semester 8 report](documentation/G07_FYP_End_Evaluation_Presentation.pdf)
-4. [Semester 8 slides](./)
+4. [Semester 8 slides](./documentation/CO425_E17_A4_07.pdf)
 <!-- 5. Author 1, Author 2 and Author 3 "Research paper title" (2021). [PDF](./). -->
 
 ## Links
