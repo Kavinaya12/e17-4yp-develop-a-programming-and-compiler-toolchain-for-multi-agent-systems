@@ -38,7 +38,7 @@ title: Programming and Compiler Toolchain for Swarm Robots
 
 ## Abstract
 
-This research aims to create an Integrated Development Environment (IDE) for swarm robots, compatible with virtual and physical platforms. The IDE's key features include a graphical, block-based interface for high-level algorithm composition, facilitating the programming of complex swarm behaviors. The IDE automates the conversion of graphical algorithms to C++ and Java, enabling compilation and execution on both virtual and physical swarm robot platforms which are created in the [PeraSwarm](https://pera-swarm.ce.pdn.ac.lk/) project. 
+This research aims to create an Integrated Development Environment (IDE) for swarm robots, compatible with virtual and physical platforms. 
 
 ## Related Works
 
@@ -90,7 +90,7 @@ The following sections detail the essential steps and strategies integral to the
 
 #### System Architecture
 
-The IDE features a React frontend, a Node.js backend in a Docker container, and integrates with PlatformIO and Maven compilers. It supports both Virtual and Physical Swarm Robot platforms. The physical robot, running C++ binaries, includes distance and color sensors, a Neopixel LED, infrared sensors, and a WiFi module. The Peraswarm Virtual platform provides a Java virtual robot, a Node.js simulator, and a visualizer, enabling distance and color readings, robot color changes, and arena configuration.
+The IDE features a React frontend, a Node.js backend in a Docker container, and integrates with PlatformIO and Maven compilers. It supports both Virtual and Physical Swarm Robot platforms.
 
 #### High-level Algorithm Composition
 
