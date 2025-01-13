@@ -42,7 +42,7 @@ This research aims to create an Integrated Development Environment (IDE) for swa
 
 ## Related Works
 
-We conducted the literature review based on two main categories: swarm programming tools-based studies and swarm behavioural algorithms-based studies. 
+The literature review focuses on swarm programming tools and swarm behavior algorithms.
 
 #### Swarm Programming Tools-based Studies
 
